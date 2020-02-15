@@ -635,7 +635,7 @@ map_nz
 ```
 
 <div class="figure" style="text-align: center">
-<iframe src="figures/tmview-1.html" width="100%" height="400px"></iframe>
+<iframe src="https://geocompr.github.io/img/tmview-1.html" width="100%" height="400px"></iframe>
 <p class="caption">(\#fig:tmview)Interactive map of New Zealand created with tmap in view mode. Interactive version available online at: geocompr.robinlovelace.net.</p>
 </div>
 
