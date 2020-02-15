@@ -24,7 +24,7 @@
 <meta name="author" content="Robin Lovelace, Jakub Nowosad, Jannes Muenchow" />
 
 
-<meta name="date" content="2020-01-25" />
+<meta name="date" content="2020-02-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -655,7 +655,9 @@ FIGURE 6.2: Mollweide projection of the world.
 <p>On the other hand, when mapping the world, it is often desirable to have as little distortion as possible for all spatial properties (area, direction, distance).
 One of the most popular projections to achieve this is the Winkel tripel projection (Figure <a href="reproj-geo-data.html#fig:wintriproj">6.3</a>).<a href="#fn29" class="footnote-ref" id="fnref29"><sup>29</sup></a>
 <code>st_transform_proj()</code> from the <strong>lwgeom</strong> package allows for coordinate transformations to a wide range of CRSs, including the Winkel tripel projection:</p>
-<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" data-line-number="1">world_wintri =<span class="st"> </span>lwgeom<span class="op">::</span><span class="kw">st_transform_proj</span>(world, <span class="dt">crs =</span> <span class="st">&quot;+proj=wintri&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" data-line-number="1">world_wintri =<span class="st"> </span>lwgeom<span class="op">::</span><span class="kw">st_transform_proj</span>(world, <span class="dt">crs =</span> <span class="st">&quot;+proj=wintri&quot;</span>)</a>
+<a class="sourceLine" id="cb223-2" data-line-number="2"><span class="co">#&gt; Warning in CPL_crs_from_proj4string(x): GDAL cannot import PROJ.4 string `</span></a>
+<a class="sourceLine" id="cb223-3" data-line-number="3"><span class="co">#&gt; +proj=wintri&#39;: returning missing CRS</span></a></code></pre></div>
 <!-- plot(world_wintri$geom) -->
 <!-- plot(world_wintri$geom, graticule = TRUE) -->
 <div class="figure" style="text-align: center"><span id="fig:wintriproj"></span>

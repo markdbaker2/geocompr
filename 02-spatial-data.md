@@ -515,7 +515,7 @@ By contrast, use matrices in the case of multipoint (`st_multipoint()`) and line
 ## MULTIPOINT
 multipoint_matrix = rbind(c(5, 2), c(1, 3), c(3, 4), c(3, 2))
 st_multipoint(multipoint_matrix)
-#> MULTIPOINT (5 2, 1 3, 3 4, 3 2)
+#> MULTIPOINT ((5 2), (1 3), (3 4), (3 2))
 ## LINESTRING
 linestring_matrix = rbind(c(1, 5), c(4, 4), c(4, 1), c(2, 2), c(3, 2))
 st_linestring(linestring_matrix)
@@ -1221,7 +1221,7 @@ luxembourg = world[world$name_long == "Luxembourg", ]
 
 ```r
 st_area(luxembourg)
-#> 2.41e+09 [m^2]
+#> 2.42e+09 [m^2]
 ```
 
 The output is in units of square meters (m^2^), showing that the result represents two-dimensional space.
@@ -1233,7 +1233,7 @@ To translate the huge number into a more digestible size, it is tempting to divi
 
 ```r
 st_area(luxembourg) / 1000000
-#> 2414 [m^2]
+#> 2417 [m^2]
 ```
 
 However, the result is incorrectly given again as square meters.
@@ -1242,7 +1242,7 @@ The solution is to set the correct units with the **units** package:
 
 ```r
 units::set_units(st_area(luxembourg), km^2)
-#> 2414 [km^2]
+#> 2417 [km^2]
 ```
 
 <!-- Is that right? I mean, the units DESCRIPTION says "Support for measurement units in R vectors, matrices and arrays". Since raster datasets are just matrices, units might be easily used with them?-->

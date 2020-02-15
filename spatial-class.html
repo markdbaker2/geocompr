@@ -24,7 +24,7 @@
 <meta name="author" content="Robin Lovelace, Jakub Nowosad, Jannes Muenchow" />
 
 
-<meta name="date" content="2020-01-25" />
+<meta name="date" content="2020-02-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -815,7 +815,7 @@ The XYM type must be specified using the <code>dim</code> argument (which is sho
 <a class="sourceLine" id="cb20-2" data-line-number="2">## MULTIPOINT</a>
 <a class="sourceLine" id="cb20-3" data-line-number="3">multipoint_matrix =<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>))</a>
 <a class="sourceLine" id="cb20-4" data-line-number="4"><span class="kw">st_multipoint</span>(multipoint_matrix)</a>
-<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="co">#&gt; MULTIPOINT (5 2, 1 3, 3 4, 3 2)</span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="co">#&gt; MULTIPOINT ((5 2), (1 3), (3 4), (3 2))</span></a>
 <a class="sourceLine" id="cb20-6" data-line-number="6">## LINESTRING</a>
 <a class="sourceLine" id="cb20-7" data-line-number="7">linestring_matrix =<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>))</a>
 <a class="sourceLine" id="cb20-8" data-line-number="8"><span class="kw">st_linestring</span>(linestring_matrix)</a>
@@ -1335,18 +1335,18 @@ This is demonstrated in the code chunk below, which calculates the area of Luxem
 </p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">luxembourg =<span class="st"> </span>world[world<span class="op">$</span>name_long <span class="op">==</span><span class="st"> &quot;Luxembourg&quot;</span>, ]</a></code></pre></div>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">st_area</span>(luxembourg)</a>
-<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="co">#&gt; 2.41e+09 [m^2]</span></a></code></pre></div>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="co">#&gt; 2.42e+09 [m^2]</span></a></code></pre></div>
 <p>The output is in units of square meters (m<sup>2</sup>), showing that the result represents two-dimensional space.
 This information, stored as an attribute (which interested readers can discover with <code>attributes(st_area(luxembourg))</code>), can feed into subsequent calculations that use units, such as population density (which is measured in people per unit area, typically per km<sup>2</sup>).
 Reporting units prevents confusion.
 To take the Luxembourg example, if the units remained unspecified, one could incorrectly assume that the units were in hectares.
 To translate the huge number into a more digestible size, it is tempting to divide the results by a million (the number of square meters in a square kilometer):</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw">st_area</span>(luxembourg) <span class="op">/</span><span class="st"> </span><span class="dv">1000000</span></a>
-<a class="sourceLine" id="cb54-2" data-line-number="2"><span class="co">#&gt; 2414 [m^2]</span></a></code></pre></div>
+<a class="sourceLine" id="cb54-2" data-line-number="2"><span class="co">#&gt; 2417 [m^2]</span></a></code></pre></div>
 <p>However, the result is incorrectly given again as square meters.
 The solution is to set the correct units with the <strong>units</strong> package:</p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1">units<span class="op">::</span><span class="kw">set_units</span>(<span class="kw">st_area</span>(luxembourg), km<span class="op">^</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="co">#&gt; 2414 [km^2]</span></a></code></pre></div>
+<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="co">#&gt; 2417 [km^2]</span></a></code></pre></div>
 <!-- Is that right? I mean, the units DESCRIPTION says "Support for measurement units in R vectors, matrices and arrays". Since raster datasets are just matrices, units might be easily used with them?-->
 <p>Units are of equal importance in the case of raster data.
 However, so far <strong>sf</strong> is the only spatial package that supports units, meaning that people working on raster data should approach changes in the units of analysis (for example, converting pixel widths from imperial to decimal units) with care.

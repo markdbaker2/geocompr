@@ -353,6 +353,8 @@ This projection is used, among others, by the National Geographic Society.
 
 ```r
 world_wintri = lwgeom::st_transform_proj(world, crs = "+proj=wintri")
+#> Warning in CPL_crs_from_proj4string(x): GDAL cannot import PROJ.4 string `
+#> +proj=wintri': returning missing CRS
 ```
 <!-- plot(world_wintri$geom) -->
 <!-- plot(world_wintri$geom, graticule = TRUE) -->
