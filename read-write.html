@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 Geographic data I/O | Geocomputation with R</title>
   <meta name="description" content="Chapter 7 Geographic data I/O | Geocomputation with R is for people who want to analyze, visualize and model geographic data with open source software. It is based on R, a statistical programming language that has powerful data processing, visualization, and geospatial capabilities. The book equips you with the knowledge and skills to tackle a wide range of issues manifested in geographic data, including those with scientific, societal, and environmental implications. This book will interest people from many backgrounds, especially Geographic Information Systems (GIS) users interested in applying their domain-specific knowledge in a powerful open source language for data science, and R users interested in extending their skills to handle spatial data." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Geographic data I/O | Geocomputation with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Robin Lovelace, Jakub Nowosad, Jannes Muenchow" />
 
 
-<meta name="date" content="2020-02-16" />
+<meta name="date" content="2020-03-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -422,10 +422,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="prerequisites-5" class="section level2 unnumbered">
 <h2>Prerequisites</h2>
 <p>This chapter requires the following packages:</p>
-<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" data-line-number="1"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb231-2" data-line-number="2"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb231-3" data-line-number="3"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb231-4" data-line-number="4"><span class="kw">library</span>(spData)</a></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb232-1" data-line-number="1"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb232-2" data-line-number="2"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb232-3" data-line-number="3"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb232-4" data-line-number="4"><span class="kw">library</span>(spData)</a></code></pre></div>
 </div>
 <div id="introduction-4" class="section level2">
 <h2><span class="header-section-number">7.1</span> Introduction</h2>
@@ -460,10 +460,10 @@ A wealth of vector datasets can be accessed from the National Aeronautics and Sp
 <em>Downloading</em> data is best done with code, however, from reproducibility and efficiency perspectives.
 Downloads can be initiated from the command line using a variety of techniques, primarily via URLs and APIs (see the <a href="https://scihub.copernicus.eu/twiki/do/view/SciHubWebPortal/APIHubDescription">Sentinel API</a> for example).
 Files hosted on static URLs can be downloaded with <code>download.file()</code>, as illustrated in the code chunk below which accesses US National Parks data from: <a href="https://catalog.data.gov/dataset/national-parks">catalog.data.gov/dataset/national-parks</a>:</p>
-<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb232-1" data-line-number="1"><span class="kw">download.file</span>(<span class="dt">url =</span> <span class="st">&quot;http://nrdata.nps.gov/programs/lands/nps_boundary.zip&quot;</span>,</a>
-<a class="sourceLine" id="cb232-2" data-line-number="2">              <span class="dt">destfile =</span> <span class="st">&quot;nps_boundary.zip&quot;</span>)</a>
-<a class="sourceLine" id="cb232-3" data-line-number="3"><span class="kw">unzip</span>(<span class="dt">zipfile =</span> <span class="st">&quot;nps_boundary.zip&quot;</span>)</a>
-<a class="sourceLine" id="cb232-4" data-line-number="4">usa_parks =<span class="st"> </span><span class="kw">st_read</span>(<span class="dt">dsn =</span> <span class="st">&quot;nps_boundary.shp&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" data-line-number="1"><span class="kw">download.file</span>(<span class="dt">url =</span> <span class="st">&quot;http://nrdata.nps.gov/programs/lands/nps_boundary.zip&quot;</span>,</a>
+<a class="sourceLine" id="cb233-2" data-line-number="2">              <span class="dt">destfile =</span> <span class="st">&quot;nps_boundary.zip&quot;</span>)</a>
+<a class="sourceLine" id="cb233-3" data-line-number="3"><span class="kw">unzip</span>(<span class="dt">zipfile =</span> <span class="st">&quot;nps_boundary.zip&quot;</span>)</a>
+<a class="sourceLine" id="cb233-4" data-line-number="4">usa_parks =<span class="st"> </span><span class="kw">st_read</span>(<span class="dt">dsn =</span> <span class="st">&quot;nps_boundary.shp&quot;</span>)</a></code></pre></div>
 </div>
 <div id="geographic-data-packages" class="section level2">
 <h2><span class="header-section-number">7.3</span> Geographic data packages</h2>
@@ -512,40 +512,40 @@ Other notable packages include <strong>GSODR</strong>, which provides Global Sum
 <p>Each data package has its own syntax for accessing data.
 This diversity is demonstrated in the subsequent code chunks, which show how to get data using three packages from Table <a href="read-write.html#tab:datapackages">7.1</a>.
 Country borders are often useful and these can be accessed with the <code>ne_countries()</code> function from the <strong>rnaturalearth</strong> package as follows:</p>
-<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" data-line-number="1"><span class="kw">library</span>(rnaturalearth)</a>
-<a class="sourceLine" id="cb233-2" data-line-number="2">usa =<span class="st"> </span><span class="kw">ne_countries</span>(<span class="dt">country =</span> <span class="st">&quot;United States of America&quot;</span>) <span class="co"># United States borders</span></a>
-<a class="sourceLine" id="cb233-3" data-line-number="3"><span class="kw">class</span>(usa)</a>
-<a class="sourceLine" id="cb233-4" data-line-number="4"><span class="co">#&gt; [1] &quot;SpatialPolygonsDataFrame&quot;</span></a>
-<a class="sourceLine" id="cb233-5" data-line-number="5"><span class="co">#&gt; attr(,&quot;package&quot;)</span></a>
-<a class="sourceLine" id="cb233-6" data-line-number="6"><span class="co">#&gt; [1] &quot;sp&quot;</span></a>
-<a class="sourceLine" id="cb233-7" data-line-number="7"><span class="co"># alternative way of accessing the data, with raster::getData()</span></a>
-<a class="sourceLine" id="cb233-8" data-line-number="8"><span class="co"># getData(&quot;GADM&quot;, country = &quot;USA&quot;, level = 0)</span></a></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb234-1" data-line-number="1"><span class="kw">library</span>(rnaturalearth)</a>
+<a class="sourceLine" id="cb234-2" data-line-number="2">usa =<span class="st"> </span><span class="kw">ne_countries</span>(<span class="dt">country =</span> <span class="st">&quot;United States of America&quot;</span>) <span class="co"># United States borders</span></a>
+<a class="sourceLine" id="cb234-3" data-line-number="3"><span class="kw">class</span>(usa)</a>
+<a class="sourceLine" id="cb234-4" data-line-number="4"><span class="co">#&gt; [1] &quot;SpatialPolygonsDataFrame&quot;</span></a>
+<a class="sourceLine" id="cb234-5" data-line-number="5"><span class="co">#&gt; attr(,&quot;package&quot;)</span></a>
+<a class="sourceLine" id="cb234-6" data-line-number="6"><span class="co">#&gt; [1] &quot;sp&quot;</span></a>
+<a class="sourceLine" id="cb234-7" data-line-number="7"><span class="co"># alternative way of accessing the data, with raster::getData()</span></a>
+<a class="sourceLine" id="cb234-8" data-line-number="8"><span class="co"># getData(&quot;GADM&quot;, country = &quot;USA&quot;, level = 0)</span></a></code></pre></div>
 <p>By default <strong>rnaturalearth</strong> returns objects of class <code>Spatial</code>.
 The result can be converted into an <code>sf</code> objects with <code>st_as_sf()</code> as follows:</p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb234-1" data-line-number="1">usa_sf =<span class="st"> </span><span class="kw">st_as_sf</span>(usa)</a></code></pre></div>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" data-line-number="1">usa_sf =<span class="st"> </span><span class="kw">st_as_sf</span>(usa)</a></code></pre></div>
 <p>A second example downloads a series of rasters containing global monthly precipitation sums with spatial resolution of ten minutes.
 The result is a multilayer object of class <code>RasterStack</code>.</p>
-<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" data-line-number="1"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb235-2" data-line-number="2">worldclim_prec =<span class="st"> </span><span class="kw">getData</span>(<span class="dt">name =</span> <span class="st">&quot;worldclim&quot;</span>, <span class="dt">var =</span> <span class="st">&quot;prec&quot;</span>, <span class="dt">res =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb235-3" data-line-number="3"><span class="kw">class</span>(worldclim_prec)</a>
-<a class="sourceLine" id="cb235-4" data-line-number="4"><span class="co">#&gt; [1] &quot;RasterStack&quot;</span></a>
-<a class="sourceLine" id="cb235-5" data-line-number="5"><span class="co">#&gt; attr(,&quot;package&quot;)</span></a>
-<a class="sourceLine" id="cb235-6" data-line-number="6"><span class="co">#&gt; [1] &quot;raster&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb236-1" data-line-number="1"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb236-2" data-line-number="2">worldclim_prec =<span class="st"> </span><span class="kw">getData</span>(<span class="dt">name =</span> <span class="st">&quot;worldclim&quot;</span>, <span class="dt">var =</span> <span class="st">&quot;prec&quot;</span>, <span class="dt">res =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb236-3" data-line-number="3"><span class="kw">class</span>(worldclim_prec)</a>
+<a class="sourceLine" id="cb236-4" data-line-number="4"><span class="co">#&gt; [1] &quot;RasterStack&quot;</span></a>
+<a class="sourceLine" id="cb236-5" data-line-number="5"><span class="co">#&gt; attr(,&quot;package&quot;)</span></a>
+<a class="sourceLine" id="cb236-6" data-line-number="6"><span class="co">#&gt; [1] &quot;raster&quot;</span></a></code></pre></div>
 <p>A third example uses the <strong>osmdata</strong> package <span class="citation">(Padgham et al. <a href="#ref-R-osmdata">2018</a>)</span> to find parks from the OpenStreetMap (OSM) database.
 As illustrated in the code-chunk below, queries begin with the function <code>opq()</code> (short for OpenStreetMap query), the first argument of which is bounding box, or text string representing a bounding box (the city of Leeds in this case).
 The result is passed to a function for selecting which OSM elements we’re interested in (parks in this case), represented by <em>key-value pairs</em>. Next, they are passed to the function <code>osmdata_sf()</code> which does the work of downloading the data and converting it into a list of <code>sf</code> objects (see <code>vignette('osmdata')</code> for further details):</p>
-<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb236-1" data-line-number="1"><span class="kw">library</span>(osmdata)</a>
-<a class="sourceLine" id="cb236-2" data-line-number="2">parks =<span class="st"> </span><span class="kw">opq</span>(<span class="dt">bbox =</span> <span class="st">&quot;leeds uk&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb236-3" data-line-number="3"><span class="st">  </span><span class="kw">add_osm_feature</span>(<span class="dt">key =</span> <span class="st">&quot;leisure&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;park&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb236-4" data-line-number="4"><span class="st">  </span><span class="kw">osmdata_sf</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" data-line-number="1"><span class="kw">library</span>(osmdata)</a>
+<a class="sourceLine" id="cb237-2" data-line-number="2">parks =<span class="st"> </span><span class="kw">opq</span>(<span class="dt">bbox =</span> <span class="st">&quot;leeds uk&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb237-3" data-line-number="3"><span class="st">  </span><span class="kw">add_osm_feature</span>(<span class="dt">key =</span> <span class="st">&quot;leisure&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;park&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb237-4" data-line-number="4"><span class="st">  </span><span class="kw">osmdata_sf</span>()</a></code></pre></div>
 <p>OpenStreetMap is a vast global database of crowd-sourced data and it is growing daily.
 Although the quality is not as spatially consistent as many official datasets, OSM data have many advantages: they are globally available free of charge and using crowd-source data can encourage ‘citizen science’ and contributions back to the digital commons.
 Further examples of <strong>osmdata</strong> in action are provided in Chapters <a href="gis.html#gis">9</a>, <a href="transport.html#transport">12</a> and <a href="location.html#location">13</a>.</p>
 <p>Sometimes, packages come with inbuilt datasets.
 These can be accessed in four ways: by attaching the package (if the package uses ‘lazy loading’ as <strong>spData</strong> does), with <code>data(dataset)</code>, by referring to the dataset with <code>pkg::dataset</code> or with <code>system.file()</code> to access raw data files.
 The following code chunk illustrates the latter two options using the <code>world</code> dataset (already loaded by attaching its parent package with <code>library(spData)</code>):<a href="#fn31" class="footnote-ref" id="fnref31"><sup>31</sup></a></p>
-<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" data-line-number="1">world2 =<span class="st"> </span>spData<span class="op">::</span>world</a>
-<a class="sourceLine" id="cb237-2" data-line-number="2">world3 =<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">&quot;shapes/world.gpkg&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" data-line-number="1">world2 =<span class="st"> </span>spData<span class="op">::</span>world</a>
+<a class="sourceLine" id="cb238-2" data-line-number="2">world3 =<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">&quot;shapes/world.gpkg&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>))</a></code></pre></div>
 </div>
 <div id="geographic-web-services" class="section level2">
 <h2><span class="header-section-number">7.4</span> Geographic web services</h2>
@@ -557,40 +557,40 @@ Like other web APIs, OWS APIs use a ‘base URL’, an ‘endpoint’ and ‘URL
 <p>There are many requests that can be made to a OWS service.
 One of the most fundamental is <code>getCapabilities</code>, demonstrated with <strong>httr</strong> below.
 The code chunk demonstrates how API queries can be constructed and dispatched, in this case to discover the capabilities of a service run by the Food and Agriculture Organization of the United Nations (FAO):</p>
-<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" data-line-number="1">base_url =<span class="st"> &quot;http://www.fao.org&quot;</span></a>
-<a class="sourceLine" id="cb238-2" data-line-number="2">endpoint =<span class="st"> &quot;/figis/geoserver/wfs&quot;</span></a>
-<a class="sourceLine" id="cb238-3" data-line-number="3">q =<span class="st"> </span><span class="kw">list</span>(<span class="dt">request =</span> <span class="st">&quot;GetCapabilities&quot;</span>)</a>
-<a class="sourceLine" id="cb238-4" data-line-number="4">res =<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> httr<span class="op">::</span><span class="kw">modify_url</span>(base_url, <span class="dt">path =</span> endpoint), <span class="dt">query =</span> q)</a>
-<a class="sourceLine" id="cb238-5" data-line-number="5">res<span class="op">$</span>url</a>
-<a class="sourceLine" id="cb238-6" data-line-number="6"><span class="co">#&gt; [1] &quot;http://www.fao.org/figis/geoserver/wfs?request=GetCapabilities&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb239-1" data-line-number="1">base_url =<span class="st"> &quot;http://www.fao.org&quot;</span></a>
+<a class="sourceLine" id="cb239-2" data-line-number="2">endpoint =<span class="st"> &quot;/figis/geoserver/wfs&quot;</span></a>
+<a class="sourceLine" id="cb239-3" data-line-number="3">q =<span class="st"> </span><span class="kw">list</span>(<span class="dt">request =</span> <span class="st">&quot;GetCapabilities&quot;</span>)</a>
+<a class="sourceLine" id="cb239-4" data-line-number="4">res =<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> httr<span class="op">::</span><span class="kw">modify_url</span>(base_url, <span class="dt">path =</span> endpoint), <span class="dt">query =</span> q)</a>
+<a class="sourceLine" id="cb239-5" data-line-number="5">res<span class="op">$</span>url</a>
+<a class="sourceLine" id="cb239-6" data-line-number="6"><span class="co">#&gt; [1] &quot;http://www.fao.org/figis/geoserver/wfs?request=GetCapabilities&quot;</span></a></code></pre></div>
 <p>The above code chunk demonstrates how API requests can be constructed programmatically with the <code>GET()</code> function, which takes a base URL and a list of query parameters which can easily be extended.
 The result of the request is saved in <code>res</code>, an object of class <code>response</code> defined in the <strong>httr</strong> package, which is a list containing information of the request, including the URL.
 As can be seen by executing <code>browseURL(res$url)</code>, the results can also be read directly in a browser.
 One way of extracting the contents of the request is as follows:</p>
-<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb239-1" data-line-number="1">txt =<span class="st"> </span>httr<span class="op">::</span><span class="kw">content</span>(res, <span class="st">&quot;text&quot;</span>)</a>
-<a class="sourceLine" id="cb239-2" data-line-number="2">xml =<span class="st"> </span>xml2<span class="op">::</span><span class="kw">read_xml</span>(txt)</a></code></pre></div>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" data-line-number="1">xml</a>
-<a class="sourceLine" id="cb240-2" data-line-number="2"><span class="co">#&gt; {xml_document} ...</span></a>
-<a class="sourceLine" id="cb240-3" data-line-number="3"><span class="co">#&gt; [1] &lt;ows:ServiceIdentification&gt;\n  &lt;ows:Title&gt;GeoServer WFS...</span></a>
-<a class="sourceLine" id="cb240-4" data-line-number="4"><span class="co">#&gt; [2] &lt;ows:ServiceProvider&gt;\n  &lt;ows:ProviderName&gt;Food and Agr...</span></a>
-<a class="sourceLine" id="cb240-5" data-line-number="5"><span class="co">#&gt; ...</span></a></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" data-line-number="1">txt =<span class="st"> </span>httr<span class="op">::</span><span class="kw">content</span>(res, <span class="st">&quot;text&quot;</span>)</a>
+<a class="sourceLine" id="cb240-2" data-line-number="2">xml =<span class="st"> </span>xml2<span class="op">::</span><span class="kw">read_xml</span>(txt)</a></code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb241-1" data-line-number="1">xml</a>
+<a class="sourceLine" id="cb241-2" data-line-number="2"><span class="co">#&gt; {xml_document} ...</span></a>
+<a class="sourceLine" id="cb241-3" data-line-number="3"><span class="co">#&gt; [1] &lt;ows:ServiceIdentification&gt;\n  &lt;ows:Title&gt;GeoServer WFS...</span></a>
+<a class="sourceLine" id="cb241-4" data-line-number="4"><span class="co">#&gt; [2] &lt;ows:ServiceProvider&gt;\n  &lt;ows:ProviderName&gt;Food and Agr...</span></a>
+<a class="sourceLine" id="cb241-5" data-line-number="5"><span class="co">#&gt; ...</span></a></code></pre></div>
 <p>Data can be downloaded from WFS services with the <code>GetFeature</code> request and a specific <code>typeName</code> (as illustrated in the code chunk below).</p>
 <p>Available names differ depending on the accessed web feature service.
 One can extract them programmatically using web technologies <span class="citation">(Nolan and Lang <a href="#ref-nolan_xml_2014">2014</a>)</span> or scrolling manually through the contents of the <code>GetCapabilities</code> output in a browser.</p>
-<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb241-1" data-line-number="1">qf =<span class="st"> </span><span class="kw">list</span>(<span class="dt">request =</span> <span class="st">&quot;GetFeature&quot;</span>, <span class="dt">typeName =</span> <span class="st">&quot;area:FAO_AREAS&quot;</span>)</a>
-<a class="sourceLine" id="cb241-2" data-line-number="2">file =<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">&quot;.gml&quot;</span>)</a>
-<a class="sourceLine" id="cb241-3" data-line-number="3">httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> base_url, <span class="dt">query =</span> qf, httr<span class="op">::</span><span class="kw">write_disk</span>(file))</a>
-<a class="sourceLine" id="cb241-4" data-line-number="4">fao_areas =<span class="st"> </span>sf<span class="op">::</span><span class="kw">read_sf</span>(file)</a></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" data-line-number="1">qf =<span class="st"> </span><span class="kw">list</span>(<span class="dt">request =</span> <span class="st">&quot;GetFeature&quot;</span>, <span class="dt">typeName =</span> <span class="st">&quot;area:FAO_AREAS&quot;</span>)</a>
+<a class="sourceLine" id="cb242-2" data-line-number="2">file =<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">&quot;.gml&quot;</span>)</a>
+<a class="sourceLine" id="cb242-3" data-line-number="3">httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> base_url, <span class="dt">query =</span> qf, httr<span class="op">::</span><span class="kw">write_disk</span>(file))</a>
+<a class="sourceLine" id="cb242-4" data-line-number="4">fao_areas =<span class="st"> </span>sf<span class="op">::</span><span class="kw">read_sf</span>(file)</a></code></pre></div>
 <p>Note the use of <code>write_disk()</code> to ensure that the results are written to disk rather than loaded into memory, allowing them to be imported with <strong>sf</strong>.
 This example shows how to gain low-level access to web services using <strong>httr</strong>, which can be useful for understanding how web services work.
 For many everyday tasks, however, a higher-level interface may be more appropriate, and a number of R packages, and tutorials, have been developed precisely for this purpose.</p>
 <p>Packages <strong>ows4R</strong>, <strong>rwfs</strong> and <strong>sos4R</strong> have been developed for working with OWS services in general, WFS and the sensor observation service (SOS) respectively.
 As of October 2018, only <strong>ows4R</strong> is on CRAN.
 The package’s basic functionality is demonstrated below, in commands that get all <code>FAO_AREAS</code> as we did in the previous code chunk:<a href="#fn32" class="footnote-ref" id="fnref32"><sup>32</sup></a></p>
-<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" data-line-number="1"><span class="kw">library</span>(ows4R)</a>
-<a class="sourceLine" id="cb242-2" data-line-number="2">wfs =<span class="st"> </span>WFSClient<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;http://www.fao.org/figis/geoserver/wfs&quot;</span>,</a>
-<a class="sourceLine" id="cb242-3" data-line-number="3">                      <span class="dt">serviceVersion =</span> <span class="st">&quot;1.0.0&quot;</span>, <span class="dt">logger =</span> <span class="st">&quot;INFO&quot;</span>)</a>
-<a class="sourceLine" id="cb242-4" data-line-number="4">fao_areas =<span class="st"> </span>wfs<span class="op">$</span><span class="kw">getFeatures</span>(<span class="st">&quot;area:FAO_AREAS&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb243-1" data-line-number="1"><span class="kw">library</span>(ows4R)</a>
+<a class="sourceLine" id="cb243-2" data-line-number="2">wfs =<span class="st"> </span>WFSClient<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;http://www.fao.org/figis/geoserver/wfs&quot;</span>,</a>
+<a class="sourceLine" id="cb243-3" data-line-number="3">                      <span class="dt">serviceVersion =</span> <span class="st">&quot;1.0.0&quot;</span>, <span class="dt">logger =</span> <span class="st">&quot;INFO&quot;</span>)</a>
+<a class="sourceLine" id="cb243-4" data-line-number="4">fao_areas =<span class="st"> </span>wfs<span class="op">$</span><span class="kw">getFeatures</span>(<span class="st">&quot;area:FAO_AREAS&quot;</span>)</a></code></pre></div>
 <p>There is much more to learn about web services and much potential for development of R-OWS interfaces, an active area of development.
 For further information on the topic, we recommend examples from European Centre for Medium-Range Weather Forecasts (ECMWF) services at <a href="https://github.com/OpenDataHack/data_service_catalogue">github.com/OpenDataHack</a> and reading-up on OCG Web Services at <a href="http://www.opengeospatial.org/standards">opengeospatial.org</a>.</p>
 </div>
@@ -831,8 +831,8 @@ Spatial vector data comes in a wide variety of file formats, most of which can b
 Behind the scenes this calls GDAL.
 To find out which data formats <strong>sf</strong> supports, run <code>st_drivers()</code>.
 Here, we show only the first five drivers (see Table <a href="read-write.html#tab:drivers">7.3</a>):</p>
-<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb243-1" data-line-number="1">sf_drivers =<span class="st"> </span><span class="kw">st_drivers</span>()</a>
-<a class="sourceLine" id="cb243-2" data-line-number="2"><span class="kw">head</span>(sf_drivers, <span class="dt">n =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb244-1" data-line-number="1">sf_drivers =<span class="st"> </span><span class="kw">st_drivers</span>()</a>
+<a class="sourceLine" id="cb244-2" data-line-number="2"><span class="kw">head</span>(sf_drivers, <span class="dt">n =</span> <span class="dv">5</span>)</a></code></pre></div>
 <table>
 <caption>
 <span id="tab:drivers">TABLE 7.3: </span>Sample of available drivers for reading/writing vector data (it could vary between different GDAL versions).
@@ -986,15 +986,15 @@ TRUE
 The content of a text string could vary between different drivers.
 In most cases, as with the ESRI Shapefile (<code>.shp</code>) or the <code>GeoPackage</code> format (<code>.gpkg</code>), the <code>dsn</code> would be a file name.
 <code>st_read()</code> guesses the driver based on the file extension, as illustrated for a <code>.gpkg</code> file below:</p>
-<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb244-1" data-line-number="1">vector_filepath =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;shapes/world.gpkg&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
-<a class="sourceLine" id="cb244-2" data-line-number="2">world =<span class="st"> </span><span class="kw">st_read</span>(vector_filepath)</a>
-<a class="sourceLine" id="cb244-3" data-line-number="3"><span class="co">#&gt; Reading layer `world&#39; from data source `.../world.gpkg&#39; using driver `GPKG&#39;</span></a>
-<a class="sourceLine" id="cb244-4" data-line-number="4"><span class="co">#&gt; Simple feature collection with 177 features and 10 fields</span></a>
-<a class="sourceLine" id="cb244-5" data-line-number="5"><span class="co">#&gt; geometry type:  MULTIPOLYGON</span></a>
-<a class="sourceLine" id="cb244-6" data-line-number="6"><span class="co">#&gt; dimension:      XY</span></a>
-<a class="sourceLine" id="cb244-7" data-line-number="7"><span class="co">#&gt; bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513</span></a>
-<a class="sourceLine" id="cb244-8" data-line-number="8"><span class="co">#&gt; epsg (SRID):    4326</span></a>
-<a class="sourceLine" id="cb244-9" data-line-number="9"><span class="co">#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</span></a></code></pre></div>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb245-1" data-line-number="1">vector_filepath =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;shapes/world.gpkg&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
+<a class="sourceLine" id="cb245-2" data-line-number="2">world =<span class="st"> </span><span class="kw">st_read</span>(vector_filepath)</a>
+<a class="sourceLine" id="cb245-3" data-line-number="3"><span class="co">#&gt; Reading layer `world&#39; from data source `.../world.gpkg&#39; using driver `GPKG&#39;</span></a>
+<a class="sourceLine" id="cb245-4" data-line-number="4"><span class="co">#&gt; Simple feature collection with 177 features and 10 fields</span></a>
+<a class="sourceLine" id="cb245-5" data-line-number="5"><span class="co">#&gt; geometry type:  MULTIPOLYGON</span></a>
+<a class="sourceLine" id="cb245-6" data-line-number="6"><span class="co">#&gt; dimension:      XY</span></a>
+<a class="sourceLine" id="cb245-7" data-line-number="7"><span class="co">#&gt; bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513</span></a>
+<a class="sourceLine" id="cb245-8" data-line-number="8"><span class="co">#&gt; epsg (SRID):    4326</span></a>
+<a class="sourceLine" id="cb245-9" data-line-number="9"><span class="co">#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</span></a></code></pre></div>
 <p>For some drivers, <code>dsn</code> could be provided as a folder name, access credentials for a database, or a GeoJSON string representation (see the examples of the <code>st_read()</code> help page for more details).</p>
 <p>Some vector driver formats can store multiple data layers.
 By default, <code>st_read()</code> automatically reads the first layer of the file specified in <code>dsn</code>; however, using the <code>layer</code> argument you can specify any other layer.</p>
@@ -1004,19 +1004,19 @@ To read in such files as spatial objects, we naturally have to specify the names
 We can do this with the help of the <code>options</code> parameter.
 To find out about possible options, please refer to the ‘Open Options’ section of the corresponding GDAL driver description.
 For the comma-separated value (csv) format, visit <a href="http://www.gdal.org/drv_csv.html" class="uri">http://www.gdal.org/drv_csv.html</a>.</p>
-<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb245-1" data-line-number="1">cycle_hire_txt =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;misc/cycle_hire_xy.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
-<a class="sourceLine" id="cb245-2" data-line-number="2">cycle_hire_xy =<span class="st"> </span><span class="kw">st_read</span>(cycle_hire_txt, <span class="dt">options =</span> <span class="kw">c</span>(<span class="st">&quot;X_POSSIBLE_NAMES=X&quot;</span>,</a>
-<a class="sourceLine" id="cb245-3" data-line-number="3">                                                    <span class="st">&quot;Y_POSSIBLE_NAMES=Y&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb246-1" data-line-number="1">cycle_hire_txt =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;misc/cycle_hire_xy.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
+<a class="sourceLine" id="cb246-2" data-line-number="2">cycle_hire_xy =<span class="st"> </span><span class="kw">st_read</span>(cycle_hire_txt, <span class="dt">options =</span> <span class="kw">c</span>(<span class="st">&quot;X_POSSIBLE_NAMES=X&quot;</span>,</a>
+<a class="sourceLine" id="cb246-3" data-line-number="3">                                                    <span class="st">&quot;Y_POSSIBLE_NAMES=Y&quot;</span>))</a></code></pre></div>
 <p>Instead of columns describing xy-coordinates, a single column can also contain the geometry information.
 Well-known text (WKT), well-known binary (WKB), and the GeoJSON formats are examples of this.
 For instance, the <code>world_wkt.csv</code> file has a column named <code>WKT</code> representing polygons of the world’s countries.
 We will again use the <code>options</code> parameter to indicate this.
 Here, we will use <code>read_sf()</code>, the tidyverse-flavoured version of <code>st_read()</code>: strings are parsed as characters instead of factors and the resulting data frame is a <a href="https://r4ds.had.co.nz/tibbles.html">tibble</a>. The driver name is also not printed to the console.</p>
-<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb246-1" data-line-number="1">world_txt =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;misc/world_wkt.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
-<a class="sourceLine" id="cb246-2" data-line-number="2">world_wkt =<span class="st"> </span><span class="kw">read_sf</span>(world_txt, <span class="dt">options =</span> <span class="st">&quot;GEOM_POSSIBLE_NAMES=WKT&quot;</span>)</a>
-<a class="sourceLine" id="cb246-3" data-line-number="3"><span class="co"># the same as</span></a>
-<a class="sourceLine" id="cb246-4" data-line-number="4">world_wkt =<span class="st"> </span><span class="kw">st_read</span>(world_txt, <span class="dt">options =</span> <span class="st">&quot;GEOM_POSSIBLE_NAMES=WKT&quot;</span>, </a>
-<a class="sourceLine" id="cb246-5" data-line-number="5">                    <span class="dt">quiet =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>, <span class="dt">as_tibble =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb247-1" data-line-number="1">world_txt =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;misc/world_wkt.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
+<a class="sourceLine" id="cb247-2" data-line-number="2">world_wkt =<span class="st"> </span><span class="kw">read_sf</span>(world_txt, <span class="dt">options =</span> <span class="st">&quot;GEOM_POSSIBLE_NAMES=WKT&quot;</span>)</a>
+<a class="sourceLine" id="cb247-3" data-line-number="3"><span class="co"># the same as</span></a>
+<a class="sourceLine" id="cb247-4" data-line-number="4">world_wkt =<span class="st"> </span><span class="kw">st_read</span>(world_txt, <span class="dt">options =</span> <span class="st">&quot;GEOM_POSSIBLE_NAMES=WKT&quot;</span>, </a>
+<a class="sourceLine" id="cb247-5" data-line-number="5">                    <span class="dt">quiet =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>, <span class="dt">as_tibble =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 
 <div class="rmdnote">
 Not all of the supported vector file formats store information about their coordinate reference system.
@@ -1030,23 +1030,23 @@ Here, we access a KML file from the web.
 This file contains more than one layer.
 <code>st_layers()</code> lists all available layers.
 We choose the first layer <code>Placemarks</code> and say so with the help of the <code>layer</code> parameter in <code>read_sf()</code>.</p>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb247-1" data-line-number="1">u =<span class="st"> &quot;https://developers.google.com/kml/documentation/KML_Samples.kml&quot;</span></a>
-<a class="sourceLine" id="cb247-2" data-line-number="2"><span class="kw">download.file</span>(u, <span class="st">&quot;KML_Samples.kml&quot;</span>)</a>
-<a class="sourceLine" id="cb247-3" data-line-number="3"><span class="kw">st_layers</span>(<span class="st">&quot;KML_Samples.kml&quot;</span>)</a>
-<a class="sourceLine" id="cb247-4" data-line-number="4"><span class="co">#&gt; Driver: LIBKML </span></a>
-<a class="sourceLine" id="cb247-5" data-line-number="5"><span class="co">#&gt; Available layers:</span></a>
-<a class="sourceLine" id="cb247-6" data-line-number="6"><span class="co">#&gt;               layer_name geometry_type features fields</span></a>
-<a class="sourceLine" id="cb247-7" data-line-number="7"><span class="co">#&gt; 1             Placemarks                      3     11</span></a>
-<a class="sourceLine" id="cb247-8" data-line-number="8"><span class="co">#&gt; 2      Styles and Markup                      1     11</span></a>
-<a class="sourceLine" id="cb247-9" data-line-number="9"><span class="co">#&gt; 3       Highlighted Icon                      1     11</span></a>
-<a class="sourceLine" id="cb247-10" data-line-number="10"><span class="co">#&gt; 4        Ground Overlays                      1     11</span></a>
-<a class="sourceLine" id="cb247-11" data-line-number="11"><span class="co">#&gt; 5        Screen Overlays                      0     11</span></a>
-<a class="sourceLine" id="cb247-12" data-line-number="12"><span class="co">#&gt; 6                  Paths                      6     11</span></a>
-<a class="sourceLine" id="cb247-13" data-line-number="13"><span class="co">#&gt; 7               Polygons                      0     11</span></a>
-<a class="sourceLine" id="cb247-14" data-line-number="14"><span class="co">#&gt; 8          Google Campus                      4     11</span></a>
-<a class="sourceLine" id="cb247-15" data-line-number="15"><span class="co">#&gt; 9       Extruded Polygon                      1     11</span></a>
-<a class="sourceLine" id="cb247-16" data-line-number="16"><span class="co">#&gt; 10 Absolute and Relative                      4     11</span></a>
-<a class="sourceLine" id="cb247-17" data-line-number="17">kml =<span class="st"> </span><span class="kw">read_sf</span>(<span class="st">&quot;KML_Samples.kml&quot;</span>, <span class="dt">layer =</span> <span class="st">&quot;Placemarks&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb248-1" data-line-number="1">u =<span class="st"> &quot;https://developers.google.com/kml/documentation/KML_Samples.kml&quot;</span></a>
+<a class="sourceLine" id="cb248-2" data-line-number="2"><span class="kw">download.file</span>(u, <span class="st">&quot;KML_Samples.kml&quot;</span>)</a>
+<a class="sourceLine" id="cb248-3" data-line-number="3"><span class="kw">st_layers</span>(<span class="st">&quot;KML_Samples.kml&quot;</span>)</a>
+<a class="sourceLine" id="cb248-4" data-line-number="4"><span class="co">#&gt; Driver: LIBKML </span></a>
+<a class="sourceLine" id="cb248-5" data-line-number="5"><span class="co">#&gt; Available layers:</span></a>
+<a class="sourceLine" id="cb248-6" data-line-number="6"><span class="co">#&gt;               layer_name geometry_type features fields</span></a>
+<a class="sourceLine" id="cb248-7" data-line-number="7"><span class="co">#&gt; 1             Placemarks                      3     11</span></a>
+<a class="sourceLine" id="cb248-8" data-line-number="8"><span class="co">#&gt; 2      Styles and Markup                      1     11</span></a>
+<a class="sourceLine" id="cb248-9" data-line-number="9"><span class="co">#&gt; 3       Highlighted Icon                      1     11</span></a>
+<a class="sourceLine" id="cb248-10" data-line-number="10"><span class="co">#&gt; 4        Ground Overlays                      1     11</span></a>
+<a class="sourceLine" id="cb248-11" data-line-number="11"><span class="co">#&gt; 5        Screen Overlays                      0     11</span></a>
+<a class="sourceLine" id="cb248-12" data-line-number="12"><span class="co">#&gt; 6                  Paths                      6     11</span></a>
+<a class="sourceLine" id="cb248-13" data-line-number="13"><span class="co">#&gt; 7               Polygons                      0     11</span></a>
+<a class="sourceLine" id="cb248-14" data-line-number="14"><span class="co">#&gt; 8          Google Campus                      4     11</span></a>
+<a class="sourceLine" id="cb248-15" data-line-number="15"><span class="co">#&gt; 9       Extruded Polygon                      1     11</span></a>
+<a class="sourceLine" id="cb248-16" data-line-number="16"><span class="co">#&gt; 10 Absolute and Relative                      4     11</span></a>
+<a class="sourceLine" id="cb248-17" data-line-number="17">kml =<span class="st"> </span><span class="kw">read_sf</span>(<span class="st">&quot;KML_Samples.kml&quot;</span>, <span class="dt">layer =</span> <span class="st">&quot;Placemarks&quot;</span>)</a></code></pre></div>
 <p>All the examples presented in this section so far have used the <strong>sf</strong> package for geographic data import.
 It is fast and flexible but it may be worth looking at other packages for specific file formats.
 An example is the <strong>geojsonsf</strong> package.
@@ -1057,14 +1057,14 @@ A <a href="https://github.com/ATFutures/geobench">benchmark</a> suggests it is a
 <p>
 Similar to vector data, raster data comes in many file formats with some of them supporting even multilayer files.
 <strong>raster</strong>’s <code>raster()</code> command reads in a single layer.</p>
-<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb248-1" data-line-number="1">raster_filepath =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;raster/srtm.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>)</a>
-<a class="sourceLine" id="cb248-2" data-line-number="2">single_layer =<span class="st"> </span><span class="kw">raster</span>(raster_filepath)</a></code></pre></div>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb249-1" data-line-number="1">raster_filepath =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;raster/srtm.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>)</a>
+<a class="sourceLine" id="cb249-2" data-line-number="2">single_layer =<span class="st"> </span><span class="kw">raster</span>(raster_filepath)</a></code></pre></div>
 <p>In case you want to read in a single band from a multilayer file, use the <code>band</code> parameter to indicate a specific layer.</p>
-<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb249-1" data-line-number="1">multilayer_filepath =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;raster/landsat.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>)</a>
-<a class="sourceLine" id="cb249-2" data-line-number="2">band3 =<span class="st"> </span><span class="kw">raster</span>(multilayer_filepath, <span class="dt">band =</span> <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" data-line-number="1">multilayer_filepath =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;raster/landsat.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>)</a>
+<a class="sourceLine" id="cb250-2" data-line-number="2">band3 =<span class="st"> </span><span class="kw">raster</span>(multilayer_filepath, <span class="dt">band =</span> <span class="dv">3</span>)</a></code></pre></div>
 <p>If you want to read in all bands, use <code>brick()</code> or <code>stack()</code>.</p>
-<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" data-line-number="1">multilayer_brick =<span class="st"> </span><span class="kw">brick</span>(multilayer_filepath)</a>
-<a class="sourceLine" id="cb250-2" data-line-number="2">multilayer_stack =<span class="st"> </span><span class="kw">stack</span>(multilayer_filepath)</a></code></pre></div>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb251-1" data-line-number="1">multilayer_brick =<span class="st"> </span><span class="kw">brick</span>(multilayer_filepath)</a>
+<a class="sourceLine" id="cb251-2" data-line-number="2">multilayer_stack =<span class="st"> </span><span class="kw">stack</span>(multilayer_filepath)</a></code></pre></div>
 <p>Please refer to Section <a href="spatial-class.html#raster-classes">2.3.3</a> for information on the difference between raster stacks and bricks.</p>
 <!-- ### Databases -->
 <!-- postgis input example -->
@@ -1082,35 +1082,29 @@ The next two sections will demonstrate how to do this.</p>
 It allows you to write <strong>sf</strong> objects to a wide range of geographic vector file formats, including the most common such as <code>.geojson</code>, <code>.shp</code> and <code>.gpkg</code>.
 Based on the file name, <code>st_write()</code> decides automatically which driver to use.
 The speed of the writing process depends also on the driver.</p>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb251-1" data-line-number="1"><span class="kw">st_write</span>(<span class="dt">obj =</span> world, <span class="dt">dsn =</span> <span class="st">&quot;world.gpkg&quot;</span>)</a>
-<a class="sourceLine" id="cb251-2" data-line-number="2"><span class="co">#&gt; Updating layer `world&#39; to data source `world.gpkg&#39; using driver `GPKG&#39;</span></a>
-<a class="sourceLine" id="cb251-3" data-line-number="3"><span class="co">#&gt; Writing 177 features with 10 fields and geometry type Multi Polygon.</span></a></code></pre></div>
-<p><strong>Note</strong>: if you try to write to the same data source again, the function will fail:</p>
 <div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb252-1" data-line-number="1"><span class="kw">st_write</span>(<span class="dt">obj =</span> world, <span class="dt">dsn =</span> <span class="st">&quot;world.gpkg&quot;</span>)</a>
-<a class="sourceLine" id="cb252-2" data-line-number="2"><span class="co">#&gt; Updating layer `world&#39; to data source `world.gpkg&#39; using driver `GPKG&#39;</span></a>
-<a class="sourceLine" id="cb252-3" data-line-number="3"><span class="co">#&gt; Creating layer world failed.</span></a>
-<a class="sourceLine" id="cb252-4" data-line-number="4"><span class="co">#&gt; Error in CPL_write_ogr(obj, dsn, layer, driver, ...),  : </span></a>
-<a class="sourceLine" id="cb252-5" data-line-number="5"><span class="co">#&gt;   Layer creation failed.</span></a>
-<a class="sourceLine" id="cb252-6" data-line-number="6"><span class="co">#&gt; In addition: Warning message:</span></a>
-<a class="sourceLine" id="cb252-7" data-line-number="7"><span class="co">#&gt; In CPL_write_ogr(obj, dsn, layer, driver, ...),  :</span></a>
-<a class="sourceLine" id="cb252-8" data-line-number="8"><span class="co">#&gt;   GDAL Error 1: Layer world already exists, CreateLayer failed.</span></a>
-<a class="sourceLine" id="cb252-9" data-line-number="9"><span class="co">#&gt; Use the layer creation option OVERWRITE=YES to replace it.</span></a></code></pre></div>
-<p>The error message provides some information as to why the function failed.
-The <code>GDAL Error 1</code> statement makes clear that the failure occurred at the GDAL level.
-Additionally, the suggestion to use <code>OVERWRITE=YES</code> provides a clue about how to fix the problem.
-However, this is not a <code>st_write()</code> argument, it is a GDAL option.
-Luckily, <code>st_write</code> provides a <code>layer_options</code> argument through which we can pass driver-dependent options:</p>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb253-1" data-line-number="1"><span class="kw">st_write</span>(<span class="dt">obj =</span> world, <span class="dt">dsn =</span> <span class="st">&quot;world.gpkg&quot;</span>, <span class="dt">layer_options =</span> <span class="st">&quot;OVERWRITE=YES&quot;</span>)</a></code></pre></div>
-<p>Another solution is to use the <code>st_write()</code> argument <code>delete_layer</code>. Setting it to <code>TRUE</code> deletes already existing layers in the data source before the function attempts to write (note there is also a <code>delete_dsn</code> argument):</p>
-<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb254-1" data-line-number="1"><span class="kw">st_write</span>(<span class="dt">obj =</span> world, <span class="dt">dsn =</span> <span class="st">&quot;world.gpkg&quot;</span>, <span class="dt">delete_layer =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p>You can achieve the same with <code>write_sf()</code> since it is equivalent to (technically an <em>alias</em> for) <code>st_write()</code>, except that its defaults for <code>delete_layer</code> and <code>quiet</code> is <code>TRUE</code>.</p>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb255-1" data-line-number="1"><span class="kw">write_sf</span>(<span class="dt">obj =</span> world, <span class="dt">dsn =</span> <span class="st">&quot;world.gpkg&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb252-2" data-line-number="2"><span class="co">#&gt; Writing layer `world&#39; to data source `world.gpkg&#39; using driver `GPKG&#39;</span></a>
+<a class="sourceLine" id="cb252-3" data-line-number="3"><span class="co">#&gt; Writing 177 features with 10 fields and geometry type Multi Polygon.</span></a></code></pre></div>
+<p><strong>Note</strong>: if you try to write to the same data source again, the function will fail:</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb253-1" data-line-number="1"><span class="kw">st_write</span>(<span class="dt">obj =</span> world, <span class="dt">dsn =</span> <span class="st">&quot;world.gpkg&quot;</span>)</a>
+<a class="sourceLine" id="cb253-2" data-line-number="2"><span class="co">#&gt; Layer world in dataset world.gpkg already exists:</span></a>
+<a class="sourceLine" id="cb253-3" data-line-number="3"><span class="co">#&gt; use either append=TRUE to append to layer or append=FALSE to overwrite layer</span></a>
+<a class="sourceLine" id="cb253-4" data-line-number="4"><span class="co">#&gt; Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options), : Dataset already exists.</span></a></code></pre></div>
+<p>The error message tells us why the function failed:
+<code>world.gpkg</code> already contains a layer called <code>world</code>.
+To fix this problem, use the <code>append</code> argument.
+When this argument is set to <code>TRUE</code>, the old layer is kept and the <code>world</code> object is added as a second new layer:</p>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb254-1" data-line-number="1"><span class="kw">st_write</span>(<span class="dt">obj =</span> world, <span class="dt">dsn =</span> <span class="st">&quot;world.gpkg&quot;</span>, <span class="dt">append =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>Alternatively with <code>append = FALSE</code>, existing layers are deleted before the function attempts to write our object to a file:</p>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb255-1" data-line-number="1"><span class="kw">st_write</span>(<span class="dt">obj =</span> world, <span class="dt">dsn =</span> <span class="st">&quot;world.gpkg&quot;</span>, <span class="dt">append =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>You can achieve the same with <code>write_sf()</code> since it is equivalent to (technically an <em>alias</em> for) <code>st_write()</code>, except that its defaults for <code>append</code> is <code>FALSE</code> and <code>quiet</code> is <code>TRUE</code>.</p>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb256-1" data-line-number="1"><span class="kw">write_sf</span>(<span class="dt">obj =</span> world, <span class="dt">dsn =</span> <span class="st">&quot;world.gpkg&quot;</span>)</a></code></pre></div>
 <p>The <code>layer_options</code> argument could be also used for many different purposes.
 One of them is to write spatial data to a text file.
 This can be done by specifying <code>GEOMETRY</code> inside of <code>layer_options</code>.
 It could be either <code>AS_XY</code> for simple point datasets (it creates two new columns for coordinates) or <code>AS_WKT</code> for more complex spatial data (one new column is created which contains the well-known text representation of spatial objects).</p>
-<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb256-1" data-line-number="1"><span class="kw">st_write</span>(cycle_hire_xy, <span class="st">&quot;cycle_hire_xy.csv&quot;</span>, <span class="dt">layer_options =</span> <span class="st">&quot;GEOMETRY=AS_XY&quot;</span>)</a>
-<a class="sourceLine" id="cb256-2" data-line-number="2"><span class="kw">st_write</span>(world_wkt, <span class="st">&quot;world_wkt.csv&quot;</span>, <span class="dt">layer_options =</span> <span class="st">&quot;GEOMETRY=AS_WKT&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" data-line-number="1"><span class="kw">st_write</span>(cycle_hire_xy, <span class="st">&quot;cycle_hire_xy.csv&quot;</span>, <span class="dt">layer_options =</span> <span class="st">&quot;GEOMETRY=AS_XY&quot;</span>)</a>
+<a class="sourceLine" id="cb257-2" data-line-number="2"><span class="kw">st_write</span>(world_wkt, <span class="st">&quot;world_wkt.csv&quot;</span>, <span class="dt">layer_options =</span> <span class="st">&quot;GEOMETRY=AS_WKT&quot;</span>)</a></code></pre></div>
 </div>
 <div id="raster-data-2" class="section level3">
 <h3><span class="header-section-number">7.7.2</span> Raster data</h3>
@@ -1249,15 +1243,15 @@ FLT8S
 <p>By default, <code>writeRaster()</code> saves outputs in its native format as <code>.grd</code> files, when a file extension is invalid or missing.
 Other file formats can be specified by changing the extension of the output file name.
 Naming a file <code>*.tif</code> will create a GeoTIFF file, as demonstrated below:</p>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" data-line-number="1"><span class="kw">writeRaster</span>(single_layer, <span class="dt">filename =</span> <span class="st">&quot;my_raster.tif&quot;</span>, <span class="dt">datatype =</span> <span class="st">&quot;INT2U&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb258-1" data-line-number="1"><span class="kw">writeRaster</span>(single_layer, <span class="dt">filename =</span> <span class="st">&quot;my_raster.tif&quot;</span>, <span class="dt">datatype =</span> <span class="st">&quot;INT2U&quot;</span>)</a></code></pre></div>
 <p>Some raster file formats have additional options, that can be set by providing <a href="http://www.gdal.org/formats_list.html">GDAL parameters</a> to the <code>options</code> argument of <code>writeRaster()</code>.
 GeoTIFF files, for example, can be compressed using <code>COMPRESS</code>:
 <!-- GeoTIFF files, for example, can be compressed using the `COMPRESS` option^[Find out about GeoTIFF options under http://www.gdal.org/frmt_gtiff.html.]: --></p>
-<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb258-1" data-line-number="1"><span class="kw">writeRaster</span>(<span class="dt">x =</span> single_layer,</a>
-<a class="sourceLine" id="cb258-2" data-line-number="2">            <span class="dt">filename =</span> <span class="st">&quot;my_raster.tif&quot;</span>,</a>
-<a class="sourceLine" id="cb258-3" data-line-number="3">            <span class="dt">datatype =</span> <span class="st">&quot;INT2U&quot;</span>,</a>
-<a class="sourceLine" id="cb258-4" data-line-number="4">            <span class="dt">options =</span> <span class="kw">c</span>(<span class="st">&quot;COMPRESS=DEFLATE&quot;</span>),</a>
-<a class="sourceLine" id="cb258-5" data-line-number="5">            <span class="dt">overwrite =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" data-line-number="1"><span class="kw">writeRaster</span>(<span class="dt">x =</span> single_layer,</a>
+<a class="sourceLine" id="cb259-2" data-line-number="2">            <span class="dt">filename =</span> <span class="st">&quot;my_raster.tif&quot;</span>,</a>
+<a class="sourceLine" id="cb259-3" data-line-number="3">            <span class="dt">datatype =</span> <span class="st">&quot;INT2U&quot;</span>,</a>
+<a class="sourceLine" id="cb259-4" data-line-number="4">            <span class="dt">options =</span> <span class="kw">c</span>(<span class="st">&quot;COMPRESS=DEFLATE&quot;</span>),</a>
+<a class="sourceLine" id="cb259-5" data-line-number="5">            <span class="dt">overwrite =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Note that <code>writeFormats()</code> returns a list with all supported file formats on your computer.</p>
 <!-- ### Databases -->
 <!-- postgis output example -->
@@ -1268,26 +1262,26 @@ GeoTIFF files, for example, can be compressed using <code>COMPRESS</code>:
 <p>
 R supports many different static and interactive graphics formats.
 The most general method to save a static plot is to open a graphic device, create a plot, and close it, for example:</p>
-<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" data-line-number="1"><span class="kw">png</span>(<span class="dt">filename =</span> <span class="st">&quot;lifeExp.png&quot;</span>, <span class="dt">width =</span> <span class="dv">500</span>, <span class="dt">height =</span> <span class="dv">350</span>)</a>
-<a class="sourceLine" id="cb259-2" data-line-number="2"><span class="kw">plot</span>(world[<span class="st">&quot;lifeExp&quot;</span>])</a>
-<a class="sourceLine" id="cb259-3" data-line-number="3"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" data-line-number="1"><span class="kw">png</span>(<span class="dt">filename =</span> <span class="st">&quot;lifeExp.png&quot;</span>, <span class="dt">width =</span> <span class="dv">500</span>, <span class="dt">height =</span> <span class="dv">350</span>)</a>
+<a class="sourceLine" id="cb260-2" data-line-number="2"><span class="kw">plot</span>(world[<span class="st">&quot;lifeExp&quot;</span>])</a>
+<a class="sourceLine" id="cb260-3" data-line-number="3"><span class="kw">dev.off</span>()</a></code></pre></div>
 <p>Other available graphic devices include <code>pdf()</code>, <code>bmp()</code>, <code>jpeg()</code>, and <code>tiff()</code>.
 You can specify several properties of the output plot, including width, height and resolution.</p>
 <p>Additionally, several graphic packages provide their own functions to save a graphical output.
 For example, the <strong>tmap</strong> package has the <code>tmap_save()</code> function.
 You can save a <code>tmap</code> object to different graphic formats by specifying the object name and a file path to a new graphic file.</p>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" data-line-number="1"><span class="kw">library</span>(tmap)</a>
-<a class="sourceLine" id="cb260-2" data-line-number="2">tmap_obj =<span class="st"> </span><span class="kw">tm_shape</span>(world) <span class="op">+</span><span class="st"> </span><span class="kw">tm_polygons</span>(<span class="dt">col =</span> <span class="st">&quot;lifeExp&quot;</span>)</a>
-<a class="sourceLine" id="cb260-3" data-line-number="3"><span class="kw">tmap_save</span>(<span class="dt">tm =</span> tmap_obj, <span class="dt">filename =</span> <span class="st">&quot;lifeExp_tmap.png&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" data-line-number="1"><span class="kw">library</span>(tmap)</a>
+<a class="sourceLine" id="cb261-2" data-line-number="2">tmap_obj =<span class="st"> </span><span class="kw">tm_shape</span>(world) <span class="op">+</span><span class="st"> </span><span class="kw">tm_polygons</span>(<span class="dt">col =</span> <span class="st">&quot;lifeExp&quot;</span>)</a>
+<a class="sourceLine" id="cb261-3" data-line-number="3"><span class="kw">tmap_save</span>(<span class="dt">tm =</span> tmap_obj, <span class="dt">filename =</span> <span class="st">&quot;lifeExp_tmap.png&quot;</span>)</a></code></pre></div>
 <!-- Note about that the `plot` function do not create an object -->
 <!-- ```{r} -->
 <!-- a = plot(world["lifeExp"]) -->
 <!-- ``` -->
 <p>On the other hand, you can save interactive maps created in the <code>mapview</code> package as an HTML file or image using the <code>mapshot()</code> function:</p>
 <!-- example doesn't work, problem with colors I guess -->
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" data-line-number="1"><span class="kw">library</span>(mapview)</a>
-<a class="sourceLine" id="cb261-2" data-line-number="2">mapview_obj =<span class="st"> </span><span class="kw">mapview</span>(world, <span class="dt">zcol =</span> <span class="st">&quot;lifeExp&quot;</span>, <span class="dt">legend =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb261-3" data-line-number="3"><span class="kw">mapshot</span>(mapview_obj, <span class="dt">file =</span> <span class="st">&quot;my_interactive_map.html&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb262-1" data-line-number="1"><span class="kw">library</span>(mapview)</a>
+<a class="sourceLine" id="cb262-2" data-line-number="2">mapview_obj =<span class="st"> </span><span class="kw">mapview</span>(world, <span class="dt">zcol =</span> <span class="st">&quot;lifeExp&quot;</span>, <span class="dt">legend =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb262-3" data-line-number="3"><span class="kw">mapshot</span>(mapview_obj, <span class="dt">file =</span> <span class="st">&quot;my_interactive_map.html&quot;</span>)</a></code></pre></div>
 </div>
 <div id="exercises-5" class="section level2">
 <h2><span class="header-section-number">7.9</span> Exercises</h2>

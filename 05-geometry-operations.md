@@ -1,4 +1,3 @@
-
 # Geometry operations {#geometric-operations}
 
 ## Prerequisites {-}
@@ -58,10 +57,12 @@ The simplified geometry was created by the following command:
 
 ```r
 seine_simp = st_simplify(seine, dTolerance = 2000)  # 2000 m
+#> Warning: st_crs<- : replacing crs does not reproject data; use st_transform for
+#> that
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/seine-simp-1.png" alt="Comparison of the original and simplified geometry of the seine object." width="100%" />
+<img src="05-geometry-operations_files/figure-html/seine-simp-1.png" alt="Comparison of the original and simplified geometry of the seine object." width="100%" />
 <p class="caption">(\#fig:seine-simp)Comparison of the original and simplified geometry of the seine object.</p>
 </div>
 
@@ -114,7 +115,7 @@ us_states_simp2 = rmapshaper::ms_simplify(us_states2163, keep = 0.01,
 Finally, the visual comparison of the original dataset and the two simplified versions shows differences between the Douglas-Peucker (`st_simplify`) and Visvalingam (`ms_simplify`) algorithm outputs (Figure \@ref(fig:us-simp)):
 
 <div class="figure" style="text-align: center">
-<img src="figures/us-simp-1.png" alt="Polygon simplification in action, comparing the original geometry of the contiguous United States with simplified versions, generated with functions from sf (center) and rmapshaper (right) packages." width="100%" />
+<img src="05-geometry-operations_files/figure-html/us-simp-1.png" alt="Polygon simplification in action, comparing the original geometry of the contiguous United States with simplified versions, generated with functions from sf (center) and rmapshaper (right) packages." width="100%" />
 <p class="caption">(\#fig:us-simp)Polygon simplification in action, comparing the original geometry of the contiguous United States with simplified versions, generated with functions from sf (center) and rmapshaper (right) packages.</p>
 </div>
 
@@ -150,7 +151,7 @@ seine_pos = st_point_on_surface(seine)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/centr-1.png" alt="Centroids (black points) and 'points on surface' (red points) of New Zealand's regions (left) and the Seine (right) datasets." width="100%" />
+<img src="05-geometry-operations_files/figure-html/centr-1.png" alt="Centroids (black points) and 'points on surface' (red points) of New Zealand's regions (left) and the Seine (right) datasets." width="100%" />
 <p class="caption">(\#fig:centr)Centroids (black points) and 'points on surface' (red points) of New Zealand's regions (left) and the Seine (right) datasets.</p>
 </div>
 
@@ -173,11 +174,15 @@ These buffers were created with commands below, which show that the command `st_
 
 ```r
 seine_buff_5km = st_buffer(seine, dist = 5000)
+#> Warning: st_crs<- : replacing crs does not reproject data; use st_transform for
+#> that
 seine_buff_50km = st_buffer(seine, dist = 50000)
+#> Warning: st_crs<- : replacing crs does not reproject data; use st_transform for
+#> that
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/buffs-1.png" alt="Buffers around the Seine dataset of 5 km (left) and 50 km (right). Note the colors, which reflect the fact that one buffer is created per geometry feature." width="75%" />
+<img src="05-geometry-operations_files/figure-html/buffs-1.png" alt="Buffers around the Seine dataset of 5 km (left) and 50 km (right). Note the colors, which reflect the fact that one buffer is created per geometry feature." width="75%" />
 <p class="caption">(\#fig:buffs)Buffers around the Seine dataset of 5 km (left) and 50 km (right). Note the colors, which reflect the fact that one buffer is created per geometry feature.</p>
 </div>
 
@@ -230,6 +235,8 @@ Finally, each object's centroid is moved back to the input data coordinates (`+ 
 
 ```r
 nz_centroid_sfc = st_centroid(nz_sfc)
+#> Warning: st_crs<- : replacing crs does not reproject data; use st_transform for
+#> that
 nz_scale = (nz_sfc - nz_centroid_sfc) * 0.5 + nz_centroid_sfc
 ```
 
@@ -264,7 +271,7 @@ nz_rotate = (nz_sfc - nz_centroid_sfc) * rotation(30) + nz_centroid_sfc
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/affine-trans-1.png" alt="Illustrations of affine transformations: shift, scale and rotate." width="100%" />
+<img src="05-geometry-operations_files/figure-html/affine-trans-1.png" alt="Illustrations of affine transformations: shift, scale and rotate." width="100%" />
 <p class="caption">(\#fig:affine-trans)Illustrations of affine transformations: shift, scale and rotate.</p>
 </div>
 
@@ -299,7 +306,7 @@ text(x = c(-0.5, 1.5), y = 1, labels = c("x", "y")) # add text
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/points-1.png" alt="Overlapping circles." width="50%" />
+<img src="05-geometry-operations_files/figure-html/points-1.png" alt="Overlapping circles." width="50%" />
 <p class="caption">(\#fig:points)Overlapping circles.</p>
 </div>
 
@@ -316,7 +323,7 @@ plot(x_and_y, col = "lightgrey", add = TRUE) # color intersecting area
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/circle-intersection-1.png" alt="Overlapping circles with a gray color indicating intersection between them." width="50%" />
+<img src="05-geometry-operations_files/figure-html/circle-intersection-1.png" alt="Overlapping circles with a gray color indicating intersection between them." width="50%" />
 <p class="caption">(\#fig:circle-intersection)Overlapping circles with a gray color indicating intersection between them.</p>
 </div>
 
@@ -324,7 +331,7 @@ The subsequent code chunk demonstrates how this works for all combinations of th
 <!-- Todo: reference r4ds -->
 
 <div class="figure" style="text-align: center">
-<img src="figures/venn-clip-1.png" alt="Spatial equivalents of logical operators." width="100%" />
+<img src="05-geometry-operations_files/figure-html/venn-clip-1.png" alt="Spatial equivalents of logical operators." width="100%" />
 <p class="caption">(\#fig:venn-clip)Spatial equivalents of logical operators.</p>
 </div>
 
@@ -346,7 +353,7 @@ text(x = c(-0.5, 1.5), y = 1, labels = c("x", "y"))
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/venn-subset-1.png" alt="Randomly distributed points within the bounding box enclosing circles x and y." width="50%" />
+<img src="05-geometry-operations_files/figure-html/venn-subset-1.png" alt="Randomly distributed points within the bounding box enclosing circles x and y." width="50%" />
 <p class="caption">(\#fig:venn-subset)Randomly distributed points within the bounding box enclosing circles x and y.</p>
 </div>
 
@@ -384,7 +391,7 @@ regions2 = us_states %>% group_by(REGION) %>%
 
 
 <div class="figure" style="text-align: center">
-<img src="figures/us-regions-1.png" alt="Spatial aggregation on contiguous polygons, illustrated by aggregating the population of US states into regions, with population represented by color. Note the operation automatically dissolves boundaries between states." width="100%" />
+<img src="05-geometry-operations_files/figure-html/us-regions-1.png" alt="Spatial aggregation on contiguous polygons, illustrated by aggregating the population of US states into regions, with population represented by color. Note the operation automatically dissolves boundaries between states." width="100%" />
 <p class="caption">(\#fig:us-regions)Spatial aggregation on contiguous polygons, illustrated by aggregating the population of US states into regions, with population represented by color. Note the operation automatically dissolves boundaries between states.</p>
 </div>
 
@@ -432,7 +439,7 @@ polyg = st_cast(multipoint, "POLYGON")
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/single-cast-1.png" alt="Examples of linestring and polygon casted from a multipoint geometry." width="100%" />
+<img src="05-geometry-operations_files/figure-html/single-cast-1.png" alt="Examples of linestring and polygon casted from a multipoint geometry." width="100%" />
 <p class="caption">(\#fig:single-cast)Examples of linestring and polygon casted from a multipoint geometry.</p>
 </div>
 
@@ -495,8 +502,7 @@ multilinestring_sf
 #> geometry type:  MULTILINESTRING
 #> dimension:      XY
 #> bbox:           xmin: 1 ymin: 1 xmax: 4 ymax: 5
-#> epsg (SRID):    NA
-#> proj4string:    NA
+#> CRS:            NA
 #>                             geom
 #> 1 MULTILINESTRING ((1 5, 4 3)...
 ```
@@ -514,8 +520,7 @@ linestring_sf2
 #> geometry type:  LINESTRING
 #> dimension:      XY
 #> bbox:           xmin: 1 ymin: 1 xmax: 4 ymax: 5
-#> epsg (SRID):    NA
-#> proj4string:    NA
+#> CRS:            NA
 #>                    geom
 #> 1 LINESTRING (1 5, 4 3)
 #> 2 LINESTRING (4 4, 4 1)
@@ -523,7 +528,7 @@ linestring_sf2
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/line-cast-1.png" alt="Examples of type casting between MULTILINESTRING (left) and LINESTRING (right)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/line-cast-1.png" alt="Examples of type casting between MULTILINESTRING (left) and LINESTRING (right)." width="100%" />
 <p class="caption">(\#fig:line-cast)Examples of type casting between MULTILINESTRING (left) and LINESTRING (right).</p>
 </div>
 
@@ -538,8 +543,7 @@ linestring_sf2
 #> geometry type:  LINESTRING
 #> dimension:      XY
 #> bbox:           xmin: 1 ymin: 1 xmax: 4 ymax: 5
-#> epsg (SRID):    NA
-#> proj4string:    NA
+#> CRS:            NA
 #>                    geom         name length
 #> 1 LINESTRING (1 5, 4 3)    Riddle Rd   3.61
 #> 2 LINESTRING (4 4, 4 1) Marshall Ave   3.00
@@ -615,7 +619,7 @@ plot(elev_2)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/extend-example-1.png" alt="Original raster extended by one row on each side (top, bottom) and two columns on each side (right, left)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/extend-example-1.png" alt="Original raster extended by one row on each side (top, bottom) and two columns on each side (right, left)." width="100%" />
 <p class="caption">(\#fig:extend-example)Original raster extended by one row on each side (top, bottom) and two columns on each side (right, left).</p>
 </div>
 
@@ -664,7 +668,7 @@ plot(elev, add = TRUE)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/origin-example-1.png" alt="Rasters with identical values but different origins." width="100%" />
+<img src="05-geometry-operations_files/figure-html/origin-example-1.png" alt="Rasters with identical values but different origins." width="100%" />
 <p class="caption">(\#fig:origin-example)Rasters with identical values but different origins.</p>
 </div>
 
@@ -691,7 +695,7 @@ dem_agg = aggregate(dem, fact = 5, fun = mean)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/aggregate-example-1.png" alt="Original raster (left). Aggregated raster (right)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/aggregate-example-1.png" alt="Original raster (left). Aggregated raster (right)." width="100%" />
 <p class="caption">(\#fig:aggregate-example)Original raster (left). Aggregated raster (right).</p>
 </div>
 
@@ -710,7 +714,7 @@ identical(dem, dem_disagg)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/bilinear-1.png" alt="Bilinear disaggregation in action." width="100%" />
+<img src="05-geometry-operations_files/figure-html/bilinear-1.png" alt="Bilinear disaggregation in action." width="100%" />
 <p class="caption">(\#fig:bilinear)Bilinear disaggregation in action.</p>
 </div>
 
@@ -804,7 +808,7 @@ srtm_inv_masked = mask(srtm, zion, inverse = TRUE)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/cropmask-1.png" alt="Illustration of raster cropping and raster masking." width="100%" />
+<img src="05-geometry-operations_files/figure-html/cropmask-1.png" alt="Illustration of raster cropping and raster masking." width="100%" />
 <p class="caption">(\#fig:cropmask)Illustration of raster cropping and raster masking.</p>
 </div>
 
@@ -833,7 +837,7 @@ The result of `raster::extract(srtm, zion_points, buffer = 1000)`, for example, 
 In practice, this example is a special case of extraction with a polygon selector, described below.
 
 <div class="figure" style="text-align: center">
-<img src="figures/pointextr-1.png" alt="Locations of points used for raster extraction." width="60%" />
+<img src="05-geometry-operations_files/figure-html/pointextr-1.png" alt="Locations of points used for raster extraction." width="60%" />
 <p class="caption">(\#fig:pointextr)Locations of points used for raster extraction.</p>
 </div>
 
@@ -875,7 +879,7 @@ transect_df$dist = c(0, cumsum(pair_dist))
 The resulting `transect_df` can be used to create elevation profiles, as illustrated in Figure \@ref(fig:lineextr)(B).
 
 <div class="figure" style="text-align: center">
-<img src="figures/lineextr-1.png" alt="Location of a line used for raster extraction (left) and the elevation along this line (right)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/lineextr-1.png" alt="Location of a line used for raster extraction (left) and the elevation along this line (right)." width="100%" />
 <p class="caption">(\#fig:lineextr)Location of a line used for raster extraction (left) and the elevation along this line (right).</p>
 </div>
 
@@ -926,7 +930,7 @@ dplyr::select(zion_nlcd, ID, levels) %>%
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/polyextr-1.png" alt="Area used for continuous (left) and categorical (right) raster extraction." width="100%" />
+<img src="05-geometry-operations_files/figure-html/polyextr-1.png" alt="Area used for continuous (left) and categorical (right) raster extraction." width="100%" />
 <p class="caption">(\#fig:polyextr)Area used for continuous (left) and categorical (right) raster extraction.</p>
 </div>
 
@@ -997,7 +1001,7 @@ ch_raster3 = rasterize(cycle_hire_osm_projected, raster_template,
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/vector-rasterization1-1.png" alt="Examples of point rasterization." width="100%" />
+<img src="05-geometry-operations_files/figure-html/vector-rasterization1-1.png" alt="Examples of point rasterization." width="100%" />
 <p class="caption">(\#fig:vector-rasterization1)Examples of point rasterization.</p>
 </div>
 
@@ -1042,7 +1046,7 @@ california_raster2 = rasterize(california, raster_template2)
 <!-- It is also possible to use the `field` or `fun` arguments for lines and polygons rasterizations. -->
 
 <div class="figure" style="text-align: center">
-<img src="figures/vector-rasterization2-1.png" alt="Examples of line and polygon rasterizations." width="100%" />
+<img src="05-geometry-operations_files/figure-html/vector-rasterization2-1.png" alt="Examples of line and polygon rasterizations." width="100%" />
 <p class="caption">(\#fig:vector-rasterization2)Examples of line and polygon rasterizations.</p>
 </div>
 
@@ -1073,7 +1077,7 @@ elev_point = rasterToPoints(elev, spatial = TRUE) %>%
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/raster-vectorization1-1.png" alt="Raster and point representation of the elev object." width="100%" />
+<img src="05-geometry-operations_files/figure-html/raster-vectorization1-1.png" alt="Raster and point representation of the elev object." width="100%" />
 <p class="caption">(\#fig:raster-vectorization1)Raster and point representation of the elev object.</p>
 </div>
 
@@ -1107,7 +1111,7 @@ contour(dem, col = "white", add = TRUE)
 \index{hillshade}
 
 <div class="figure" style="text-align: center">
-<img src="figures/contour-tmap-1.png" alt="DEM hillshade of the southern flank of Mt. Mongón overlaid by contour lines." width="100%" />
+<img src="05-geometry-operations_files/figure-html/contour-tmap-1.png" alt="DEM hillshade of the southern flank of Mt. Mongón overlaid by contour lines." width="100%" />
 <p class="caption">(\#fig:contour-tmap)DEM hillshade of the southern flank of Mt. Mongón overlaid by contour lines.</p>
 </div>
 
@@ -1128,7 +1132,7 @@ grain_poly2 = grain_poly %>%
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/raster-vectorization2-1.png" alt="Illustration of vectorization of raster (left) into polygon (center) and polygon aggregation (right)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/raster-vectorization2-1.png" alt="Illustration of vectorization of raster (left) into polygon (center) and polygon aggregation (right)." width="100%" />
 <p class="caption">(\#fig:raster-vectorization2)Illustration of vectorization of raster (left) into polygon (center) and polygon aggregation (right).</p>
 </div>
 

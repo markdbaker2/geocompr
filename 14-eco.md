@@ -1,4 +1,3 @@
-
 # Ecology {#eco}
 
 ## Prerequisites {-}
@@ -98,7 +97,7 @@ Visualizing the data helps to get more familiar with it, as shown in Figure \@re
 \index{hillshade}
 
 <div class="figure" style="text-align: center">
-<img src="figures/sa-mongon-1.png" alt="Study mask (polygon), location of the sampling sites (black points) and DEM in the background." width="100%" />
+<img src="14-eco_files/figure-html/sa-mongon-1.png" alt="Study mask (polygon), location of the sampling sites (black points) and DEM in the background." width="100%" />
 <p class="caption">(\#fig:sa-mongon)Study mask (polygon), location of the sampling sites (black points) and DEM in the background.</p>
 </div>
 
@@ -263,7 +262,7 @@ plot(y = sc[, 1], x = elev, xlab = "elevation in m",
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/xy-nmds-1.png" alt="Plotting the first NMDS axis against altitude." width="60%" />
+<img src="14-eco_files/figure-html/xy-nmds-1.png" alt="Plotting the first NMDS axis against altitude." width="60%" />
 <p class="caption">(\#fig:xy-nmds)Plotting the first NMDS axis against altitude.</p>
 </div>
 
@@ -486,7 +485,7 @@ pred[] = pred_rf$data$response
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/rf-pred-1.png" alt="Predictive mapping of the floristic gradient clearly revealing distinct vegetation belts." width="100%" />
+<img src="14-eco_files/figure-html/rf-pred-1.png" alt="Predictive mapping of the floristic gradient clearly revealing distinct vegetation belts." width="100%" />
 <p class="caption">(\#fig:rf-pred)Predictive mapping of the floristic gradient clearly revealing distinct vegetation belts.</p>
 </div>
 

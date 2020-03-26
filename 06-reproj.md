@@ -1,4 +1,3 @@
-
 # Reprojecting geographic data {#reproj-geo-data}
 
 ## Prerequisites {-}
@@ -121,7 +120,7 @@ The result in Figure \@ref(fig:crs-buf) (right panel) shows that buffers based o
 every part of the buffer's border is equidistant to London.
 
 <div class="figure" style="text-align: center">
-<img src="figures/crs-buf-1.png" alt="Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline." width="45%" /><img src="figures/crs-buf-2.png" alt="Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline." width="45%" />
+<img src="06-reproj_files/figure-html/crs-buf-1.png" alt="Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline." width="45%" /><img src="06-reproj_files/figure-html/crs-buf-2.png" alt="Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline." width="45%" />
 <p class="caption">(\#fig:crs-buf)Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline.</p>
 </div>
 
@@ -244,9 +243,9 @@ The following command uses this function to identify the UTM zone and associated
 epsg_utm_auk = lonlat2UTM(c(174.7, -36.9))
 epsg_utm_lnd = lonlat2UTM(st_coordinates(london))
 st_crs(epsg_utm_auk)$proj4string
-#> [1] "+proj=utm +zone=60 +south +datum=WGS84 +units=m +no_defs"
+#> [1] "+proj=utm +zone=60 +south +datum=WGS84 +units=m +no_defs "
 st_crs(epsg_utm_lnd)$proj4string
-#> [1] "+proj=utm +zone=30 +datum=WGS84 +units=m +no_defs"
+#> [1] "+proj=utm +zone=30 +datum=WGS84 +units=m +no_defs "
 ```
 
 Maps of UTM zones such as that provided by [dmap.co.uk](http://www.dmap.co.uk/utmworld.htm) confirm that London is in UTM zone 30U.
@@ -340,7 +339,7 @@ world_mollweide = st_transform(world, crs = "+proj=moll")
 <!-- plot(world_mollweide$geom, graticule = TRUE) -->
 
 <div class="figure" style="text-align: center">
-<img src="figures/mollproj-1.png" alt="Mollweide projection of the world." width="100%" />
+<img src="06-reproj_files/figure-html/mollproj-1.png" alt="Mollweide projection of the world." width="100%" />
 <p class="caption">(\#fig:mollproj)Mollweide projection of the world.</p>
 </div>
 
@@ -353,8 +352,6 @@ This projection is used, among others, by the National Geographic Society.
 
 ```r
 world_wintri = lwgeom::st_transform_proj(world, crs = "+proj=wintri")
-#> Warning in CPL_crs_from_proj4string(x): GDAL cannot import PROJ.4 string `
-#> +proj=wintri': returning missing CRS
 ```
 <!-- plot(world_wintri$geom) -->
 <!-- plot(world_wintri$geom, graticule = TRUE) -->
@@ -383,8 +380,8 @@ world_laea1 = st_transform(world,
 <!-- plot(world_laea1$geom, graticule = TRUE) -->
 
 <div class="figure" style="text-align: center">
-<img src="figures/laeaproj1-1.png" alt="Lambert azimuthal equal-area projection of the world centered on longitude and latitude of 0." width="100%" />
-<p class="caption">(\#fig:laeaproj1)Lambert azimuthal equal-area projection of the world centered on longitude and latitude of 0.</p>
+<img src="06-reproj_files/figure-html/laeaproj1-1.png" alt="Lambert azimuthal equal-area projection centered on longitude and latitude of 0." width="100%" />
+<p class="caption">(\#fig:laeaproj1)Lambert azimuthal equal-area projection centered on longitude and latitude of 0.</p>
 </div>
 
 We can change the PROJ parameters, for example the center of the projection, using the `+lon_0` and `+lat_0` parameters. 
@@ -399,7 +396,7 @@ world_laea2 = st_transform(world,
 <!-- plot(world_laea2$geom, graticule = TRUE) -->
 
 <div class="figure" style="text-align: center">
-<img src="figures/laeaproj2-1.png" alt="Lambert azimuthal equal-area projection of the world centered on New York City." width="100%" />
+<img src="06-reproj_files/figure-html/laeaproj2-1.png" alt="Lambert azimuthal equal-area projection of the world centered on New York City." width="100%" />
 <p class="caption">(\#fig:laeaproj2)Lambert azimuthal equal-area projection of the world centered on New York City.</p>
 </div>
 

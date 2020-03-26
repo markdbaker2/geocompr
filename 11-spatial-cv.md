@@ -1,4 +1,3 @@
-
 # Statistical learning {#spatial-cv}
 
 ## Prerequisites {-}
@@ -119,7 +118,7 @@ dem = raster(
 
 
 <div class="figure" style="text-align: center">
-<img src="figures/lsl-map-1.png" alt="Landslide initiation points (red) and points unaffected by landsliding (blue) in Southern Ecuador." width="100%" />
+<img src="11-spatial-cv_files/figure-html/lsl-map-1.png" alt="Landslide initiation points (red) and points unaffected by landsliding (blue) in Southern Ecuador." width="100%" />
 <p class="caption">(\#fig:lsl-map)Landslide initiation points (red) and points unaffected by landsliding (blue) in Southern Ecuador.</p>
 </div>
 \index{hillshade}
@@ -222,7 +221,7 @@ pred = raster::predict(ta, model = fit, type = "response")
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/lsl-susc-1.png" alt="Spatial prediction of landslide susceptibility using a GLM." width="100%" />
+<img src="11-spatial-cv_files/figure-html/lsl-susc-1.png" alt="Spatial prediction of landslide susceptibility using a GLM." width="100%" />
 <p class="caption">(\#fig:lsl-susc)Spatial prediction of landslide susceptibility using a GLM.</p>
 </div>
 
@@ -499,7 +498,7 @@ To put these results in perspective, let us compare them with AUROC\index{AUROC}
 As expected, the spatially cross-validated result yields lower AUROC values on average than the conventional cross-validation approach, underlining the over-optimistic predictive performance due to spatial autocorrelation\index{autocorrelation!spatial} of the latter.
 
 <div class="figure" style="text-align: center">
-<img src="figures/boxplot-cv-1.png" alt="Boxplot showing the difference in AUROC values between spatial and conventional 100-repeated 5-fold cross-validation." width="100%" />
+<img src="11-spatial-cv_files/figure-html/boxplot-cv-1.png" alt="Boxplot showing the difference in AUROC values between spatial and conventional 100-repeated 5-fold cross-validation." width="100%" />
 <p class="caption">(\#fig:boxplot-cv)Boxplot showing the difference in AUROC values between spatial and conventional 100-repeated 5-fold cross-validation.</p>
 </div>
 

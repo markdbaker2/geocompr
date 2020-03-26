@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Reprojecting geographic data | Geocomputation with R</title>
   <meta name="description" content="Chapter 6 Reprojecting geographic data | Geocomputation with R is for people who want to analyze, visualize and model geographic data with open source software. It is based on R, a statistical programming language that has powerful data processing, visualization, and geospatial capabilities. The book equips you with the knowledge and skills to tackle a wide range of issues manifested in geographic data, including those with scientific, societal, and environmental implications. This book will interest people from many backgrounds, especially Geographic Information Systems (GIS) users interested in applying their domain-specific knowledge in a powerful open source language for data science, and R users interested in extending their skills to handle spatial data." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Reprojecting geographic data | Geocomputation with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Robin Lovelace, Jakub Nowosad, Jannes Muenchow" />
 
 
-<meta name="date" content="2020-02-16" />
+<meta name="date" content="2020-03-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -424,11 +424,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>This chapter requires the following packages (<strong>lwgeom</strong> is also used, but does not need to be attached):</li>
 </ul>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb206-1" data-line-number="1"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb206-2" data-line-number="2"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb206-3" data-line-number="3"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb206-4" data-line-number="4"><span class="kw">library</span>(spData)</a>
-<a class="sourceLine" id="cb206-5" data-line-number="5"><span class="kw">library</span>(spDataLarge)</a></code></pre></div>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" data-line-number="1"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb207-2" data-line-number="2"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb207-3" data-line-number="3"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb207-4" data-line-number="4"><span class="kw">library</span>(spData)</a>
+<a class="sourceLine" id="cb207-5" data-line-number="5"><span class="kw">library</span>(spDataLarge)</a></code></pre></div>
 </div>
 <div id="introduction-3" class="section level2">
 <h2><span class="header-section-number">6.1</span> Introduction</h2>
@@ -442,22 +442,22 @@ This has consequences.
 Many geometry operations in <strong>sf</strong>, for example, assume their inputs have a projected CRS, because the GEOS functions they are based on assume projected data.
 To deal with this issue <strong>sf</strong> provides the function <code>st_is_longlat()</code> to check.
 In some cases the CRS is unknown, as shown below using the example of London introduced in Section <a href="spatial-class.html#vector-data">2.2</a>:</p>
-<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" data-line-number="1">london =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">lon =</span> <span class="fl">-0.1</span>, <span class="dt">lat =</span> <span class="fl">51.5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb207-2" data-line-number="2"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>))</a>
-<a class="sourceLine" id="cb207-3" data-line-number="3"><span class="kw">st_is_longlat</span>(london)</a>
-<a class="sourceLine" id="cb207-4" data-line-number="4"><span class="co">#&gt; [1] NA</span></a></code></pre></div>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" data-line-number="1">london =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">lon =</span> <span class="fl">-0.1</span>, <span class="dt">lat =</span> <span class="fl">51.5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb208-2" data-line-number="2"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>))</a>
+<a class="sourceLine" id="cb208-3" data-line-number="3"><span class="kw">st_is_longlat</span>(london)</a>
+<a class="sourceLine" id="cb208-4" data-line-number="4"><span class="co">#&gt; [1] NA</span></a></code></pre></div>
 <p>This shows that unless a CRS is manually specified or is loaded from a source that has CRS metadata, the CRS is <code>NA</code>.
 A CRS can be added to <code>sf</code> objects with <code>st_set_crs()</code> as follows:<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a></p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" data-line-number="1">london_geo =<span class="st"> </span><span class="kw">st_set_crs</span>(london, <span class="dv">4326</span>)</a>
-<a class="sourceLine" id="cb208-2" data-line-number="2"><span class="kw">st_is_longlat</span>(london_geo)</a>
-<a class="sourceLine" id="cb208-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" data-line-number="1">london_geo =<span class="st"> </span><span class="kw">st_set_crs</span>(london, <span class="dv">4326</span>)</a>
+<a class="sourceLine" id="cb209-2" data-line-number="2"><span class="kw">st_is_longlat</span>(london_geo)</a>
+<a class="sourceLine" id="cb209-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 <p>Datasets without a specified CRS can cause problems.
 An example is provided below, which creates a buffer of one unit around <code>london</code> and <code>london_geo</code> objects:</p>
-<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" data-line-number="1">london_buff_no_crs =<span class="st"> </span><span class="kw">st_buffer</span>(london, <span class="dt">dist =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb209-2" data-line-number="2">london_buff =<span class="st"> </span><span class="kw">st_buffer</span>(london_geo, <span class="dt">dist =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb209-3" data-line-number="3"><span class="co">#&gt; Warning in st_buffer.sfc(st_geometry(x), dist, nQuadSegs, endCapStyle =</span></a>
-<a class="sourceLine" id="cb209-4" data-line-number="4"><span class="co">#&gt; endCapStyle, : st_buffer does not correctly buffer longitude/latitude data</span></a>
-<a class="sourceLine" id="cb209-5" data-line-number="5"><span class="co">#&gt; dist is assumed to be in decimal degrees (arc_degrees).</span></a></code></pre></div>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" data-line-number="1">london_buff_no_crs =<span class="st"> </span><span class="kw">st_buffer</span>(london, <span class="dt">dist =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb210-2" data-line-number="2">london_buff =<span class="st"> </span><span class="kw">st_buffer</span>(london_geo, <span class="dt">dist =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb210-3" data-line-number="3"><span class="co">#&gt; Warning in st_buffer.sfc(st_geometry(x), dist, nQuadSegs, endCapStyle =</span></a>
+<a class="sourceLine" id="cb210-4" data-line-number="4"><span class="co">#&gt; endCapStyle, : st_buffer does not correctly buffer longitude/latitude data</span></a>
+<a class="sourceLine" id="cb210-5" data-line-number="5"><span class="co">#&gt; dist is assumed to be in decimal degrees (arc_degrees).</span></a></code></pre></div>
 <p>Only the second operation generates a warning.
 The warning message is useful, telling us that the result may be of limited use because it is in units of latitude and longitude, rather than meters or some other suitable measure of distance assumed by <code>st_buffer()</code>.
 The consequences of a failure to work on projected data are illustrated in Figure <a href="reproj-geo-data.html#fig:crs-buf">6.1</a> (left panel):
@@ -476,14 +476,14 @@ It is better understood as a suggestion to <em>reproject</em> the data onto a pr
 This suggestion does not always need to be heeded: performing spatial and geometric operations makes little or no difference in some cases (e.g., spatial subsetting).
 But for operations involving distances such as buffering, the only way to ensure a good result is to create a projected copy of the data and run the operation on that.
 This is done in the code chunk below:</p>
-<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" data-line-number="1">london_proj =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="dv">530000</span>, <span class="dt">y =</span> <span class="dv">180000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb210-2" data-line-number="2"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">crs =</span> <span class="dv">27700</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" data-line-number="1">london_proj =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="dv">530000</span>, <span class="dt">y =</span> <span class="dv">180000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb211-2" data-line-number="2"><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">crs =</span> <span class="dv">27700</span>)</a></code></pre></div>
 <p>The result is a new object that is identical to <code>london</code>, but reprojected onto a suitable CRS (the British National Grid, which has an EPSG code of 27700 in this case) that has units of meters.
 We can verify that the CRS has changed using <code>st_crs()</code> as follows (some of the output has been replaced by <code>...</code>):</p>
-<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" data-line-number="1"><span class="kw">st_crs</span>(london_proj)</a>
-<a class="sourceLine" id="cb211-2" data-line-number="2"><span class="co">#&gt; Coordinate Reference System:</span></a>
-<a class="sourceLine" id="cb211-3" data-line-number="3"><span class="co">#&gt;   EPSG: 27700 </span></a>
-<a class="sourceLine" id="cb211-4" data-line-number="4"><span class="co">#&gt;   proj4string: &quot;+proj=tmerc +lat_0=49 +lon_0=-2 ... +units=m +no_defs&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb212-1" data-line-number="1"><span class="kw">st_crs</span>(london_proj)</a>
+<a class="sourceLine" id="cb212-2" data-line-number="2"><span class="co">#&gt; Coordinate Reference System:</span></a>
+<a class="sourceLine" id="cb212-3" data-line-number="3"><span class="co">#&gt;   EPSG: 27700 </span></a>
+<a class="sourceLine" id="cb212-4" data-line-number="4"><span class="co">#&gt;   proj4string: &quot;+proj=tmerc +lat_0=49 +lon_0=-2 ... +units=m +no_defs&quot;</span></a></code></pre></div>
 <p>Notable components of this CRS description include the EPSG code (<code>EPSG: 27700</code>), the projection (<a href="https://en.wikipedia.org/wiki/Transverse_Mercator_projection">transverse Mercator</a>, <code>+proj=tmerc</code>), the origin (<code>+lat_0=49 +lon_0=-2</code>) and units (<code>+units=m</code>).<a href="#fn25" class="footnote-ref" id="fnref25"><sup>25</sup></a>
 The fact that the units of the CRS are meters (rather than degrees) tells us that this is a projected CRS: <code>st_is_longlat(london_proj)</code> now returns <code>FALSE</code> and geometry operations on <code>london_proj</code> will work without a warning, meaning buffers can be produced from it using proper units of distance.
 <!-- 
@@ -495,11 +495,11 @@ geosphere::alongTrackDistance(coords, coords + c(1, 0), coords + c(1, 0))
 -->
 As pointed out above, moving one degree means moving a bit more than 111 km at the equator (to be precise: 111,320 meters).
 This is used as the new buffer distance:</p>
-<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb212-1" data-line-number="1">london_proj_buff =<span class="st"> </span><span class="kw">st_buffer</span>(london_proj, <span class="dv">111320</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" data-line-number="1">london_proj_buff =<span class="st"> </span><span class="kw">st_buffer</span>(london_proj, <span class="dv">111320</span>)</a></code></pre></div>
 <p>The result in Figure <a href="reproj-geo-data.html#fig:crs-buf">6.1</a> (right panel) shows that buffers based on a projected CRS are not distorted:
 every part of the buffer’s border is equidistant to London.</p>
 <div class="figure" style="text-align: center"><span id="fig:crs-buf"></span>
-<img src="figures/crs-buf-1.png" alt="Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline." width="45%" /><img src="figures/crs-buf-2.png" alt="Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline." width="45%" />
+<img src="06-reproj_files/figure-html/crs-buf-1.png" alt="Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline." width="45%" /><img src="06-reproj_files/figure-html/crs-buf-2.png" alt="Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline." width="45%" />
 <p class="caption">
 FIGURE 6.1: Buffers around London with a geographic (left) and projected (right) CRS. The gray outline represents the UK coastline.
 </p>
@@ -520,18 +520,18 @@ However, there are some general principles provided in this section that can hel
 In some cases transformation to a projected CRS is essential, such as when using geometric functions such as <code>st_buffer()</code>, as Figure <a href="reproj-geo-data.html#fig:crs-buf">6.1</a> showed.
 Conversely, publishing data online with the <strong>leaflet</strong> package may require a geographic CRS.
 Another case is when two objects with different CRSs must be compared or combined, as shown when we try to find the distance between two objects with different CRSs:</p>
-<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" data-line-number="1"><span class="kw">st_distance</span>(london_geo, london_proj)</a>
-<a class="sourceLine" id="cb213-2" data-line-number="2"><span class="co"># &gt; Error: st_crs(x) == st_crs(y) is not TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" data-line-number="1"><span class="kw">st_distance</span>(london_geo, london_proj)</a>
+<a class="sourceLine" id="cb214-2" data-line-number="2"><span class="co"># &gt; Error: st_crs(x) == st_crs(y) is not TRUE</span></a></code></pre></div>
 <p>To make the <code>london</code> and <code>london_proj</code> objects geographically comparable one of them must be transformed into the CRS of the other.
 But which CRS to use?
 The answer is usually ‘to the projected CRS’, which in this case is the British National Grid (EPSG:27700):</p>
-<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" data-line-number="1">london2 =<span class="st"> </span><span class="kw">st_transform</span>(london_geo, <span class="dv">27700</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb215-1" data-line-number="1">london2 =<span class="st"> </span><span class="kw">st_transform</span>(london_geo, <span class="dv">27700</span>)</a></code></pre></div>
 <p>Now that a transformed version of <code>london</code> has been created, using the <strong>sf</strong> function <code>st_transform()</code>, the distance between the two representations of London can be found.
 It may come as a surprise that <code>london</code> and <code>london2</code> are just over 2 km apart!<a href="#fn26" class="footnote-ref" id="fnref26"><sup>26</sup></a></p>
-<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb215-1" data-line-number="1"><span class="kw">st_distance</span>(london2, london_proj)</a>
-<a class="sourceLine" id="cb215-2" data-line-number="2"><span class="co">#&gt; Units: [m]</span></a>
-<a class="sourceLine" id="cb215-3" data-line-number="3"><span class="co">#&gt;      [,1]</span></a>
-<a class="sourceLine" id="cb215-4" data-line-number="4"><span class="co">#&gt; [1,] 2018</span></a></code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb216-1" data-line-number="1"><span class="kw">st_distance</span>(london2, london_proj)</a>
+<a class="sourceLine" id="cb216-2" data-line-number="2"><span class="co">#&gt; Units: [m]</span></a>
+<a class="sourceLine" id="cb216-3" data-line-number="3"><span class="co">#&gt;      [,1]</span></a>
+<a class="sourceLine" id="cb216-4" data-line-number="4"><span class="co">#&gt; [1,] 2018</span></a></code></pre></div>
 </div>
 <div id="which-crs-to-use" class="section level2">
 <h2><span class="header-section-number">6.3</span> Which CRS to use?</h2>
@@ -570,21 +570,21 @@ Documentation from the GIS software Manifold therefore suggests restricting the 
 <p>Almost every place on Earth has a UTM code, such as “60H” which refers to northern New Zealand where R was invented.
 All UTM projections have the same datum (WGS84) and their EPSG codes run sequentially from 32601 to 32660 for northern hemisphere locations and from 32701 to 32760 for southern hemisphere locations.</p>
 <p>To show how the system works, let’s create a function, <code>lonlat2UTM()</code> to calculate the EPSG code associated with any point on the planet as <a href="https://stackoverflow.com/a/9188972/">follows</a>:</p>
-<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb216-1" data-line-number="1">lonlat2UTM =<span class="st"> </span><span class="cf">function</span>(lonlat) {</a>
-<a class="sourceLine" id="cb216-2" data-line-number="2">  utm =<span class="st"> </span>(<span class="kw">floor</span>((lonlat[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">180</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%%</span><span class="st"> </span><span class="dv">60</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb216-3" data-line-number="3">  <span class="cf">if</span>(lonlat[<span class="dv">2</span>] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</a>
-<a class="sourceLine" id="cb216-4" data-line-number="4">    utm <span class="op">+</span><span class="st"> </span><span class="dv">32600</span></a>
-<a class="sourceLine" id="cb216-5" data-line-number="5">  } <span class="cf">else</span>{</a>
-<a class="sourceLine" id="cb216-6" data-line-number="6">    utm <span class="op">+</span><span class="st"> </span><span class="dv">32700</span></a>
-<a class="sourceLine" id="cb216-7" data-line-number="7">  }</a>
-<a class="sourceLine" id="cb216-8" data-line-number="8">}</a></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb217-1" data-line-number="1">lonlat2UTM =<span class="st"> </span><span class="cf">function</span>(lonlat) {</a>
+<a class="sourceLine" id="cb217-2" data-line-number="2">  utm =<span class="st"> </span>(<span class="kw">floor</span>((lonlat[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">180</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%%</span><span class="st"> </span><span class="dv">60</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb217-3" data-line-number="3">  <span class="cf">if</span>(lonlat[<span class="dv">2</span>] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb217-4" data-line-number="4">    utm <span class="op">+</span><span class="st"> </span><span class="dv">32600</span></a>
+<a class="sourceLine" id="cb217-5" data-line-number="5">  } <span class="cf">else</span>{</a>
+<a class="sourceLine" id="cb217-6" data-line-number="6">    utm <span class="op">+</span><span class="st"> </span><span class="dv">32700</span></a>
+<a class="sourceLine" id="cb217-7" data-line-number="7">  }</a>
+<a class="sourceLine" id="cb217-8" data-line-number="8">}</a></code></pre></div>
 <p>The following command uses this function to identify the UTM zone and associated EPSG code for Auckland and London:</p>
-<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb217-1" data-line-number="1">epsg_utm_auk =<span class="st"> </span><span class="kw">lonlat2UTM</span>(<span class="kw">c</span>(<span class="fl">174.7</span>, <span class="fl">-36.9</span>))</a>
-<a class="sourceLine" id="cb217-2" data-line-number="2">epsg_utm_lnd =<span class="st"> </span><span class="kw">lonlat2UTM</span>(<span class="kw">st_coordinates</span>(london))</a>
-<a class="sourceLine" id="cb217-3" data-line-number="3"><span class="kw">st_crs</span>(epsg_utm_auk)<span class="op">$</span>proj4string</a>
-<a class="sourceLine" id="cb217-4" data-line-number="4"><span class="co">#&gt; [1] &quot;+proj=utm +zone=60 +south +datum=WGS84 +units=m +no_defs&quot;</span></a>
-<a class="sourceLine" id="cb217-5" data-line-number="5"><span class="kw">st_crs</span>(epsg_utm_lnd)<span class="op">$</span>proj4string</a>
-<a class="sourceLine" id="cb217-6" data-line-number="6"><span class="co">#&gt; [1] &quot;+proj=utm +zone=30 +datum=WGS84 +units=m +no_defs&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb218-1" data-line-number="1">epsg_utm_auk =<span class="st"> </span><span class="kw">lonlat2UTM</span>(<span class="kw">c</span>(<span class="fl">174.7</span>, <span class="fl">-36.9</span>))</a>
+<a class="sourceLine" id="cb218-2" data-line-number="2">epsg_utm_lnd =<span class="st"> </span><span class="kw">lonlat2UTM</span>(<span class="kw">st_coordinates</span>(london))</a>
+<a class="sourceLine" id="cb218-3" data-line-number="3"><span class="kw">st_crs</span>(epsg_utm_auk)<span class="op">$</span>proj4string</a>
+<a class="sourceLine" id="cb218-4" data-line-number="4"><span class="co">#&gt; [1] &quot;+proj=utm +zone=60 +south +datum=WGS84 +units=m +no_defs &quot;</span></a>
+<a class="sourceLine" id="cb218-5" data-line-number="5"><span class="kw">st_crs</span>(epsg_utm_lnd)<span class="op">$</span>proj4string</a>
+<a class="sourceLine" id="cb218-6" data-line-number="6"><span class="co">#&gt; [1] &quot;+proj=utm +zone=30 +datum=WGS84 +units=m +no_defs &quot;</span></a></code></pre></div>
 <p>Maps of UTM zones such as that provided by <a href="http://www.dmap.co.uk/utmworld.htm">dmap.co.uk</a> confirm that London is in UTM zone 30U.</p>
 <p>Another approach to automatically select a projected CRS specific to a local dataset is to create an azimuthal equidistant (<a href="https://en.wikipedia.org/wiki/Azimuthal_equidistant_projection">AEQD</a>) projection for the center-point of the study area.
 This involves creating a custom CRS (with no EPSG code) with units of meters based on the centerpoint of a dataset.
@@ -603,29 +603,29 @@ This is illustrated by <code>cycle_hire_osm</code>, an <code>sf</code> object fr
 The previous section showed how the CRS of vector data can be queried with <code>st_crs()</code>.
 Although the output of this function is printed as a single entity, the result is in fact a named list of class <code>crs</code>, with names <code>proj4string</code> (which contains full details of the CRS) and <code>epsg</code> for its code.
 This is demonstrated below:</p>
-<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb218-1" data-line-number="1">crs_lnd =<span class="st"> </span><span class="kw">st_crs</span>(cycle_hire_osm)</a>
-<a class="sourceLine" id="cb218-2" data-line-number="2"><span class="kw">class</span>(crs_lnd)</a>
-<a class="sourceLine" id="cb218-3" data-line-number="3"><span class="co">#&gt; [1] &quot;crs&quot;</span></a>
-<a class="sourceLine" id="cb218-4" data-line-number="4">crs_lnd<span class="op">$</span>epsg</a>
-<a class="sourceLine" id="cb218-5" data-line-number="5"><span class="co">#&gt; [1] 4326</span></a></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" data-line-number="1">crs_lnd =<span class="st"> </span><span class="kw">st_crs</span>(cycle_hire_osm)</a>
+<a class="sourceLine" id="cb219-2" data-line-number="2"><span class="kw">class</span>(crs_lnd)</a>
+<a class="sourceLine" id="cb219-3" data-line-number="3"><span class="co">#&gt; [1] &quot;crs&quot;</span></a>
+<a class="sourceLine" id="cb219-4" data-line-number="4">crs_lnd<span class="op">$</span>epsg</a>
+<a class="sourceLine" id="cb219-5" data-line-number="5"><span class="co">#&gt; [1] 4326</span></a></code></pre></div>
 <p>This duality of CRS objects means that they can be set either using an EPSG code or a <code>proj4string</code>.
 This means that <code>st_crs(&quot;+proj=longlat +datum=WGS84 +no_defs&quot;)</code> is equivalent to <code>st_crs(4326)</code>, although not all <code>proj4string</code>s have an associated EPSG code.
 Both elements of the CRS are changed by transforming the object to a projected CRS:</p>
-<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" data-line-number="1">cycle_hire_osm_projected =<span class="st"> </span><span class="kw">st_transform</span>(cycle_hire_osm, <span class="dv">27700</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb220-1" data-line-number="1">cycle_hire_osm_projected =<span class="st"> </span><span class="kw">st_transform</span>(cycle_hire_osm, <span class="dv">27700</span>)</a></code></pre></div>
 <p>The resulting object has a new CRS with an EPSG code 27700.
 But how to find out more details about this EPSG code, or any code?
 One option is to search for it online.
 Another option is to use a function from the <strong>rgdal</strong> package to find the name of the CRS:</p>
-<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb220-1" data-line-number="1">crs_codes =<span class="st"> </span>rgdal<span class="op">::</span><span class="kw">make_EPSG</span>()[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb220-2" data-line-number="2">dplyr<span class="op">::</span><span class="kw">filter</span>(crs_codes, code <span class="op">==</span><span class="st"> </span><span class="dv">27700</span>)</a>
-<a class="sourceLine" id="cb220-3" data-line-number="3"><span class="co">#&gt;    code                                note</span></a>
-<a class="sourceLine" id="cb220-4" data-line-number="4"><span class="co">#&gt; 1 27700 # OSGB 1936 / British National Grid</span></a></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" data-line-number="1">crs_codes =<span class="st"> </span>rgdal<span class="op">::</span><span class="kw">make_EPSG</span>()[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb221-2" data-line-number="2">dplyr<span class="op">::</span><span class="kw">filter</span>(crs_codes, code <span class="op">==</span><span class="st"> </span><span class="dv">27700</span>)</a>
+<a class="sourceLine" id="cb221-3" data-line-number="3"><span class="co">#&gt;    code                                note</span></a>
+<a class="sourceLine" id="cb221-4" data-line-number="4"><span class="co">#&gt; 1 27700 # OSGB 1936 / British National Grid</span></a></code></pre></div>
 <p>The result shows that the EPSG code 27700 represents the British National Grid, a result that could have been found by searching online for “<a href="https://www.google.com/search?q=CRS+27700">EPSG 27700</a>”.
 But what about the <code>proj4string</code> element?
 <code>proj4string</code>s are text strings that describe the CRS.
 They can be seen as formulas for converting a projected point into a point on the surface of the Earth and can be accessed from <code>crs</code> objects as follows (see <a href="https://proj.org/">proj.org/</a> for further details of what the output means):</p>
-<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" data-line-number="1"><span class="kw">st_crs</span>(<span class="dv">27700</span>)<span class="op">$</span>proj4string</a>
-<a class="sourceLine" id="cb221-2" data-line-number="2"><span class="co">#&gt; [1] &quot;+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 ...</span></a></code></pre></div>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb222-1" data-line-number="1"><span class="kw">st_crs</span>(<span class="dv">27700</span>)<span class="op">$</span>proj4string</a>
+<a class="sourceLine" id="cb222-2" data-line-number="2"><span class="co">#&gt; [1] &quot;+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 ...</span></a></code></pre></div>
 
 <div class="rmdnote">
 Printing a spatial object in the console automatically returns its coordinate reference system.
@@ -643,11 +643,11 @@ This system allows a very wide range of projections to be created, as we’ll se
 <p>A long and growing list of projections has been developed and many of these can be set with the <code>+proj=</code> element of <code>proj4string</code>s.<a href="#fn28" class="footnote-ref" id="fnref28"><sup>28</sup></a></p>
 <p>When mapping the world while preserving area relationships, the Mollweide projection is a good choice <span class="citation">(Jenny et al. <a href="#ref-jenny_guide_2017">2017</a>)</span> (Figure <a href="reproj-geo-data.html#fig:mollproj">6.2</a>).
 To use this projection, we need to specify it using the <code>proj4string</code> element, <code>&quot;+proj=moll&quot;</code>, in the <code>st_transform</code> function:</p>
-<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb222-1" data-line-number="1">world_mollweide =<span class="st"> </span><span class="kw">st_transform</span>(world, <span class="dt">crs =</span> <span class="st">&quot;+proj=moll&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" data-line-number="1">world_mollweide =<span class="st"> </span><span class="kw">st_transform</span>(world, <span class="dt">crs =</span> <span class="st">&quot;+proj=moll&quot;</span>)</a></code></pre></div>
 <!-- plot(world_mollweide$geom) -->
 <!-- plot(world_mollweide$geom, graticule = TRUE) -->
 <div class="figure" style="text-align: center"><span id="fig:mollproj"></span>
-<img src="figures/mollproj-1.png" alt="Mollweide projection of the world." width="100%" />
+<img src="06-reproj_files/figure-html/mollproj-1.png" alt="Mollweide projection of the world." width="100%" />
 <p class="caption">
 FIGURE 6.2: Mollweide projection of the world.
 </p>
@@ -655,9 +655,7 @@ FIGURE 6.2: Mollweide projection of the world.
 <p>On the other hand, when mapping the world, it is often desirable to have as little distortion as possible for all spatial properties (area, direction, distance).
 One of the most popular projections to achieve this is the Winkel tripel projection (Figure <a href="reproj-geo-data.html#fig:wintriproj">6.3</a>).<a href="#fn29" class="footnote-ref" id="fnref29"><sup>29</sup></a>
 <code>st_transform_proj()</code> from the <strong>lwgeom</strong> package allows for coordinate transformations to a wide range of CRSs, including the Winkel tripel projection:</p>
-<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" data-line-number="1">world_wintri =<span class="st"> </span>lwgeom<span class="op">::</span><span class="kw">st_transform_proj</span>(world, <span class="dt">crs =</span> <span class="st">&quot;+proj=wintri&quot;</span>)</a>
-<a class="sourceLine" id="cb223-2" data-line-number="2"><span class="co">#&gt; Warning in CPL_crs_from_proj4string(x): GDAL cannot import PROJ.4 string `</span></a>
-<a class="sourceLine" id="cb223-3" data-line-number="3"><span class="co">#&gt; +proj=wintri&#39;: returning missing CRS</span></a></code></pre></div>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb224-1" data-line-number="1">world_wintri =<span class="st"> </span>lwgeom<span class="op">::</span><span class="kw">st_transform_proj</span>(world, <span class="dt">crs =</span> <span class="st">&quot;+proj=wintri&quot;</span>)</a></code></pre></div>
 <!-- plot(world_wintri$geom) -->
 <!-- plot(world_wintri$geom, graticule = TRUE) -->
 <div class="figure" style="text-align: center"><span id="fig:wintriproj"></span>
@@ -676,24 +674,24 @@ The next one allows for greater customization of a projection, which includes ca
 
 <p>Moreover, PROJ parameters can be modified in most CRS definitions.
 The below code transforms the coordinates to the Lambert azimuthal equal-area projection centered on longitude and latitude of <code>0</code> (Figure <a href="reproj-geo-data.html#fig:laeaproj1">6.4</a>).</p>
-<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb224-1" data-line-number="1">world_laea1 =<span class="st"> </span><span class="kw">st_transform</span>(world, </a>
-<a class="sourceLine" id="cb224-2" data-line-number="2">                           <span class="dt">crs =</span> <span class="st">&quot;+proj=laea +x_0=0 +y_0=0 +lon_0=0 +lat_0=0&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb225-1" data-line-number="1">world_laea1 =<span class="st"> </span><span class="kw">st_transform</span>(world, </a>
+<a class="sourceLine" id="cb225-2" data-line-number="2">                           <span class="dt">crs =</span> <span class="st">&quot;+proj=laea +x_0=0 +y_0=0 +lon_0=0 +lat_0=0&quot;</span>)</a></code></pre></div>
 <!-- plot(world_laea1$geom) -->
 <!-- plot(world_laea1$geom, graticule = TRUE) -->
 <div class="figure" style="text-align: center"><span id="fig:laeaproj1"></span>
-<img src="figures/laeaproj1-1.png" alt="Lambert azimuthal equal-area projection of the world centered on longitude and latitude of 0." width="100%" />
+<img src="06-reproj_files/figure-html/laeaproj1-1.png" alt="Lambert azimuthal equal-area projection centered on longitude and latitude of 0." width="100%" />
 <p class="caption">
-FIGURE 6.4: Lambert azimuthal equal-area projection of the world centered on longitude and latitude of 0.
+FIGURE 6.4: Lambert azimuthal equal-area projection centered on longitude and latitude of 0.
 </p>
 </div>
 <p>We can change the PROJ parameters, for example the center of the projection, using the <code>+lon_0</code> and <code>+lat_0</code> parameters.
 The code below gives the map centered on New York City (Figure <a href="reproj-geo-data.html#fig:laeaproj2">6.5</a>).</p>
-<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb225-1" data-line-number="1">world_laea2 =<span class="st"> </span><span class="kw">st_transform</span>(world,</a>
-<a class="sourceLine" id="cb225-2" data-line-number="2">                           <span class="dt">crs =</span> <span class="st">&quot;+proj=laea +x_0=0 +y_0=0 +lon_0=-74 +lat_0=40&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb226-1" data-line-number="1">world_laea2 =<span class="st"> </span><span class="kw">st_transform</span>(world,</a>
+<a class="sourceLine" id="cb226-2" data-line-number="2">                           <span class="dt">crs =</span> <span class="st">&quot;+proj=laea +x_0=0 +y_0=0 +lon_0=-74 +lat_0=40&quot;</span>)</a></code></pre></div>
 <!-- plot(world_laea2$geom) -->
 <!-- plot(world_laea2$geom, graticule = TRUE) -->
 <div class="figure" style="text-align: center"><span id="fig:laeaproj2"></span>
-<img src="figures/laeaproj2-1.png" alt="Lambert azimuthal equal-area projection of the world centered on New York City." width="100%" />
+<img src="06-reproj_files/figure-html/laeaproj2-1.png" alt="Lambert azimuthal equal-area projection of the world centered on New York City." width="100%" />
 <p class="caption">
 FIGURE 6.5: Lambert azimuthal equal-area projection of the world centered on New York City.
 </p>
@@ -732,22 +730,22 @@ The PROJ library automatically adds the rest of the parameters and converts them
 <p>Let’s take a look at two examples of raster transformation: using categorical and continuous data.
 Land cover data are usually represented by categorical maps.
 The <code>nlcd2011.tif</code> file provides information for a small area in Utah, USA obtained from <a href="https://www.mrlc.gov/nlcd2011.php">National Land Cover Database 2011</a> in the NAD83 / UTM zone 12N CRS.</p>
-<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb226-1" data-line-number="1">cat_raster =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">system.file</span>(<span class="st">&quot;raster/nlcd2011.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>))</a>
-<a class="sourceLine" id="cb226-2" data-line-number="2"><span class="kw">crs</span>(cat_raster)</a>
-<a class="sourceLine" id="cb226-3" data-line-number="3"><span class="co">#&gt; CRS arguments:</span></a>
-<a class="sourceLine" id="cb226-4" data-line-number="4"><span class="co">#&gt;  +proj=utm +zone=12 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m</span></a>
-<a class="sourceLine" id="cb226-5" data-line-number="5"><span class="co">#&gt; +no_defs</span></a></code></pre></div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" data-line-number="1">cat_raster =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">system.file</span>(<span class="st">&quot;raster/nlcd2011.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>))</a>
+<a class="sourceLine" id="cb227-2" data-line-number="2"><span class="kw">crs</span>(cat_raster)</a>
+<a class="sourceLine" id="cb227-3" data-line-number="3"><span class="co">#&gt; CRS arguments:</span></a>
+<a class="sourceLine" id="cb227-4" data-line-number="4"><span class="co">#&gt;  +proj=utm +zone=12 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m</span></a>
+<a class="sourceLine" id="cb227-5" data-line-number="5"><span class="co">#&gt; +no_defs</span></a></code></pre></div>
 <p>In this region, 14 land cover classes were distinguished (a full list of NLCD2011 land cover classes can be found at <a href="https://www.mrlc.gov/nlcd11_leg.php">mrlc.gov</a>):</p>
-<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" data-line-number="1"><span class="kw">unique</span>(cat_raster)</a>
-<a class="sourceLine" id="cb227-2" data-line-number="2"><span class="co">#&gt;  [1] 11 21 22 23 31 41 42 43 52 71 81 82 90 95</span></a></code></pre></div>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb228-1" data-line-number="1"><span class="kw">unique</span>(cat_raster)</a>
+<a class="sourceLine" id="cb228-2" data-line-number="2"><span class="co">#&gt;  [1] 11 21 22 23 31 41 42 43 52 71 81 82 90 95</span></a></code></pre></div>
 <p>When reprojecting categorical rasters, the estimated values must be the same as those of the original.
 This could be done using the nearest neighbor method (<code>ngb</code>).
 This method sets each new cell value to the value of the nearest cell (center) of the input raster.
 An example is reprojecting <code>cat_raster</code> to WGS84, a geographic CRS well suited for web mapping.
 The first step is to obtain the PROJ definition of this CRS, which can be done using the <a href="http://spatialreference.org/ref/epsg/wgs-84/">http://spatialreference.org</a> webpage.
 The final step is to reproject the raster with the <code>projectRaster()</code> function which, in the case of categorical data, uses the nearest neighbor method (<code>ngb</code>):</p>
-<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb228-1" data-line-number="1">wgs84 =<span class="st"> &quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;</span></a>
-<a class="sourceLine" id="cb228-2" data-line-number="2">cat_raster_wgs84 =<span class="st"> </span><span class="kw">projectRaster</span>(cat_raster, <span class="dt">crs =</span> wgs84, <span class="dt">method =</span> <span class="st">&quot;ngb&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb229-1" data-line-number="1">wgs84 =<span class="st"> &quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;</span></a>
+<a class="sourceLine" id="cb229-2" data-line-number="2">cat_raster_wgs84 =<span class="st"> </span><span class="kw">projectRaster</span>(cat_raster, <span class="dt">crs =</span> wgs84, <span class="dt">method =</span> <span class="st">&quot;ngb&quot;</span>)</a></code></pre></div>
 <p>Many properties of the new object differ from the previous one, including the number of columns and rows (and therefore number of cells), resolution (transformed from meters into degrees), and extent, as illustrated in Table <a href="reproj-geo-data.html#tab:catraster">6.1</a> (note that the number of categories increases from 14 to 15 because of the addition of <code>NA</code> values, not because a new category has been created — the land cover classes are preserved).</p>
 <table>
 <caption><span id="tab:catraster">TABLE 6.1: </span>Key attributes in the original (‘cat_raster’) and projected (‘cat_raster_wgs84’) categorical raster datasets.</caption>
@@ -782,10 +780,10 @@ The final step is to reproject the raster with the <code>projectRaster()</code> 
 </table>
 <p>Reprojecting numeric rasters (with <code>numeric</code> or in this case <code>integer</code> values) follows an almost identical procedure.
 This is demonstrated below with <code>srtm.tif</code> in <strong>spDataLarge</strong> from <a href="https://www2.jpl.nasa.gov/srtm/">the Shuttle Radar Topography Mission (SRTM)</a>, which represents height in meters above sea level (elevation) with the WGS84 CRS:</p>
-<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb229-1" data-line-number="1">con_raster =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">system.file</span>(<span class="st">&quot;raster/srtm.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>))</a>
-<a class="sourceLine" id="cb229-2" data-line-number="2"><span class="kw">crs</span>(con_raster)</a>
-<a class="sourceLine" id="cb229-3" data-line-number="3"><span class="co">#&gt; CRS arguments:</span></a>
-<a class="sourceLine" id="cb229-4" data-line-number="4"><span class="co">#&gt;  +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0</span></a></code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb230-1" data-line-number="1">con_raster =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">system.file</span>(<span class="st">&quot;raster/srtm.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>))</a>
+<a class="sourceLine" id="cb230-2" data-line-number="2"><span class="kw">crs</span>(con_raster)</a>
+<a class="sourceLine" id="cb230-3" data-line-number="3"><span class="co">#&gt; CRS arguments:</span></a>
+<a class="sourceLine" id="cb230-4" data-line-number="4"><span class="co">#&gt;  +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0</span></a></code></pre></div>
 <p>We will reproject this dataset into a projected CRS, but <em>not</em> with the nearest neighbor method which is appropriate for categorical data.
 Instead, we will use the bilinear method which computes the output cell value based on the four nearest cells in the original raster.
 <!--
@@ -795,11 +793,11 @@ However, these interpolation methods are still unavailable in the **raster** pac
 The values in the projected dataset are the distance-weighted average of the values from these four cells:
 the closer the input cell is to the center of the output cell, the greater its weight.
 The following commands create a text string representing the Oblique Lambert azimuthal equal-area projection, and reproject the raster into this CRS, using the <code>bilinear</code> method:</p>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb230-1" data-line-number="1">equalarea =<span class="st"> &quot;+proj=laea +lat_0=37.32 +lon_0=-113.04&quot;</span></a>
-<a class="sourceLine" id="cb230-2" data-line-number="2">con_raster_ea =<span class="st"> </span><span class="kw">projectRaster</span>(con_raster, <span class="dt">crs =</span> equalarea, <span class="dt">method =</span> <span class="st">&quot;bilinear&quot;</span>)</a>
-<a class="sourceLine" id="cb230-3" data-line-number="3"><span class="kw">crs</span>(con_raster_ea)</a>
-<a class="sourceLine" id="cb230-4" data-line-number="4"><span class="co">#&gt; CRS arguments:</span></a>
-<a class="sourceLine" id="cb230-5" data-line-number="5"><span class="co">#&gt;  +proj=laea +lat_0=37.32 +lon_0=-113.04 +ellps=WGS84</span></a></code></pre></div>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" data-line-number="1">equalarea =<span class="st"> &quot;+proj=laea +lat_0=37.32 +lon_0=-113.04&quot;</span></a>
+<a class="sourceLine" id="cb231-2" data-line-number="2">con_raster_ea =<span class="st"> </span><span class="kw">projectRaster</span>(con_raster, <span class="dt">crs =</span> equalarea, <span class="dt">method =</span> <span class="st">&quot;bilinear&quot;</span>)</a>
+<a class="sourceLine" id="cb231-3" data-line-number="3"><span class="kw">crs</span>(con_raster_ea)</a>
+<a class="sourceLine" id="cb231-4" data-line-number="4"><span class="co">#&gt; CRS arguments:</span></a>
+<a class="sourceLine" id="cb231-5" data-line-number="5"><span class="co">#&gt;  +proj=laea +lat_0=37.32 +lon_0=-113.04 +ellps=WGS84</span></a></code></pre></div>
 <p>Raster reprojection on numeric variables also leads to small changes to values and spatial properties, such as the number of cells, resolution, and extent.
 These changes are demonstrated in Table <a href="reproj-geo-data.html#tab:rastercrs">6.2</a><a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a>:</p>
 <table>

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Geographic data in R | Geocomputation with R</title>
   <meta name="description" content="Chapter 2 Geographic data in R | Geocomputation with R is for people who want to analyze, visualize and model geographic data with open source software. It is based on R, a statistical programming language that has powerful data processing, visualization, and geospatial capabilities. The book equips you with the knowledge and skills to tackle a wide range of issues manifested in geographic data, including those with scientific, societal, and environmental implications. This book will interest people from many backgrounds, especially Geographic Information Systems (GIS) users interested in applying their domain-specific knowledge in a powerful open source language for data science, and R users interested in extending their skills to handle spatial data." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Geographic data in R | Geocomputation with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Robin Lovelace, Jakub Nowosad, Jannes Muenchow" />
 
 
-<meta name="date" content="2020-02-16" />
+<meta name="date" content="2020-03-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -556,7 +556,7 @@ The <strong>sf</strong> package provides a <code>plot()</code> method for visual
 the following command creates Figure <a href="spatial-class.html#fig:world-all">2.3</a>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">plot</span>(world)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:world-all"></span>
-<img src="figures/world-all-1.png" alt="A spatial plot of the world using the sf package, with a facet for each attribute." width="100%" />
+<img src="02-spatial-data_files/figure-html/world-all-1.png" alt="A spatial plot of the world using the sf package, with a facet for each attribute." width="100%" />
 <p class="caption">
 FIGURE 2.3: A spatial plot of the world using the sf package, with a facet for each attribute.
 </p>
@@ -566,14 +566,16 @@ This behavior can be useful for exploring the spatial distribution of different 
 <p>Being able to treat spatial objects as regular data frames with spatial powers has many advantages, especially if you are already used to working with data frames.
 The commonly used <code>summary()</code> function, for example, provides a useful overview of the variables within the <code>world</code> object.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">summary</span>(world[<span class="st">&quot;lifeExp&quot;</span>])</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt;     lifeExp                geom    </span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt;  Min.   :50.6   MULTIPOLYGON :177  </span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt;  1st Qu.:65.0   epsg:4326    :  0  </span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  Median :72.9   +proj=long...:  0  </span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  Mean   :70.9                      </span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  3rd Qu.:76.8                      </span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  Max.   :83.6                      </span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  NA&#39;s   :10</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; Warning in `$.crs`(attr(object, &quot;crs&quot;), &quot;proj4string&quot;): CRS uses proj4string,</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; which is deprecated.</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt;     lifeExp                geom    </span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  Min.   :50.6   MULTIPOLYGON :177  </span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  1st Qu.:65.0   epsg:4326    :  0  </span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  Median :72.9   +proj=long...:  0  </span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  Mean   :70.9                      </span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  3rd Qu.:76.8                      </span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;  Max.   :83.6                      </span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  NA&#39;s   :10</span></a></code></pre></div>
 <p>Although we have only selected one variable for the <code>summary</code> command, it also outputs a report on the geometry.
 This demonstrates the ‘sticky’ behavior of the geometry columns of <strong>sf</strong> objects, meaning the geometry is kept unless the user deliberately removes them, as we’ll see in Section <a href="attr.html#vector-attribute-manipulation">3.2</a>.
 The result provides a quick summary of both the non-spatial and spatial data contained in <code>world</code>: the mean average life expectancy is 71 years (ranging from less than 51 to more than 83 years with a median of 73 years) across all countries.</p>
@@ -595,11 +597,10 @@ The output shows two major differences compared with a regular <code>data.frame<
 <a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; geometry type:  MULTIPOLYGON</span></a>
 <a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; dimension:      XY</span></a>
 <a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; bbox:           xmin: -180 ymin: -18.3 xmax: 180 ymax: -0.95</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; epsg (SRID):    4326</span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</span></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt;   iso_a2 name_long continent                           geom</span></a>
-<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; 1     FJ      Fiji   Oceania MULTIPOLYGON (((180 -16.1, ...</span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; 2     TZ  Tanzania    Africa MULTIPOLYGON (((33.9 -0.95,...</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; CRS:            EPSG:4326</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;   iso_a2 name_long continent                           geom</span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; 1     FJ      Fiji   Oceania MULTIPOLYGON (((180 -16.1, ...</span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; 2     TZ  Tanzania    Africa MULTIPOLYGON (((33.9 -0.95,...</span></a></code></pre></div>
 <p>All this may seem rather complex, especially for a class system that is supposed to be simple.
 However, there are good reasons for organizing things this way and using <strong>sf</strong>.</p>
 <!-- It's a `MULTIPOLYGON` with 177 features and a geographic (longitude/latidue) coordinate reference system (CRS) with an EPSG code of `4326`. -->
@@ -657,7 +658,7 @@ Colors can also be set with <code>col =</code>, although this will not create a 
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">plot</span>(world[<span class="dv">3</span><span class="op">:</span><span class="dv">6</span>])</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">plot</span>(world[<span class="st">&quot;pop&quot;</span>])</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:sfplot"></span>
-<img src="figures/sfplot-1.png" alt="Plotting with sf, with multiple variables (left) and a single variable (right)." width="49%" /><img src="figures/sfplot-2.png" alt="Plotting with sf, with multiple variables (left) and a single variable (right)." width="49%" />
+<img src="02-spatial-data_files/figure-html/sfplot-1.png" alt="Plotting with sf, with multiple variables (left) and a single variable (right)." width="49%" /><img src="02-spatial-data_files/figure-html/sfplot-2.png" alt="Plotting with sf, with multiple variables (left) and a single variable (right)." width="49%" />
 <p class="caption">
 FIGURE 2.4: Plotting with sf, with multiple variables (left) and a single variable (right).
 </p>
@@ -688,7 +689,7 @@ A basic version of the map can be created with the following commands (see exerc
 <a class="sourceLine" id="cb17-3" data-line-number="3">world_cents =<span class="st"> </span><span class="kw">st_centroid</span>(world, <span class="dt">of_largest =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(world_cents), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> cex)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:contpop"></span>
-<img src="figures/contpop-1.png" alt="Country continents (represented by fill color) and 2015 populations (represented by circles, with area proportional to population)." width="100%" />
+<img src="02-spatial-data_files/figure-html/contpop-1.png" alt="Country continents (represented by fill color) and 2015 populations (represented by circles, with area proportional to population)." width="100%" />
 <p class="caption">
 FIGURE 2.5: Country continents (represented by fill color) and 2015 populations (represented by circles, with area proportional to population).
 </p>
@@ -702,7 +703,7 @@ This is used to plot India in the context of its giant Asian neighbors, with an 
 <a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(india), <span class="dt">expandBB =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="dv">1</span>), <span class="dt">col =</span> <span class="st">&quot;gray&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>)</a>
 <a class="sourceLine" id="cb18-3" data-line-number="3"><span class="kw">plot</span>(world_asia[<span class="dv">0</span>], <span class="dt">add =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:china"></span>
-<img src="figures/china-1.png" alt="India in context, demonstrating the expandBB argument." width="50%" />
+<img src="02-spatial-data_files/figure-html/china-1.png" alt="India in context, demonstrating the expandBB argument." width="50%" />
 <p class="caption">
 FIGURE 2.6: India in context, demonstrating the expandBB argument.
 </p>
@@ -745,7 +746,7 @@ Closed means that the first and the last point of a polygon have the same coordi
 <li>Polygon without a hole: <code>POLYGON ((1 5, 2 2, 4 1, 4 4, 1 5))</code></li>
 </ul>
 <div class="figure" style="text-align: center"><span id="fig:sfcs"></span>
-<img src="figures/sfcs-1.png" alt="Illustration of point, linestring and polygon geometries." width="100%" />
+<img src="02-spatial-data_files/figure-html/sfcs-1.png" alt="Illustration of point, linestring and polygon geometries." width="100%" />
 <p class="caption">
 FIGURE 2.7: Illustration of point, linestring and polygon geometries.
 </p>
@@ -759,7 +760,7 @@ However, <strong>sf</strong> also allows multiple geometries to exist within a s
 <li>Multipolygon: <code>MULTIPOLYGON (((1 5, 2 2, 4 1, 4 4, 1 5), (0 2, 1 2, 1 3, 0 3, 0 2)))</code></li>
 </ul>
 <div class="figure" style="text-align: center"><span id="fig:multis"></span>
-<img src="figures/multis-1.png" alt="Illustration of multi* geometries." width="100%" />
+<img src="02-spatial-data_files/figure-html/multis-1.png" alt="Illustration of multi* geometries." width="100%" />
 <p class="caption">
 FIGURE 2.8: Illustration of multi* geometries.
 </p>
@@ -770,7 +771,7 @@ FIGURE 2.8: Illustration of multi* geometries.
 <li>Geometry collection: <code>GEOMETRYCOLLECTION (MULTIPOINT (5 2, 1 3, 3 4, 3 2), LINESTRING (1 5, 4 4, 4 1, 2 2, 3 2))</code></li>
 </ul>
 <div class="figure" style="text-align: center"><span id="fig:geomcollection"></span>
-<img src="figures/geomcollection-1.png" alt="Illustration of a geometry collection." width="33%" />
+<img src="02-spatial-data_files/figure-html/geomcollection-1.png" alt="Illustration of a geometry collection." width="33%" />
 <p class="caption">
 FIGURE 2.9: Illustration of a geometry collection.
 </p>
@@ -869,10 +870,9 @@ This is important since <code>sfc</code> represents the geometry column in <stro
 <a class="sourceLine" id="cb26-7" data-line-number="7"><span class="co">#&gt; geometry type:  POINT</span></a>
 <a class="sourceLine" id="cb26-8" data-line-number="8"><span class="co">#&gt; dimension:      XY</span></a>
 <a class="sourceLine" id="cb26-9" data-line-number="9"><span class="co">#&gt; bbox:           xmin: 1 ymin: 2 xmax: 5 ymax: 3</span></a>
-<a class="sourceLine" id="cb26-10" data-line-number="10"><span class="co">#&gt; epsg (SRID):    NA</span></a>
-<a class="sourceLine" id="cb26-11" data-line-number="11"><span class="co">#&gt; proj4string:    NA</span></a>
-<a class="sourceLine" id="cb26-12" data-line-number="12"><span class="co">#&gt; POINT (5 2)</span></a>
-<a class="sourceLine" id="cb26-13" data-line-number="13"><span class="co">#&gt; POINT (1 3)</span></a></code></pre></div>
+<a class="sourceLine" id="cb26-10" data-line-number="10"><span class="co">#&gt; CRS:            NA</span></a>
+<a class="sourceLine" id="cb26-11" data-line-number="11"><span class="co">#&gt; POINT (5 2)</span></a>
+<a class="sourceLine" id="cb26-12" data-line-number="12"><span class="co">#&gt; POINT (1 3)</span></a></code></pre></div>
 <p>In most cases, an <code>sfc</code> object contains objects of the same geometry type.
 Therefore, when we convert <code>sfg</code> objects of type polygon into a simple feature geometry column, we would also end up with an <code>sfc</code> object of type polygon, which can be verified with <code>st_geometry_type()</code>.
 Equally, a geometry column of multilinestrings would result in an <code>sfc</code> object of type multilinestring:</p>
@@ -919,8 +919,18 @@ This argument accepts an integer with the <code>epsg</code> code such as <code>4
 <a class="sourceLine" id="cb31-2" data-line-number="2">points_sfc_wgs =<span class="st"> </span><span class="kw">st_sfc</span>(point1, point2, <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
 <a class="sourceLine" id="cb31-3" data-line-number="3"><span class="kw">st_crs</span>(points_sfc_wgs)</a>
 <a class="sourceLine" id="cb31-4" data-line-number="4"><span class="co">#&gt; Coordinate Reference System:</span></a>
-<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="co">#&gt;   EPSG: 4326 </span></a>
-<a class="sourceLine" id="cb31-6" data-line-number="6"><span class="co">#&gt;   proj4string: &quot;+proj=longlat +datum=WGS84 +no_defs&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="co">#&gt;   User input: EPSG:4326 </span></a>
+<a class="sourceLine" id="cb31-6" data-line-number="6"><span class="co">#&gt;   wkt:</span></a>
+<a class="sourceLine" id="cb31-7" data-line-number="7"><span class="co">#&gt; GEOGCS[&quot;WGS 84&quot;,</span></a>
+<a class="sourceLine" id="cb31-8" data-line-number="8"><span class="co">#&gt;     DATUM[&quot;WGS_1984&quot;,</span></a>
+<a class="sourceLine" id="cb31-9" data-line-number="9"><span class="co">#&gt;         SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,</span></a>
+<a class="sourceLine" id="cb31-10" data-line-number="10"><span class="co">#&gt;             AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],</span></a>
+<a class="sourceLine" id="cb31-11" data-line-number="11"><span class="co">#&gt;         AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],</span></a>
+<a class="sourceLine" id="cb31-12" data-line-number="12"><span class="co">#&gt;     PRIMEM[&quot;Greenwich&quot;,0,</span></a>
+<a class="sourceLine" id="cb31-13" data-line-number="13"><span class="co">#&gt;         AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],</span></a>
+<a class="sourceLine" id="cb31-14" data-line-number="14"><span class="co">#&gt;     UNIT[&quot;degree&quot;,0.0174532925199433,</span></a>
+<a class="sourceLine" id="cb31-15" data-line-number="15"><span class="co">#&gt;         AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],</span></a>
+<a class="sourceLine" id="cb31-16" data-line-number="16"><span class="co">#&gt;     AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]</span></a></code></pre></div>
 <p>It also accepts a raw proj4string (result not shown):</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># PROJ4STRING definition</span></a>
 <a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw">st_sfc</span>(point1, point2, <span class="dt">crs =</span> <span class="st">&quot;+proj=longlat +datum=WGS84 +no_defs&quot;</span>)</a></code></pre></div>
@@ -1000,7 +1010,7 @@ This and map algebra makes raster processing much more efficient and faster than
 However, in contrast to vector data, the cell of one raster layer can only hold a single value.
 The value might be numeric or categorical (Figure <a href="spatial-class.html#fig:raster-intro-plot">2.10</a>:C).</p>
 <div class="figure" style="text-align: center"><span id="fig:raster-intro-plot"></span>
-<img src="figures/raster-intro-plot-1.png" alt="Raster data types: (A) cell IDs, (B) cell values, (C) a colored raster map." width="100%" />
+<img src="02-spatial-data_files/figure-html/raster-intro-plot-1.png" alt="Raster data types: (A) cell IDs, (B) cell values, (C) a colored raster map." width="100%" />
 <p class="caption">
 FIGURE 2.10: Raster data types: (A) cell IDs, (B) cell values, (C) a colored raster map.
 </p>
@@ -1009,7 +1019,7 @@ FIGURE 2.10: Raster data types: (A) cell IDs, (B) cell values, (C) a colored ras
 Of course, we can represent discrete features such as soil or land-cover classes also with the help of a raster data model (Figure <a href="spatial-class.html#fig:raster-intro-plot2">2.11</a>).
 Consequently, the discrete borders of these features become blurred, and depending on the spatial task a vector representation might be more suitable.</p>
 <div class="figure" style="text-align: center"><span id="fig:raster-intro-plot2"></span>
-<img src="figures/raster-intro-plot2-1.png" alt="Examples of continuous and categorical rasters." width="100%" />
+<img src="02-spatial-data_files/figure-html/raster-intro-plot2-1.png" alt="Examples of continuous and categorical rasters." width="100%" />
 <p class="caption">
 FIGURE 2.11: Examples of continuous and categorical rasters.
 </p>
@@ -1067,7 +1077,7 @@ hist(new_raster)
 #> of the raster cells were used. 100000 values used.
 ```
 
-<img src="figures/new_raster-hist-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="02-spatial-data_files/figure-html/new_raster-hist-1.png" width="100%" style="display: block; margin: auto;" />
 
 `getValues()` extracts the values of a raster as a numerical vector.
 To only select specific rows, use the `row` parameter.
@@ -1089,7 +1099,7 @@ The new vector, `new_raster_values`, can serve as input for subsequent statistic
 </p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">plot</span>(new_raster)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:basic-new-raster-plot"></span>
-<img src="figures/basic-new-raster-plot-1.png" alt="Basic raster plot." width="100%" />
+<img src="02-spatial-data_files/figure-html/basic-new-raster-plot-1.png" alt="Basic raster plot." width="100%" />
 <p class="caption">
 FIGURE 2.12: Basic raster plot.
 </p>

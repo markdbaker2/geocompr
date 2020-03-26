@@ -1,4 +1,3 @@
-
 # Geographic data I/O {#read-write}
 
 ## Prerequisites {-}
@@ -577,7 +576,7 @@ The speed of the writing process depends also on the driver.
 
 ```r
 st_write(obj = world, dsn = "world.gpkg")
-#> Updating layer `world' to data source `world.gpkg' using driver `GPKG'
+#> Writing layer `world' to data source `world.gpkg' using driver `GPKG'
 #> Writing 177 features with 10 fields and geometry type Multi Polygon.
 ```
 
@@ -586,35 +585,29 @@ st_write(obj = world, dsn = "world.gpkg")
 
 ```r
 st_write(obj = world, dsn = "world.gpkg")
-#> Updating layer `world' to data source `world.gpkg' using driver `GPKG'
-#> Creating layer world failed.
-#> Error in CPL_write_ogr(obj, dsn, layer, driver, ...),  : 
-#>   Layer creation failed.
-#> In addition: Warning message:
-#> In CPL_write_ogr(obj, dsn, layer, driver, ...),  :
-#>   GDAL Error 1: Layer world already exists, CreateLayer failed.
-#> Use the layer creation option OVERWRITE=YES to replace it.
+#> Layer world in dataset world.gpkg already exists:
+#> use either append=TRUE to append to layer or append=FALSE to overwrite layer
+#> Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options), : Dataset already exists.
 ```
 
-The error message provides some information as to why the function failed.
-The `GDAL Error 1` statement makes clear that the failure occurred at the GDAL\index{GDAL} level.
-Additionally, the suggestion to use `OVERWRITE=YES` provides a clue about how to fix the problem.
-However, this is not a `st_write()` argument, it is a GDAL\index{GDAL} option.
-Luckily, `st_write` provides a `layer_options` argument through which we can pass driver-dependent options:
+The error message tells us why the function failed:
+`world.gpkg` already contains a layer called `world`. 
+To fix this problem, use the `append` argument.
+When this argument is set to `TRUE`, the old layer is kept and the `world` object is added as a second new layer:
 
 
 ```r
-st_write(obj = world, dsn = "world.gpkg", layer_options = "OVERWRITE=YES")
+st_write(obj = world, dsn = "world.gpkg", append = TRUE)
 ```
 
-Another solution is to use the `st_write()` argument `delete_layer`. Setting it to `TRUE` deletes already existing layers in the data source before the function attempts to write (note there is also a `delete_dsn` argument):
+Alternatively with `append = FALSE`, existing layers are deleted before the function attempts to write our object to a file:
 
 
 ```r
-st_write(obj = world, dsn = "world.gpkg", delete_layer = TRUE)
+st_write(obj = world, dsn = "world.gpkg", append = FALSE)
 ```
 
-You can achieve the same with `write_sf()` since it is equivalent to (technically an *alias* for) `st_write()`, except that its defaults for `delete_layer` and `quiet` is `TRUE`.
+You can achieve the same with `write_sf()` since it is equivalent to (technically an *alias* for) `st_write()`, except that its defaults for `append` is `FALSE` and `quiet` is `TRUE`.
 
 
 ```r

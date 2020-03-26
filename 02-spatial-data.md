@@ -1,4 +1,3 @@
-
 # (PART) Foundations {-}
 
 # Geographic data in R {#spatial-class}
@@ -190,7 +189,7 @@ plot(world)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/world-all-1.png" alt="A spatial plot of the world using the sf package, with a facet for each attribute." width="100%" />
+<img src="02-spatial-data_files/figure-html/world-all-1.png" alt="A spatial plot of the world using the sf package, with a facet for each attribute." width="100%" />
 <p class="caption">(\#fig:world-all)A spatial plot of the world using the sf package, with a facet for each attribute.</p>
 </div>
 
@@ -203,6 +202,8 @@ The commonly used `summary()` function, for example, provides a useful overview 
 
 ```r
 summary(world["lifeExp"])
+#> Warning in `$.crs`(attr(object, "crs"), "proj4string"): CRS uses proj4string,
+#> which is deprecated.
 #>     lifeExp                geom    
 #>  Min.   :50.6   MULTIPOLYGON :177  
 #>  1st Qu.:65.0   epsg:4326    :  0  
@@ -236,8 +237,7 @@ world_mini
 #> geometry type:  MULTIPOLYGON
 #> dimension:      XY
 #> bbox:           xmin: -180 ymin: -18.3 xmax: 180 ymax: -0.95
-#> epsg (SRID):    4326
-#> proj4string:    +proj=longlat +datum=WGS84 +no_defs
+#> CRS:            EPSG:4326
 #>   iso_a2 name_long continent                           geom
 #> 1     FJ      Fiji   Oceania MULTIPOLYGON (((180 -16.1, ...
 #> 2     TZ  Tanzania    Africa MULTIPOLYGON (((33.9 -0.95,...
@@ -316,7 +316,7 @@ plot(world["pop"])
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/sfplot-1.png" alt="Plotting with sf, with multiple variables (left) and a single variable (right)." width="49%" /><img src="figures/sfplot-2.png" alt="Plotting with sf, with multiple variables (left) and a single variable (right)." width="49%" />
+<img src="02-spatial-data_files/figure-html/sfplot-1.png" alt="Plotting with sf, with multiple variables (left) and a single variable (right)." width="49%" /><img src="02-spatial-data_files/figure-html/sfplot-2.png" alt="Plotting with sf, with multiple variables (left) and a single variable (right)." width="49%" />
 <p class="caption">(\#fig:sfplot)Plotting with sf, with multiple variables (left) and a single variable (right).</p>
 </div>
 
@@ -369,7 +369,7 @@ plot(st_geometry(world_cents), add = TRUE, cex = cex)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/contpop-1.png" alt="Country continents (represented by fill color) and 2015 populations (represented by circles, with area proportional to population)." width="100%" />
+<img src="02-spatial-data_files/figure-html/contpop-1.png" alt="Country continents (represented by fill color) and 2015 populations (represented by circles, with area proportional to population)." width="100%" />
 <p class="caption">(\#fig:contpop)Country continents (represented by fill color) and 2015 populations (represented by circles, with area proportional to population).</p>
 </div>
 
@@ -388,7 +388,7 @@ plot(world_asia[0], add = TRUE)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/china-1.png" alt="India in context, demonstrating the expandBB argument." width="50%" />
+<img src="02-spatial-data_files/figure-html/china-1.png" alt="India in context, demonstrating the expandBB argument." width="50%" />
 <p class="caption">(\#fig:china)India in context, demonstrating the expandBB argument.</p>
 </div>
 
@@ -435,7 +435,7 @@ A polygon with a hole would be, for example, `POLYGON ((1 5, 2 2, 4 1, 4 4, 1 5)
 - Polygon without a hole: `POLYGON ((1 5, 2 2, 4 1, 4 4, 1 5))`
 
 <div class="figure" style="text-align: center">
-<img src="figures/sfcs-1.png" alt="Illustration of point, linestring and polygon geometries." width="100%" />
+<img src="02-spatial-data_files/figure-html/sfcs-1.png" alt="Illustration of point, linestring and polygon geometries." width="100%" />
 <p class="caption">(\#fig:sfcs)Illustration of point, linestring and polygon geometries.</p>
 </div>
 
@@ -452,7 +452,7 @@ However, **sf** also allows multiple geometries to exist within a single feature
 
 
 <div class="figure" style="text-align: center">
-<img src="figures/multis-1.png" alt="Illustration of multi* geometries." width="100%" />
+<img src="02-spatial-data_files/figure-html/multis-1.png" alt="Illustration of multi* geometries." width="100%" />
 <p class="caption">(\#fig:multis)Illustration of multi* geometries.</p>
 </div>
 
@@ -462,7 +462,7 @@ Finally, a geometry collection can contain any combination of geometries includi
 - Geometry collection: `GEOMETRYCOLLECTION (MULTIPOINT (5 2, 1 3, 3 4, 3 2), LINESTRING (1 5, 4 4, 4 1, 2 2, 3 2))`
 
 <div class="figure" style="text-align: center">
-<img src="figures/geomcollection-1.png" alt="Illustration of a geometry collection." width="33%" />
+<img src="02-spatial-data_files/figure-html/geomcollection-1.png" alt="Illustration of a geometry collection." width="33%" />
 <p class="caption">(\#fig:geomcollection)Illustration of a geometry collection.</p>
 </div>
 
@@ -595,8 +595,7 @@ points_sfc
 #> geometry type:  POINT
 #> dimension:      XY
 #> bbox:           xmin: 1 ymin: 2 xmax: 5 ymax: 3
-#> epsg (SRID):    NA
-#> proj4string:    NA
+#> CRS:            NA
 #> POINT (5 2)
 #> POINT (1 3)
 ```
@@ -670,8 +669,18 @@ This argument accepts an integer with the `epsg` code such as `4326`, which auto
 points_sfc_wgs = st_sfc(point1, point2, crs = 4326)
 st_crs(points_sfc_wgs)
 #> Coordinate Reference System:
-#>   EPSG: 4326 
-#>   proj4string: "+proj=longlat +datum=WGS84 +no_defs"
+#>   User input: EPSG:4326 
+#>   wkt:
+#> GEOGCS["WGS 84",
+#>     DATUM["WGS_1984",
+#>         SPHEROID["WGS 84",6378137,298.257223563,
+#>             AUTHORITY["EPSG","7030"]],
+#>         AUTHORITY["EPSG","6326"]],
+#>     PRIMEM["Greenwich",0,
+#>         AUTHORITY["EPSG","8901"]],
+#>     UNIT["degree",0.0174532925199433,
+#>         AUTHORITY["EPSG","9122"]],
+#>     AUTHORITY["EPSG","4326"]]
 ```
 
 It also accepts a raw proj4string (result not shown):
@@ -783,7 +792,7 @@ However, in contrast to vector data, the cell of one raster layer can only hold 
 The value might be numeric or categorical (Figure  \@ref(fig:raster-intro-plot):C).
 
 <div class="figure" style="text-align: center">
-<img src="figures/raster-intro-plot-1.png" alt="Raster data types: (A) cell IDs, (B) cell values, (C) a colored raster map." width="100%" />
+<img src="02-spatial-data_files/figure-html/raster-intro-plot-1.png" alt="Raster data types: (A) cell IDs, (B) cell values, (C) a colored raster map." width="100%" />
 <p class="caption">(\#fig:raster-intro-plot)Raster data types: (A) cell IDs, (B) cell values, (C) a colored raster map.</p>
 </div>
 
@@ -792,7 +801,7 @@ Of course, we can represent discrete features such as soil or land-cover classes
 Consequently, the discrete borders of these features become blurred, and depending on the spatial task a vector representation might be more suitable.
 
 <div class="figure" style="text-align: center">
-<img src="figures/raster-intro-plot2-1.png" alt="Examples of continuous and categorical rasters." width="100%" />
+<img src="02-spatial-data_files/figure-html/raster-intro-plot2-1.png" alt="Examples of continuous and categorical rasters." width="100%" />
 <p class="caption">(\#fig:raster-intro-plot2)Examples of continuous and categorical rasters.</p>
 </div>
 
@@ -862,7 +871,7 @@ hist(new_raster)
 #> of the raster cells were used. 100000 values used.
 ```
 
-<img src="figures/new_raster-hist-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="02-spatial-data_files/figure-html/new_raster-hist-1.png" width="100%" style="display: block; margin: auto;" />
 
 `getValues()` extracts the values of a raster as a numerical vector.
 To only select specific rows, use the `row` parameter.
@@ -890,7 +899,7 @@ plot(new_raster)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figures/basic-new-raster-plot-1.png" alt="Basic raster plot." width="100%" />
+<img src="02-spatial-data_files/figure-html/basic-new-raster-plot-1.png" alt="Basic raster plot." width="100%" />
 <p class="caption">(\#fig:basic-new-raster-plot)Basic raster plot.</p>
 </div>
 

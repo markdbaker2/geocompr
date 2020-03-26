@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Geometry operations | Geocomputation with R</title>
   <meta name="description" content="Chapter 5 Geometry operations | Geocomputation with R is for people who want to analyze, visualize and model geographic data with open source software. It is based on R, a statistical programming language that has powerful data processing, visualization, and geospatial capabilities. The book equips you with the knowledge and skills to tackle a wide range of issues manifested in geographic data, including those with scientific, societal, and environmental implications. This book will interest people from many backgrounds, especially Geographic Information Systems (GIS) users interested in applying their domain-specific knowledge in a powerful open source language for data science, and R users interested in extending their skills to handle spatial data." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Geometry operations | Geocomputation with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Robin Lovelace, Jakub Nowosad, Jannes Muenchow" />
 
 
-<meta name="date" content="2020-02-16" />
+<meta name="date" content="2020-03-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -424,11 +424,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>This chapter uses the same packages as Chapter <a href="spatial-operations.html#spatial-operations">4</a> but with the addition of <strong>spDataLarge</strong>, which was installed in Chapter <a href="spatial-class.html#spatial-class">2</a>:</li>
 </ul>
-<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" data-line-number="1"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb146-2" data-line-number="2"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb146-3" data-line-number="3"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb146-4" data-line-number="4"><span class="kw">library</span>(spData)</a>
-<a class="sourceLine" id="cb146-5" data-line-number="5"><span class="kw">library</span>(spDataLarge)</a></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" data-line-number="1"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb147-2" data-line-number="2"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb147-3" data-line-number="3"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb147-4" data-line-number="4"><span class="kw">library</span>(spData)</a>
+<a class="sourceLine" id="cb147-5" data-line-number="5"><span class="kw">library</span>(spDataLarge)</a></code></pre></div>
 </div>
 <div id="introduction-2" class="section level2">
 <h2><span class="header-section-number">5.1</span> Introduction</h2>
@@ -467,26 +467,28 @@ The <strong>sf</strong> package provides <code>st_simplify()</code>, which uses 
 <!-- As a result, all vertices in the simplified geometry will be within this value from the original ones. -->
 Figure <a href="geometric-operations.html#fig:seine-simp">5.1</a> illustrates simplification of a <code>LINESTRING</code> geometry representing the river Seine and tributaries.
 The simplified geometry was created by the following command:</p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" data-line-number="1">seine_simp =<span class="st"> </span><span class="kw">st_simplify</span>(seine, <span class="dt">dTolerance =</span> <span class="dv">2000</span>)  <span class="co"># 2000 m</span></a></code></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" data-line-number="1">seine_simp =<span class="st"> </span><span class="kw">st_simplify</span>(seine, <span class="dt">dTolerance =</span> <span class="dv">2000</span>)  <span class="co"># 2000 m</span></a>
+<a class="sourceLine" id="cb148-2" data-line-number="2"><span class="co">#&gt; Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span></a>
+<a class="sourceLine" id="cb148-3" data-line-number="3"><span class="co">#&gt; that</span></a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:seine-simp"></span>
-<img src="figures/seine-simp-1.png" alt="Comparison of the original and simplified geometry of the seine object." width="100%" />
+<img src="05-geometry-operations_files/figure-html/seine-simp-1.png" alt="Comparison of the original and simplified geometry of the seine object." width="100%" />
 <p class="caption">
 FIGURE 5.1: Comparison of the original and simplified geometry of the seine object.
 </p>
 </div>
 <p>The resulting <code>seine_simp</code> object is a copy of the original <code>seine</code> but with fewer vertices.
 This is apparent, with the result being visually simpler (Figure <a href="geometric-operations.html#fig:seine-simp">5.1</a>, right) and consuming less memory than the original object, as verified below:</p>
-<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" data-line-number="1"><span class="kw">object.size</span>(seine)</a>
-<a class="sourceLine" id="cb148-2" data-line-number="2"><span class="co">#&gt; 17304 bytes</span></a>
-<a class="sourceLine" id="cb148-3" data-line-number="3"><span class="kw">object.size</span>(seine_simp)</a>
-<a class="sourceLine" id="cb148-4" data-line-number="4"><span class="co">#&gt; 8320 bytes</span></a></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" data-line-number="1"><span class="kw">object.size</span>(seine)</a>
+<a class="sourceLine" id="cb149-2" data-line-number="2"><span class="co">#&gt; 17304 bytes</span></a>
+<a class="sourceLine" id="cb149-3" data-line-number="3"><span class="kw">object.size</span>(seine_simp)</a>
+<a class="sourceLine" id="cb149-4" data-line-number="4"><span class="co">#&gt; 8320 bytes</span></a></code></pre></div>
 <p>Simplification is also applicable for polygons.
 This is illustrated using <code>us_states</code>, representing the contiguous United States.
 As we show in Chapter <a href="reproj-geo-data.html#reproj-geo-data">6</a>, GEOS assumes that the data is in a projected CRS and this could lead to unexpected results when using a geographic CRS.
 Therefore, the first step is to project the data into some adequate projected CRS, such as US National Atlas Equal Area (epsg = 2163) (on the left in Figure <a href="geometric-operations.html#fig:us-simp">5.2</a>):</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" data-line-number="1">us_states2163 =<span class="st"> </span><span class="kw">st_transform</span>(us_states, <span class="dv">2163</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb150-1" data-line-number="1">us_states2163 =<span class="st"> </span><span class="kw">st_transform</span>(us_states, <span class="dv">2163</span>)</a></code></pre></div>
 <p><code>st_simplify()</code> works equally well with projected polygons:</p>
-<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb150-1" data-line-number="1">us_states_simp1 =<span class="st"> </span><span class="kw">st_simplify</span>(us_states2163, <span class="dt">dTolerance =</span> <span class="dv">100000</span>)  <span class="co"># 100 km</span></a></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" data-line-number="1">us_states_simp1 =<span class="st"> </span><span class="kw">st_simplify</span>(us_states2163, <span class="dt">dTolerance =</span> <span class="dv">100000</span>)  <span class="co"># 100 km</span></a></code></pre></div>
 <p>A limitation with <code>st_simplify()</code> is that it simplifies objects on a per-geometry basis.
 This means the ‘topology’ is lost, resulting in overlapping and ‘holy’ areal units illustrated in Figure <a href="geometric-operations.html#fig:us-simp">5.2</a> (middle panel).
 <code>ms_simplify()</code> from <strong>rmapshaper</strong> provides an alternative that overcomes this issue.
@@ -494,13 +496,13 @@ By default it uses the Visvalingam algorithm, which overcomes some limitations o
 <!-- https://bost.ocks.org/mike/simplify/ -->
 The following code chunk uses this function to simplify <code>us_states2163</code>.
 The result has only 1% of the vertices of the input (set using the argument <code>keep</code>) but its number of objects remains intact because we set <code>keep_shapes = TRUE</code>:<a href="#fn19" class="footnote-ref" id="fnref19"><sup>19</sup></a></p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" data-line-number="1"><span class="co"># proportion of points to retain (0-1; default 0.05)</span></a>
-<a class="sourceLine" id="cb151-2" data-line-number="2">us_states2163<span class="op">$</span>AREA =<span class="st"> </span><span class="kw">as.numeric</span>(us_states2163<span class="op">$</span>AREA)</a>
-<a class="sourceLine" id="cb151-3" data-line-number="3">us_states_simp2 =<span class="st"> </span>rmapshaper<span class="op">::</span><span class="kw">ms_simplify</span>(us_states2163, <span class="dt">keep =</span> <span class="fl">0.01</span>,</a>
-<a class="sourceLine" id="cb151-4" data-line-number="4">                                          <span class="dt">keep_shapes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" data-line-number="1"><span class="co"># proportion of points to retain (0-1; default 0.05)</span></a>
+<a class="sourceLine" id="cb152-2" data-line-number="2">us_states2163<span class="op">$</span>AREA =<span class="st"> </span><span class="kw">as.numeric</span>(us_states2163<span class="op">$</span>AREA)</a>
+<a class="sourceLine" id="cb152-3" data-line-number="3">us_states_simp2 =<span class="st"> </span>rmapshaper<span class="op">::</span><span class="kw">ms_simplify</span>(us_states2163, <span class="dt">keep =</span> <span class="fl">0.01</span>,</a>
+<a class="sourceLine" id="cb152-4" data-line-number="4">                                          <span class="dt">keep_shapes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Finally, the visual comparison of the original dataset and the two simplified versions shows differences between the Douglas-Peucker (<code>st_simplify</code>) and Visvalingam (<code>ms_simplify</code>) algorithm outputs (Figure <a href="geometric-operations.html#fig:us-simp">5.2</a>):</p>
 <div class="figure" style="text-align: center"><span id="fig:us-simp"></span>
-<img src="figures/us-simp-1.png" alt="Polygon simplification in action, comparing the original geometry of the contiguous United States with simplified versions, generated with functions from sf (center) and rmapshaper (right) packages." width="100%" />
+<img src="05-geometry-operations_files/figure-html/us-simp-1.png" alt="Polygon simplification in action, comparing the original geometry of the contiguous United States with simplified versions, generated with functions from sf (center) and rmapshaper (right) packages." width="100%" />
 <p class="caption">
 FIGURE 5.2: Polygon simplification in action, comparing the original geometry of the contiguous United States with simplified versions, generated with functions from sf (center) and rmapshaper (right) packages.
 </p>
@@ -516,16 +518,16 @@ All of them create single point representations of more complex vector objects.<
 This type of centroid operation (often referred to as ‘the centroid’) represents the center of mass in a spatial object (think of balancing a plate on your finger).
 Geographic centroids have many uses, for example to create a simple point representation of complex geometries, or to estimate distances between polygons.
 They can be calculated with the <strong>sf</strong> function <code>st_centroid()</code> as demonstrated in the code below, which generates the geographic centroids of regions in New Zealand and tributaries to the River Seine, illustrated with black points in Figure <a href="geometric-operations.html#fig:centr">5.3</a>.</p>
-<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" data-line-number="1">nz_centroid =<span class="st"> </span><span class="kw">st_centroid</span>(nz)</a>
-<a class="sourceLine" id="cb152-2" data-line-number="2">seine_centroid =<span class="st"> </span><span class="kw">st_centroid</span>(seine)</a></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" data-line-number="1">nz_centroid =<span class="st"> </span><span class="kw">st_centroid</span>(nz)</a>
+<a class="sourceLine" id="cb153-2" data-line-number="2">seine_centroid =<span class="st"> </span><span class="kw">st_centroid</span>(seine)</a></code></pre></div>
 <p>Sometimes the geographic centroid falls outside the boundaries of their parent objects (think of a doughnut).
 In such cases <em>point on surface</em> operations can be used to guarantee the point will be in the parent object (e.g., for labeling irregular multipolygon objects such as island states), as illustrated by the red points in Figure <a href="geometric-operations.html#fig:centr">5.3</a>.
 Notice that these red points always lie on their parent objects.
 They were created with <code>st_point_on_surface()</code> as follows:<a href="#fn20" class="footnote-ref" id="fnref20"><sup>20</sup></a></p>
-<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" data-line-number="1">nz_pos =<span class="st"> </span><span class="kw">st_point_on_surface</span>(nz)</a>
-<a class="sourceLine" id="cb153-2" data-line-number="2">seine_pos =<span class="st"> </span><span class="kw">st_point_on_surface</span>(seine)</a></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb154-1" data-line-number="1">nz_pos =<span class="st"> </span><span class="kw">st_point_on_surface</span>(nz)</a>
+<a class="sourceLine" id="cb154-2" data-line-number="2">seine_pos =<span class="st"> </span><span class="kw">st_point_on_surface</span>(seine)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:centr"></span>
-<img src="figures/centr-1.png" alt="Centroids (black points) and 'points on surface' (red points) of New Zealand's regions (left) and the Seine (right) datasets." width="100%" />
+<img src="05-geometry-operations_files/figure-html/centr-1.png" alt="Centroids (black points) and 'points on surface' (red points) of New Zealand's regions (left) and the Seine (right) datasets." width="100%" />
 <p class="caption">
 FIGURE 5.3: Centroids (black points) and ‘points on surface’ (red points) of New Zealand’s regions (left) and the Seine (right) datasets.
 </p>
@@ -544,10 +546,14 @@ Which demographic groups are within travel distance of this new shop?
 These kinds of questions can be answered and visualized by creating buffers around the geographic entities of interest.</p>
 <p>Figure <a href="geometric-operations.html#fig:buffs">5.4</a> illustrates buffers of different sizes (5 and 50 km) surrounding the river Seine and tributaries.
 These buffers were created with commands below, which show that the command <code>st_buffer()</code> requires at least two arguments: an input geometry and a distance, provided in the units of the CRS (in this case meters):</p>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb154-1" data-line-number="1">seine_buff_5km =<span class="st"> </span><span class="kw">st_buffer</span>(seine, <span class="dt">dist =</span> <span class="dv">5000</span>)</a>
-<a class="sourceLine" id="cb154-2" data-line-number="2">seine_buff_50km =<span class="st"> </span><span class="kw">st_buffer</span>(seine, <span class="dt">dist =</span> <span class="dv">50000</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" data-line-number="1">seine_buff_5km =<span class="st"> </span><span class="kw">st_buffer</span>(seine, <span class="dt">dist =</span> <span class="dv">5000</span>)</a>
+<a class="sourceLine" id="cb155-2" data-line-number="2"><span class="co">#&gt; Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span></a>
+<a class="sourceLine" id="cb155-3" data-line-number="3"><span class="co">#&gt; that</span></a>
+<a class="sourceLine" id="cb155-4" data-line-number="4">seine_buff_50km =<span class="st"> </span><span class="kw">st_buffer</span>(seine, <span class="dt">dist =</span> <span class="dv">50000</span>)</a>
+<a class="sourceLine" id="cb155-5" data-line-number="5"><span class="co">#&gt; Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span></a>
+<a class="sourceLine" id="cb155-6" data-line-number="6"><span class="co">#&gt; that</span></a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:buffs"></span>
-<img src="figures/buffs-1.png" alt="Buffers around the Seine dataset of 5 km (left) and 50 km (right). Note the colors, which reflect the fact that one buffer is created per geometry feature." width="75%" />
+<img src="05-geometry-operations_files/figure-html/buffs-1.png" alt="Buffers around the Seine dataset of 5 km (left) and 50 km (right). Note the colors, which reflect the fact that one buffer is created per geometry feature." width="75%" />
 <p class="caption">
 FIGURE 5.4: Buffers around the Seine dataset of 5 km (left) and 50 km (right). Note the colors, which reflect the fact that one buffer is created per geometry feature.
 </p>
@@ -572,11 +578,11 @@ Additionally, it is possible to use any combination of these.
 Affine transformations are an essential part of geocomputation.
 For example, shifting is needed for labels placement, scaling is used in non-contiguous area cartograms (see Section <a href="adv-map.html#other-mapping-packages">8.6</a>), and many affine transformations are applied when reprojecting or improving the geometry that was created based on a distorted or wrongly projected map.
 The <strong>sf</strong> package implements affine transformation for objects of classes <code>sfg</code> and <code>sfc</code>.</p>
-<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" data-line-number="1">nz_sfc =<span class="st"> </span><span class="kw">st_geometry</span>(nz)</a></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb156-1" data-line-number="1">nz_sfc =<span class="st"> </span><span class="kw">st_geometry</span>(nz)</a></code></pre></div>
 <p>Shifting moves every point by the same distance in map units.
 It could be done by adding a numerical vector to a vector object.
 For example, the code below shifts all y-coordinates by 100,000 meters to the north, but leaves the x-coordinates untouched (left panel of Figure <a href="geometric-operations.html#fig:affine-trans">5.5</a>).</p>
-<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb156-1" data-line-number="1">nz_shift =<span class="st"> </span>nz_sfc <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100000</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" data-line-number="1">nz_shift =<span class="st"> </span>nz_sfc <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100000</span>)</a></code></pre></div>
 <p>Scaling enlarges or shrinks objects by a factor.
 It can be applied either globally or locally. <!-- my terms - jn-->
 Global scaling increases or decreases all coordinates values in relation to the origin coordinates, while keeping all geometries topological relations intact.
@@ -586,8 +592,10 @@ In the example below, each geometry is shrunk by a factor of two around the cent
 To achieve that, each object is firstly shifted in a way that its center has coordinates of <code>0, 0</code> (<code>(nz_sfc - nz_centroid_sfc)</code>).
 Next, the sizes of the geometries are reduced by half (<code>* 0.5</code>).
 Finally, each object’s centroid is moved back to the input data coordinates (<code>+ nz_centroid_sfc</code>).</p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" data-line-number="1">nz_centroid_sfc =<span class="st"> </span><span class="kw">st_centroid</span>(nz_sfc)</a>
-<a class="sourceLine" id="cb157-2" data-line-number="2">nz_scale =<span class="st"> </span>(nz_sfc <span class="op">-</span><span class="st"> </span>nz_centroid_sfc) <span class="op">*</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span>nz_centroid_sfc</a></code></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" data-line-number="1">nz_centroid_sfc =<span class="st"> </span><span class="kw">st_centroid</span>(nz_sfc)</a>
+<a class="sourceLine" id="cb158-2" data-line-number="2"><span class="co">#&gt; Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span></a>
+<a class="sourceLine" id="cb158-3" data-line-number="3"><span class="co">#&gt; that</span></a>
+<a class="sourceLine" id="cb158-4" data-line-number="4">nz_scale =<span class="st"> </span>(nz_sfc <span class="op">-</span><span class="st"> </span>nz_centroid_sfc) <span class="op">*</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span>nz_centroid_sfc</a></code></pre></div>
 <p>Rotation of two-dimensional coordinates requires a rotation matrix:</p>
 <p><span class="math display">\[
 R =
@@ -599,22 +607,22 @@ R =
 <p>It rotates points in a clockwise direction.
 The rotation matrix can be implemented in R as:
 <!-- https://r-spatial.github.io/sf/articles/sf3.html#affine-transformations --></p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" data-line-number="1">rotation =<span class="st"> </span><span class="cf">function</span>(a){</a>
-<a class="sourceLine" id="cb158-2" data-line-number="2">  r =<span class="st"> </span>a <span class="op">*</span><span class="st"> </span>pi <span class="op">/</span><span class="st"> </span><span class="dv">180</span> <span class="co">#degrees to radians</span></a>
-<a class="sourceLine" id="cb158-3" data-line-number="3">  <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">cos</span>(r), <span class="kw">sin</span>(r), <span class="op">-</span><span class="kw">sin</span>(r), <span class="kw">cos</span>(r)), <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb158-4" data-line-number="4">} </a></code></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb159-1" data-line-number="1">rotation =<span class="st"> </span><span class="cf">function</span>(a){</a>
+<a class="sourceLine" id="cb159-2" data-line-number="2">  r =<span class="st"> </span>a <span class="op">*</span><span class="st"> </span>pi <span class="op">/</span><span class="st"> </span><span class="dv">180</span> <span class="co">#degrees to radians</span></a>
+<a class="sourceLine" id="cb159-3" data-line-number="3">  <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">cos</span>(r), <span class="kw">sin</span>(r), <span class="op">-</span><span class="kw">sin</span>(r), <span class="kw">cos</span>(r)), <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb159-4" data-line-number="4">} </a></code></pre></div>
 <p>The <code>rotation</code> function accepts one argument <code>a</code> - a rotation angle in degrees.
 Rotation could be done around selected points, such as centroids (right panel of Figure <a href="geometric-operations.html#fig:affine-trans">5.5</a>).
 See <code>vignette(&quot;sf3&quot;)</code> for more examples.</p>
-<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb159-1" data-line-number="1">nz_rotate =<span class="st"> </span>(nz_sfc <span class="op">-</span><span class="st"> </span>nz_centroid_sfc) <span class="op">*</span><span class="st"> </span><span class="kw">rotation</span>(<span class="dv">30</span>) <span class="op">+</span><span class="st"> </span>nz_centroid_sfc</a></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb160-1" data-line-number="1">nz_rotate =<span class="st"> </span>(nz_sfc <span class="op">-</span><span class="st"> </span>nz_centroid_sfc) <span class="op">*</span><span class="st"> </span><span class="kw">rotation</span>(<span class="dv">30</span>) <span class="op">+</span><span class="st"> </span>nz_centroid_sfc</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:affine-trans"></span>
-<img src="figures/affine-trans-1.png" alt="Illustrations of affine transformations: shift, scale and rotate." width="100%" />
+<img src="05-geometry-operations_files/figure-html/affine-trans-1.png" alt="Illustrations of affine transformations: shift, scale and rotate." width="100%" />
 <p class="caption">
 FIGURE 5.5: Illustrations of affine transformations: shift, scale and rotate.
 </p>
 </div>
 <p>Finally, the newly created geometries can replace the old ones with the <code>st_set_geometry()</code> function:</p>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb160-1" data-line-number="1">nz_scale_sf =<span class="st"> </span><span class="kw">st_set_geometry</span>(nz, nz_scale)</a></code></pre></div>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" data-line-number="1">nz_scale_sf =<span class="st"> </span><span class="kw">st_set_geometry</span>(nz, nz_scale)</a></code></pre></div>
 </div>
 <div id="clipping" class="section level3">
 <h3><span class="header-section-number">5.2.5</span> Clipping</h3>
@@ -625,25 +633,25 @@ Spatial clipping is a form of spatial subsetting that involves changes to the <c
 lines, polygons and their ‘multi’ equivalents.
 To illustrate the concept we will start with a simple example:
 two overlapping circles with a center point one unit away from each other and a radius of one (Figure <a href="geometric-operations.html#fig:points">5.6</a>).</p>
-<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" data-line-number="1">b =<span class="st"> </span><span class="kw">st_sfc</span>(<span class="kw">st_point</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)), <span class="kw">st_point</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))) <span class="co"># create 2 points</span></a>
-<a class="sourceLine" id="cb161-2" data-line-number="2">b =<span class="st"> </span><span class="kw">st_buffer</span>(b, <span class="dt">dist =</span> <span class="dv">1</span>) <span class="co"># convert points to circles</span></a>
-<a class="sourceLine" id="cb161-3" data-line-number="3"><span class="kw">plot</span>(b)</a>
-<a class="sourceLine" id="cb161-4" data-line-number="4"><span class="kw">text</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>), <span class="dt">y =</span> <span class="dv">1</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)) <span class="co"># add text</span></a></code></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" data-line-number="1">b =<span class="st"> </span><span class="kw">st_sfc</span>(<span class="kw">st_point</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)), <span class="kw">st_point</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))) <span class="co"># create 2 points</span></a>
+<a class="sourceLine" id="cb162-2" data-line-number="2">b =<span class="st"> </span><span class="kw">st_buffer</span>(b, <span class="dt">dist =</span> <span class="dv">1</span>) <span class="co"># convert points to circles</span></a>
+<a class="sourceLine" id="cb162-3" data-line-number="3"><span class="kw">plot</span>(b)</a>
+<a class="sourceLine" id="cb162-4" data-line-number="4"><span class="kw">text</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>), <span class="dt">y =</span> <span class="dv">1</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)) <span class="co"># add text</span></a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:points"></span>
-<img src="figures/points-1.png" alt="Overlapping circles." width="50%" />
+<img src="05-geometry-operations_files/figure-html/points-1.png" alt="Overlapping circles." width="50%" />
 <p class="caption">
 FIGURE 5.6: Overlapping circles.
 </p>
 </div>
 <p>Imagine you want to select not one circle or the other, but the space covered by both <code>x</code> <em>and</em> <code>y</code>.
 This can be done using the function <code>st_intersection()</code>, illustrated using objects named <code>x</code> and <code>y</code> which represent the left- and right-hand circles (Figure <a href="geometric-operations.html#fig:circle-intersection">5.7</a>).</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" data-line-number="1">x =<span class="st"> </span>b[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb162-2" data-line-number="2">y =<span class="st"> </span>b[<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb162-3" data-line-number="3">x_and_y =<span class="st"> </span><span class="kw">st_intersection</span>(x, y)</a>
-<a class="sourceLine" id="cb162-4" data-line-number="4"><span class="kw">plot</span>(b)</a>
-<a class="sourceLine" id="cb162-5" data-line-number="5"><span class="kw">plot</span>(x_and_y, <span class="dt">col =</span> <span class="st">&quot;lightgrey&quot;</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>) <span class="co"># color intersecting area</span></a></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb163-1" data-line-number="1">x =<span class="st"> </span>b[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb163-2" data-line-number="2">y =<span class="st"> </span>b[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb163-3" data-line-number="3">x_and_y =<span class="st"> </span><span class="kw">st_intersection</span>(x, y)</a>
+<a class="sourceLine" id="cb163-4" data-line-number="4"><span class="kw">plot</span>(b)</a>
+<a class="sourceLine" id="cb163-5" data-line-number="5"><span class="kw">plot</span>(x_and_y, <span class="dt">col =</span> <span class="st">&quot;lightgrey&quot;</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>) <span class="co"># color intersecting area</span></a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:circle-intersection"></span>
-<img src="figures/circle-intersection-1.png" alt="Overlapping circles with a gray color indicating intersection between them." width="50%" />
+<img src="05-geometry-operations_files/figure-html/circle-intersection-1.png" alt="Overlapping circles with a gray color indicating intersection between them." width="50%" />
 <p class="caption">
 FIGURE 5.7: Overlapping circles with a gray color indicating intersection between them.
 </p>
@@ -651,7 +659,7 @@ FIGURE 5.7: Overlapping circles with a gray color indicating intersection betwee
 <p>The subsequent code chunk demonstrates how this works for all combinations of the ‘Venn’ diagram representing <code>x</code> and <code>y</code>, inspired by <a href="http://r4ds.had.co.nz/transform.html#logical-operators">Figure 5.1</a> of the book <em>R for Data Science</em> <span class="citation">(Grolemund and Wickham <a href="#ref-grolemund_r_2016">2016</a>)</span>.
 <!-- Todo: reference r4ds --></p>
 <div class="figure" style="text-align: center"><span id="fig:venn-clip"></span>
-<img src="figures/venn-clip-1.png" alt="Spatial equivalents of logical operators." width="100%" />
+<img src="05-geometry-operations_files/figure-html/venn-clip-1.png" alt="Spatial equivalents of logical operators." width="100%" />
 <p class="caption">
 FIGURE 5.8: Spatial equivalents of logical operators.
 </p>
@@ -659,29 +667,29 @@ FIGURE 5.8: Spatial equivalents of logical operators.
 <p>To illustrate the relationship between subsetting and clipping spatial data, we will subset points that cover the bounding box of the circles <code>x</code> and <code>y</code> in Figure <a href="geometric-operations.html#fig:venn-clip">5.8</a>.
 Some points will be inside just one circle, some will be inside both and some will be inside neither.
 <code>st_sample()</code> is used below to generate a <em>simple random</em> distribution of points within the extent of circles <code>x</code> and <code>y</code>, resulting in output illustrated in Figure <a href="geometric-operations.html#fig:venn-subset">5.9</a>.</p>
-<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb163-1" data-line-number="1">bb =<span class="st"> </span><span class="kw">st_bbox</span>(<span class="kw">st_union</span>(x, y))</a>
-<a class="sourceLine" id="cb163-2" data-line-number="2">box =<span class="st"> </span><span class="kw">st_as_sfc</span>(bb)</a>
-<a class="sourceLine" id="cb163-3" data-line-number="3"><span class="kw">set.seed</span>(<span class="dv">2017</span>)</a>
-<a class="sourceLine" id="cb163-4" data-line-number="4">p =<span class="st"> </span><span class="kw">st_sample</span>(<span class="dt">x =</span> box, <span class="dt">size =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb163-5" data-line-number="5"><span class="kw">plot</span>(box)</a>
-<a class="sourceLine" id="cb163-6" data-line-number="6"><span class="kw">plot</span>(x, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb163-7" data-line-number="7"><span class="kw">plot</span>(y, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb163-8" data-line-number="8"><span class="kw">plot</span>(p, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb163-9" data-line-number="9"><span class="kw">text</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>), <span class="dt">y =</span> <span class="dv">1</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" data-line-number="1">bb =<span class="st"> </span><span class="kw">st_bbox</span>(<span class="kw">st_union</span>(x, y))</a>
+<a class="sourceLine" id="cb164-2" data-line-number="2">box =<span class="st"> </span><span class="kw">st_as_sfc</span>(bb)</a>
+<a class="sourceLine" id="cb164-3" data-line-number="3"><span class="kw">set.seed</span>(<span class="dv">2017</span>)</a>
+<a class="sourceLine" id="cb164-4" data-line-number="4">p =<span class="st"> </span><span class="kw">st_sample</span>(<span class="dt">x =</span> box, <span class="dt">size =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb164-5" data-line-number="5"><span class="kw">plot</span>(box)</a>
+<a class="sourceLine" id="cb164-6" data-line-number="6"><span class="kw">plot</span>(x, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb164-7" data-line-number="7"><span class="kw">plot</span>(y, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb164-8" data-line-number="8"><span class="kw">plot</span>(p, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb164-9" data-line-number="9"><span class="kw">text</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>), <span class="dt">y =</span> <span class="dv">1</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>))</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:venn-subset"></span>
-<img src="figures/venn-subset-1.png" alt="Randomly distributed points within the bounding box enclosing circles x and y." width="50%" />
+<img src="05-geometry-operations_files/figure-html/venn-subset-1.png" alt="Randomly distributed points within the bounding box enclosing circles x and y." width="50%" />
 <p class="caption">
 FIGURE 5.9: Randomly distributed points within the bounding box enclosing circles x and y.
 </p>
 </div>
 <p>The logical operator way would find the points inside both <code>x</code> and <code>y</code> using a spatial predicate such as <code>st_intersects()</code>, whereas the intersection method simply finds the points inside the intersecting region created above as <code>x_and_y</code>.
 As demonstrated below the results are identical, but the method that uses the clipped polygon is more concise:</p>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" data-line-number="1">sel_p_xy =<span class="st"> </span><span class="kw">st_intersects</span>(p, x, <span class="dt">sparse =</span> <span class="ot">FALSE</span>)[, <span class="dv">1</span>] <span class="op">&amp;</span></a>
-<a class="sourceLine" id="cb164-2" data-line-number="2"><span class="st">  </span><span class="kw">st_intersects</span>(p, y, <span class="dt">sparse =</span> <span class="ot">FALSE</span>)[, <span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb164-3" data-line-number="3">p_xy1 =<span class="st"> </span>p[sel_p_xy]</a>
-<a class="sourceLine" id="cb164-4" data-line-number="4">p_xy2 =<span class="st"> </span>p[x_and_y]</a>
-<a class="sourceLine" id="cb164-5" data-line-number="5"><span class="kw">identical</span>(p_xy1, p_xy2)</a>
-<a class="sourceLine" id="cb164-6" data-line-number="6"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb165-1" data-line-number="1">sel_p_xy =<span class="st"> </span><span class="kw">st_intersects</span>(p, x, <span class="dt">sparse =</span> <span class="ot">FALSE</span>)[, <span class="dv">1</span>] <span class="op">&amp;</span></a>
+<a class="sourceLine" id="cb165-2" data-line-number="2"><span class="st">  </span><span class="kw">st_intersects</span>(p, y, <span class="dt">sparse =</span> <span class="ot">FALSE</span>)[, <span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb165-3" data-line-number="3">p_xy1 =<span class="st"> </span>p[sel_p_xy]</a>
+<a class="sourceLine" id="cb165-4" data-line-number="4">p_xy2 =<span class="st"> </span>p[x_and_y]</a>
+<a class="sourceLine" id="cb165-5" data-line-number="5"><span class="kw">identical</span>(p_xy1, p_xy2)</a>
+<a class="sourceLine" id="cb165-6" data-line-number="6"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 </div>
 <div id="geometry-unions" class="section level3">
 <h3><span class="header-section-number">5.2.6</span> Geometry unions</h3>
@@ -689,12 +697,12 @@ As demonstrated below the results are identical, but the method that uses the cl
 
 As we saw in Section <a href="attr.html#vector-attribute-aggregation">3.2.2</a>, spatial aggregation can silently dissolve the geometries of touching polygons in the same group.
 This is demonstrated in the code chunk below in which 49 <code>us_states</code> are aggregated into 4 regions using base and <strong>tidyverse</strong> functions (see results in Figure <a href="geometric-operations.html#fig:us-regions">5.10</a>):</p>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb165-1" data-line-number="1">regions =<span class="st"> </span><span class="kw">aggregate</span>(<span class="dt">x =</span> us_states[, <span class="st">&quot;total_pop_15&quot;</span>], <span class="dt">by =</span> <span class="kw">list</span>(us_states<span class="op">$</span>REGION),</a>
-<a class="sourceLine" id="cb165-2" data-line-number="2">                    <span class="dt">FUN =</span> sum, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb165-3" data-line-number="3">regions2 =<span class="st"> </span>us_states <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(REGION) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb165-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">pop =</span> <span class="kw">sum</span>(total_pop_<span class="dv">15</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" data-line-number="1">regions =<span class="st"> </span><span class="kw">aggregate</span>(<span class="dt">x =</span> us_states[, <span class="st">&quot;total_pop_15&quot;</span>], <span class="dt">by =</span> <span class="kw">list</span>(us_states<span class="op">$</span>REGION),</a>
+<a class="sourceLine" id="cb166-2" data-line-number="2">                    <span class="dt">FUN =</span> sum, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb166-3" data-line-number="3">regions2 =<span class="st"> </span>us_states <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(REGION) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb166-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">pop =</span> <span class="kw">sum</span>(total_pop_<span class="dv">15</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:us-regions"></span>
-<img src="figures/us-regions-1.png" alt="Spatial aggregation on contiguous polygons, illustrated by aggregating the population of US states into regions, with population represented by color. Note the operation automatically dissolves boundaries between states." width="100%" />
+<img src="05-geometry-operations_files/figure-html/us-regions-1.png" alt="Spatial aggregation on contiguous polygons, illustrated by aggregating the population of US states into regions, with population represented by color. Note the operation automatically dissolves boundaries between states." width="100%" />
 <p class="caption">
 FIGURE 5.10: Spatial aggregation on contiguous polygons, illustrated by aggregating the population of US states into regions, with population represented by color. Note the operation automatically dissolves boundaries between states.
 </p>
@@ -702,11 +710,11 @@ FIGURE 5.10: Spatial aggregation on contiguous polygons, illustrated by aggregat
 <p>What is going on in terms of the geometries?
 Behind the scenes, both <code>aggregate()</code> and <code>summarize()</code> combine the geometries and dissolve the boundaries between them using <code>st_union()</code>.
 This is demonstrated in the code chunk below which creates a united western US:</p>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" data-line-number="1">us_west =<span class="st"> </span>us_states[us_states<span class="op">$</span>REGION <span class="op">==</span><span class="st"> &quot;West&quot;</span>, ]</a>
-<a class="sourceLine" id="cb166-2" data-line-number="2">us_west_union =<span class="st"> </span><span class="kw">st_union</span>(us_west)</a></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" data-line-number="1">us_west =<span class="st"> </span>us_states[us_states<span class="op">$</span>REGION <span class="op">==</span><span class="st"> &quot;West&quot;</span>, ]</a>
+<a class="sourceLine" id="cb167-2" data-line-number="2">us_west_union =<span class="st"> </span><span class="kw">st_union</span>(us_west)</a></code></pre></div>
 <p>The function can take two geometries and unite them, as demonstrated in the code chunk below which creates a united western block incorporating Texas (challenge: reproduce and plot the result):</p>
-<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" data-line-number="1">texas =<span class="st"> </span>us_states[us_states<span class="op">$</span>NAME <span class="op">==</span><span class="st"> &quot;Texas&quot;</span>, ]</a>
-<a class="sourceLine" id="cb167-2" data-line-number="2">texas_union =<span class="st"> </span><span class="kw">st_union</span>(us_west_union, texas)</a></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" data-line-number="1">texas =<span class="st"> </span>us_states[us_states<span class="op">$</span>NAME <span class="op">==</span><span class="st"> &quot;Texas&quot;</span>, ]</a>
+<a class="sourceLine" id="cb168-2" data-line-number="2">texas_union =<span class="st"> </span><span class="kw">st_union</span>(us_west_union, texas)</a></code></pre></div>
 </div>
 <div id="type-trans" class="section level3">
 <h3><span class="header-section-number">5.2.7</span> Type transformations</h3>
@@ -715,13 +723,13 @@ Geometry casting is a powerful operation that enables transformation of the geom
 It is implemented in the <code>st_cast</code> function from the <strong>sf</strong> package.
 Importantly, <code>st_cast</code> behaves differently on single simple feature geometry (<code>sfg</code>) objects, simple feature geometry column (<code>sfc</code>) and simple features objects.</p>
 <p>Let’s create a multipoint to illustrate how geometry casting works on simple feature geometry (<code>sfg</code>) objects:</p>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" data-line-number="1">multipoint =<span class="st"> </span><span class="kw">st_multipoint</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>), <span class="dt">ncol =</span> <span class="dv">2</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb169-1" data-line-number="1">multipoint =<span class="st"> </span><span class="kw">st_multipoint</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>), <span class="dt">ncol =</span> <span class="dv">2</span>))</a></code></pre></div>
 <p>In this case, <code>st_cast</code> can be useful to transform the new object into linestring or polygon (Figure <a href="geometric-operations.html#fig:single-cast">5.11</a>):</p>
 <!-- a/ points -> lines -> polygons  -->
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb169-1" data-line-number="1">linestring =<span class="st"> </span><span class="kw">st_cast</span>(multipoint, <span class="st">&quot;LINESTRING&quot;</span>)</a>
-<a class="sourceLine" id="cb169-2" data-line-number="2">polyg =<span class="st"> </span><span class="kw">st_cast</span>(multipoint, <span class="st">&quot;POLYGON&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" data-line-number="1">linestring =<span class="st"> </span><span class="kw">st_cast</span>(multipoint, <span class="st">&quot;LINESTRING&quot;</span>)</a>
+<a class="sourceLine" id="cb170-2" data-line-number="2">polyg =<span class="st"> </span><span class="kw">st_cast</span>(multipoint, <span class="st">&quot;POLYGON&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:single-cast"></span>
-<img src="figures/single-cast-1.png" alt="Examples of linestring and polygon casted from a multipoint geometry." width="100%" />
+<img src="05-geometry-operations_files/figure-html/single-cast-1.png" alt="Examples of linestring and polygon casted from a multipoint geometry." width="100%" />
 <p class="caption">
 FIGURE 5.11: Examples of linestring and polygon casted from a multipoint geometry.
 </p>
@@ -730,10 +738,10 @@ FIGURE 5.11: Examples of linestring and polygon casted from a multipoint geometr
 This allows spatial operations such as the length of the path traveled.
 Conversion from multipoint or linestring to polygon is often used to calculate an area, for example from the set of GPS measurements taken around a lake or from the corners of a building lot.</p>
 <p>The transformation process can be also reversed using <code>st_cast</code>:</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" data-line-number="1">multipoint_<span class="dv">2</span> =<span class="st"> </span><span class="kw">st_cast</span>(linestring, <span class="st">&quot;MULTIPOINT&quot;</span>)</a>
-<a class="sourceLine" id="cb170-2" data-line-number="2">multipoint_<span class="dv">3</span> =<span class="st"> </span><span class="kw">st_cast</span>(polyg, <span class="st">&quot;MULTIPOINT&quot;</span>)</a>
-<a class="sourceLine" id="cb170-3" data-line-number="3"><span class="kw">all.equal</span>(multipoint, multipoint_<span class="dv">2</span>, multipoint_<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb170-4" data-line-number="4"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb171-1" data-line-number="1">multipoint_<span class="dv">2</span> =<span class="st"> </span><span class="kw">st_cast</span>(linestring, <span class="st">&quot;MULTIPOINT&quot;</span>)</a>
+<a class="sourceLine" id="cb171-2" data-line-number="2">multipoint_<span class="dv">3</span> =<span class="st"> </span><span class="kw">st_cast</span>(polyg, <span class="st">&quot;MULTIPOINT&quot;</span>)</a>
+<a class="sourceLine" id="cb171-3" data-line-number="3"><span class="kw">all.equal</span>(multipoint, multipoint_<span class="dv">2</span>, multipoint_<span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb171-4" data-line-number="4"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 
 <div class="rmdnote">
 For single simple feature geometries (<code>sfg</code>), <code>st_cast</code> also provides geometry casting from non-multi-types to multi-types (e.g., <code>POINT</code> to <code>MULTIPOINT</code>) and from multi-types to non-multi-types.
@@ -838,56 +846,53 @@ You can see that, for example, when you cast a multipoint consisting of five pai
 <p><strong>Note:</strong>
 ^^ Note: Values like (1) represent the number of features; NA means the operation is not possible. Abbreviations: POI, LIN, POL and GC refer to POINT, LINESTRING, POLYGON and GEOMETRYCOLLECTION. The MULTI version of these geometry types is indicated by a preceding M, e.g., MPOI is the acronym for MULTIPOINT.</p>
 <p>Let’s try to apply geometry type transformations on a new object, <code>multilinestring_sf</code>, as an example (on the left in Figure <a href="geometric-operations.html#fig:line-cast">5.12</a>):</p>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb171-1" data-line-number="1">multilinestring_list =<span class="st"> </span><span class="kw">list</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">3</span>), <span class="dt">ncol =</span> <span class="dv">2</span>), </a>
-<a class="sourceLine" id="cb171-2" data-line-number="2">                            <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="dt">ncol =</span> <span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb171-3" data-line-number="3">                            <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">2</span>), <span class="dt">ncol =</span> <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb171-4" data-line-number="4">multilinestring =<span class="st"> </span><span class="kw">st_multilinestring</span>((multilinestring_list))</a>
-<a class="sourceLine" id="cb171-5" data-line-number="5">multilinestring_sf =<span class="st"> </span><span class="kw">st_sf</span>(<span class="dt">geom =</span> <span class="kw">st_sfc</span>(multilinestring))</a>
-<a class="sourceLine" id="cb171-6" data-line-number="6">multilinestring_sf</a>
-<a class="sourceLine" id="cb171-7" data-line-number="7"><span class="co">#&gt; Simple feature collection with 1 feature and 0 fields</span></a>
-<a class="sourceLine" id="cb171-8" data-line-number="8"><span class="co">#&gt; geometry type:  MULTILINESTRING</span></a>
-<a class="sourceLine" id="cb171-9" data-line-number="9"><span class="co">#&gt; dimension:      XY</span></a>
-<a class="sourceLine" id="cb171-10" data-line-number="10"><span class="co">#&gt; bbox:           xmin: 1 ymin: 1 xmax: 4 ymax: 5</span></a>
-<a class="sourceLine" id="cb171-11" data-line-number="11"><span class="co">#&gt; epsg (SRID):    NA</span></a>
-<a class="sourceLine" id="cb171-12" data-line-number="12"><span class="co">#&gt; proj4string:    NA</span></a>
-<a class="sourceLine" id="cb171-13" data-line-number="13"><span class="co">#&gt;                             geom</span></a>
-<a class="sourceLine" id="cb171-14" data-line-number="14"><span class="co">#&gt; 1 MULTILINESTRING ((1 5, 4 3)...</span></a></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb172-1" data-line-number="1">multilinestring_list =<span class="st"> </span><span class="kw">list</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">3</span>), <span class="dt">ncol =</span> <span class="dv">2</span>), </a>
+<a class="sourceLine" id="cb172-2" data-line-number="2">                            <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="dt">ncol =</span> <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb172-3" data-line-number="3">                            <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">2</span>), <span class="dt">ncol =</span> <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb172-4" data-line-number="4">multilinestring =<span class="st"> </span><span class="kw">st_multilinestring</span>((multilinestring_list))</a>
+<a class="sourceLine" id="cb172-5" data-line-number="5">multilinestring_sf =<span class="st"> </span><span class="kw">st_sf</span>(<span class="dt">geom =</span> <span class="kw">st_sfc</span>(multilinestring))</a>
+<a class="sourceLine" id="cb172-6" data-line-number="6">multilinestring_sf</a>
+<a class="sourceLine" id="cb172-7" data-line-number="7"><span class="co">#&gt; Simple feature collection with 1 feature and 0 fields</span></a>
+<a class="sourceLine" id="cb172-8" data-line-number="8"><span class="co">#&gt; geometry type:  MULTILINESTRING</span></a>
+<a class="sourceLine" id="cb172-9" data-line-number="9"><span class="co">#&gt; dimension:      XY</span></a>
+<a class="sourceLine" id="cb172-10" data-line-number="10"><span class="co">#&gt; bbox:           xmin: 1 ymin: 1 xmax: 4 ymax: 5</span></a>
+<a class="sourceLine" id="cb172-11" data-line-number="11"><span class="co">#&gt; CRS:            NA</span></a>
+<a class="sourceLine" id="cb172-12" data-line-number="12"><span class="co">#&gt;                             geom</span></a>
+<a class="sourceLine" id="cb172-13" data-line-number="13"><span class="co">#&gt; 1 MULTILINESTRING ((1 5, 4 3)...</span></a></code></pre></div>
 <p>You can imagine it as a road or river network.
 The new object has only one row that defines all the lines.
 This restricts the number of operations that can be done, for example it prevents adding names to each line segment or calculating lengths of single lines.
 The <code>st_cast</code> function can be used in this situation, as it separates one mutlilinestring into three linestrings:</p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb172-1" data-line-number="1">linestring_sf2 =<span class="st"> </span><span class="kw">st_cast</span>(multilinestring_sf, <span class="st">&quot;LINESTRING&quot;</span>)</a>
-<a class="sourceLine" id="cb172-2" data-line-number="2">linestring_sf2</a>
-<a class="sourceLine" id="cb172-3" data-line-number="3"><span class="co">#&gt; Simple feature collection with 3 features and 0 fields</span></a>
-<a class="sourceLine" id="cb172-4" data-line-number="4"><span class="co">#&gt; geometry type:  LINESTRING</span></a>
-<a class="sourceLine" id="cb172-5" data-line-number="5"><span class="co">#&gt; dimension:      XY</span></a>
-<a class="sourceLine" id="cb172-6" data-line-number="6"><span class="co">#&gt; bbox:           xmin: 1 ymin: 1 xmax: 4 ymax: 5</span></a>
-<a class="sourceLine" id="cb172-7" data-line-number="7"><span class="co">#&gt; epsg (SRID):    NA</span></a>
-<a class="sourceLine" id="cb172-8" data-line-number="8"><span class="co">#&gt; proj4string:    NA</span></a>
-<a class="sourceLine" id="cb172-9" data-line-number="9"><span class="co">#&gt;                    geom</span></a>
-<a class="sourceLine" id="cb172-10" data-line-number="10"><span class="co">#&gt; 1 LINESTRING (1 5, 4 3)</span></a>
-<a class="sourceLine" id="cb172-11" data-line-number="11"><span class="co">#&gt; 2 LINESTRING (4 4, 4 1)</span></a>
-<a class="sourceLine" id="cb172-12" data-line-number="12"><span class="co">#&gt; 3 LINESTRING (2 2, 4 2)</span></a></code></pre></div>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb173-1" data-line-number="1">linestring_sf2 =<span class="st"> </span><span class="kw">st_cast</span>(multilinestring_sf, <span class="st">&quot;LINESTRING&quot;</span>)</a>
+<a class="sourceLine" id="cb173-2" data-line-number="2">linestring_sf2</a>
+<a class="sourceLine" id="cb173-3" data-line-number="3"><span class="co">#&gt; Simple feature collection with 3 features and 0 fields</span></a>
+<a class="sourceLine" id="cb173-4" data-line-number="4"><span class="co">#&gt; geometry type:  LINESTRING</span></a>
+<a class="sourceLine" id="cb173-5" data-line-number="5"><span class="co">#&gt; dimension:      XY</span></a>
+<a class="sourceLine" id="cb173-6" data-line-number="6"><span class="co">#&gt; bbox:           xmin: 1 ymin: 1 xmax: 4 ymax: 5</span></a>
+<a class="sourceLine" id="cb173-7" data-line-number="7"><span class="co">#&gt; CRS:            NA</span></a>
+<a class="sourceLine" id="cb173-8" data-line-number="8"><span class="co">#&gt;                    geom</span></a>
+<a class="sourceLine" id="cb173-9" data-line-number="9"><span class="co">#&gt; 1 LINESTRING (1 5, 4 3)</span></a>
+<a class="sourceLine" id="cb173-10" data-line-number="10"><span class="co">#&gt; 2 LINESTRING (4 4, 4 1)</span></a>
+<a class="sourceLine" id="cb173-11" data-line-number="11"><span class="co">#&gt; 3 LINESTRING (2 2, 4 2)</span></a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:line-cast"></span>
-<img src="figures/line-cast-1.png" alt="Examples of type casting between MULTILINESTRING (left) and LINESTRING (right)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/line-cast-1.png" alt="Examples of type casting between MULTILINESTRING (left) and LINESTRING (right)." width="100%" />
 <p class="caption">
 FIGURE 5.12: Examples of type casting between MULTILINESTRING (left) and LINESTRING (right).
 </p>
 </div>
 <p>The newly created object allows for attributes creation (see more in Section <a href="attr.html#vec-attr-creation">3.2.4</a>) and length measurements:</p>
-<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb173-1" data-line-number="1">linestring_sf2<span class="op">$</span>name =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Riddle Rd&quot;</span>, <span class="st">&quot;Marshall Ave&quot;</span>, <span class="st">&quot;Foulke St&quot;</span>)</a>
-<a class="sourceLine" id="cb173-2" data-line-number="2">linestring_sf2<span class="op">$</span>length =<span class="st"> </span><span class="kw">st_length</span>(linestring_sf2)</a>
-<a class="sourceLine" id="cb173-3" data-line-number="3">linestring_sf2</a>
-<a class="sourceLine" id="cb173-4" data-line-number="4"><span class="co">#&gt; Simple feature collection with 3 features and 2 fields</span></a>
-<a class="sourceLine" id="cb173-5" data-line-number="5"><span class="co">#&gt; geometry type:  LINESTRING</span></a>
-<a class="sourceLine" id="cb173-6" data-line-number="6"><span class="co">#&gt; dimension:      XY</span></a>
-<a class="sourceLine" id="cb173-7" data-line-number="7"><span class="co">#&gt; bbox:           xmin: 1 ymin: 1 xmax: 4 ymax: 5</span></a>
-<a class="sourceLine" id="cb173-8" data-line-number="8"><span class="co">#&gt; epsg (SRID):    NA</span></a>
-<a class="sourceLine" id="cb173-9" data-line-number="9"><span class="co">#&gt; proj4string:    NA</span></a>
-<a class="sourceLine" id="cb173-10" data-line-number="10"><span class="co">#&gt;                    geom         name length</span></a>
-<a class="sourceLine" id="cb173-11" data-line-number="11"><span class="co">#&gt; 1 LINESTRING (1 5, 4 3)    Riddle Rd   3.61</span></a>
-<a class="sourceLine" id="cb173-12" data-line-number="12"><span class="co">#&gt; 2 LINESTRING (4 4, 4 1) Marshall Ave   3.00</span></a>
-<a class="sourceLine" id="cb173-13" data-line-number="13"><span class="co">#&gt; 3 LINESTRING (2 2, 4 2)    Foulke St   2.00</span></a></code></pre></div>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb174-1" data-line-number="1">linestring_sf2<span class="op">$</span>name =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Riddle Rd&quot;</span>, <span class="st">&quot;Marshall Ave&quot;</span>, <span class="st">&quot;Foulke St&quot;</span>)</a>
+<a class="sourceLine" id="cb174-2" data-line-number="2">linestring_sf2<span class="op">$</span>length =<span class="st"> </span><span class="kw">st_length</span>(linestring_sf2)</a>
+<a class="sourceLine" id="cb174-3" data-line-number="3">linestring_sf2</a>
+<a class="sourceLine" id="cb174-4" data-line-number="4"><span class="co">#&gt; Simple feature collection with 3 features and 2 fields</span></a>
+<a class="sourceLine" id="cb174-5" data-line-number="5"><span class="co">#&gt; geometry type:  LINESTRING</span></a>
+<a class="sourceLine" id="cb174-6" data-line-number="6"><span class="co">#&gt; dimension:      XY</span></a>
+<a class="sourceLine" id="cb174-7" data-line-number="7"><span class="co">#&gt; bbox:           xmin: 1 ymin: 1 xmax: 4 ymax: 5</span></a>
+<a class="sourceLine" id="cb174-8" data-line-number="8"><span class="co">#&gt; CRS:            NA</span></a>
+<a class="sourceLine" id="cb174-9" data-line-number="9"><span class="co">#&gt;                    geom         name length</span></a>
+<a class="sourceLine" id="cb174-10" data-line-number="10"><span class="co">#&gt; 1 LINESTRING (1 5, 4 3)    Riddle Rd   3.61</span></a>
+<a class="sourceLine" id="cb174-11" data-line-number="11"><span class="co">#&gt; 2 LINESTRING (4 4, 4 1) Marshall Ave   3.00</span></a>
+<a class="sourceLine" id="cb174-12" data-line-number="12"><span class="co">#&gt; 3 LINESTRING (2 2, 4 2)    Foulke St   2.00</span></a></code></pre></div>
 <!-- idea: example where a collection of points referring to different objects are combined to MULTIPOINT by object, then casted to LINESTRING geometries per object -->
 </div>
 </div>
@@ -919,18 +924,18 @@ In Section <a href="spatial-operations.html#spatial-raster-subsetting">4.3.1</a>
 To retrieve a spatial output, we can use almost the same subsetting syntax.
 The only difference is that we have to make clear that we would like to keep the matrix structure by setting the <code>drop</code>-parameter to <code>FALSE</code>.
 This will return a raster object containing the cells whose midpoints overlap with <code>clip</code>.</p>
-<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb174-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;elev&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
-<a class="sourceLine" id="cb174-2" data-line-number="2">clip =<span class="st"> </span><span class="kw">raster</span>(<span class="dt">xmn =</span> <span class="fl">0.9</span>, <span class="dt">xmx =</span> <span class="fl">1.8</span>, <span class="dt">ymn =</span> <span class="fl">-0.45</span>, <span class="dt">ymx =</span> <span class="fl">0.45</span>,</a>
-<a class="sourceLine" id="cb174-3" data-line-number="3">              <span class="dt">res =</span> <span class="fl">0.3</span>, <span class="dt">vals =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">9</span>))</a>
-<a class="sourceLine" id="cb174-4" data-line-number="4">elev[clip, drop =<span class="st"> </span><span class="ot">FALSE</span>]</a>
-<a class="sourceLine" id="cb174-5" data-line-number="5"><span class="co">#&gt; class      : RasterLayer </span></a>
-<a class="sourceLine" id="cb174-6" data-line-number="6"><span class="co">#&gt; dimensions : 2, 1, 2  (nrow, ncol, ncell)</span></a>
-<a class="sourceLine" id="cb174-7" data-line-number="7"><span class="co">#&gt; resolution : 0.5, 0.5  (x, y)</span></a>
-<a class="sourceLine" id="cb174-8" data-line-number="8"><span class="co">#&gt; extent     : 1, 1.5, -0.5, 0.5  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb174-9" data-line-number="9"><span class="co">#&gt; crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 </span></a>
-<a class="sourceLine" id="cb174-10" data-line-number="10"><span class="co">#&gt; source     : memory</span></a>
-<a class="sourceLine" id="cb174-11" data-line-number="11"><span class="co">#&gt; names      : layer </span></a>
-<a class="sourceLine" id="cb174-12" data-line-number="12"><span class="co">#&gt; values     : 18, 24  (min, max)</span></a></code></pre></div>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb175-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;elev&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
+<a class="sourceLine" id="cb175-2" data-line-number="2">clip =<span class="st"> </span><span class="kw">raster</span>(<span class="dt">xmn =</span> <span class="fl">0.9</span>, <span class="dt">xmx =</span> <span class="fl">1.8</span>, <span class="dt">ymn =</span> <span class="fl">-0.45</span>, <span class="dt">ymx =</span> <span class="fl">0.45</span>,</a>
+<a class="sourceLine" id="cb175-3" data-line-number="3">              <span class="dt">res =</span> <span class="fl">0.3</span>, <span class="dt">vals =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">9</span>))</a>
+<a class="sourceLine" id="cb175-4" data-line-number="4">elev[clip, drop =<span class="st"> </span><span class="ot">FALSE</span>]</a>
+<a class="sourceLine" id="cb175-5" data-line-number="5"><span class="co">#&gt; class      : RasterLayer </span></a>
+<a class="sourceLine" id="cb175-6" data-line-number="6"><span class="co">#&gt; dimensions : 2, 1, 2  (nrow, ncol, ncell)</span></a>
+<a class="sourceLine" id="cb175-7" data-line-number="7"><span class="co">#&gt; resolution : 0.5, 0.5  (x, y)</span></a>
+<a class="sourceLine" id="cb175-8" data-line-number="8"><span class="co">#&gt; extent     : 1, 1.5, -0.5, 0.5  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb175-9" data-line-number="9"><span class="co">#&gt; crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 </span></a>
+<a class="sourceLine" id="cb175-10" data-line-number="10"><span class="co">#&gt; source     : memory</span></a>
+<a class="sourceLine" id="cb175-11" data-line-number="11"><span class="co">#&gt; names      : layer </span></a>
+<a class="sourceLine" id="cb175-12" data-line-number="12"><span class="co">#&gt; values     : 18, 24  (min, max)</span></a></code></pre></div>
 <p>For the same operation we can also use the <code>intersect()</code> and <code>crop()</code> command.</p>
 </div>
 <div id="extent-and-origin" class="section level3">
@@ -942,39 +947,39 @@ We can deal with such mismatches by aligning the rasters.</p>
 <p>In the simplest case, two images only differ with regard to their extent.
 <!--The `projectRaster()` function reprojects one raster to a desired projection, say from UTM to WGS84.-->
 Following code adds one row and two columns to each side of the raster while setting all new values to an elevation of 1000 meters (Figure <a href="geometric-operations.html#fig:extend-example">5.13</a>).</p>
-<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb175-1" data-line-number="1"><span class="kw">data</span>(elev, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
-<a class="sourceLine" id="cb175-2" data-line-number="2">elev_<span class="dv">2</span> =<span class="st"> </span><span class="kw">extend</span>(elev, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">value =</span> <span class="dv">1000</span>)</a>
-<a class="sourceLine" id="cb175-3" data-line-number="3"><span class="kw">plot</span>(elev_<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" data-line-number="1"><span class="kw">data</span>(elev, <span class="dt">package =</span> <span class="st">&quot;spData&quot;</span>)</a>
+<a class="sourceLine" id="cb176-2" data-line-number="2">elev_<span class="dv">2</span> =<span class="st"> </span><span class="kw">extend</span>(elev, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">value =</span> <span class="dv">1000</span>)</a>
+<a class="sourceLine" id="cb176-3" data-line-number="3"><span class="kw">plot</span>(elev_<span class="dv">2</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:extend-example"></span>
-<img src="figures/extend-example-1.png" alt="Original raster extended by one row on each side (top, bottom) and two columns on each side (right, left)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/extend-example-1.png" alt="Original raster extended by one row on each side (top, bottom) and two columns on each side (right, left)." width="100%" />
 <p class="caption">
 FIGURE 5.13: Original raster extended by one row on each side (top, bottom) and two columns on each side (right, left).
 </p>
 </div>
 <p>Performing an algebraic operation on two objects with differing extents in R, the <strong>raster</strong> package returns the result for the intersection, and says so in a warning.</p>
-<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" data-line-number="1">elev_<span class="dv">3</span> =<span class="st"> </span>elev <span class="op">+</span><span class="st"> </span>elev_<span class="dv">2</span></a>
-<a class="sourceLine" id="cb176-2" data-line-number="2"><span class="co">#&gt; Warning in elev + elev_2: Raster objects have different extents. Result for</span></a>
-<a class="sourceLine" id="cb176-3" data-line-number="3"><span class="co">#&gt; their intersection is returned</span></a></code></pre></div>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb177-1" data-line-number="1">elev_<span class="dv">3</span> =<span class="st"> </span>elev <span class="op">+</span><span class="st"> </span>elev_<span class="dv">2</span></a>
+<a class="sourceLine" id="cb177-2" data-line-number="2"><span class="co">#&gt; Warning in elev + elev_2: Raster objects have different extents. Result for</span></a>
+<a class="sourceLine" id="cb177-3" data-line-number="3"><span class="co">#&gt; their intersection is returned</span></a></code></pre></div>
 <p>However, we can also align the extent of two rasters with <code>extend()</code>.
 Instead of telling the function how many rows or columns should be added (as done before), we allow it to figure it out by using another raster object.
 Here, we extend the <code>elev</code> object to the extent of <code>elev_2</code>.
 The newly added rows and column receive the default value of the <code>value</code> parameter, i.e., <code>NA</code>.</p>
-<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb177-1" data-line-number="1">elev_<span class="dv">4</span> =<span class="st"> </span><span class="kw">extend</span>(elev, elev_<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" data-line-number="1">elev_<span class="dv">4</span> =<span class="st"> </span><span class="kw">extend</span>(elev, elev_<span class="dv">2</span>)</a></code></pre></div>
 <p>The origin of a raster is the cell corner closest to the coordinates (0, 0).
 The <code>origin()</code> function returns the coordinates of the origin.
 In the below example a cell corner exists with coordinates (0, 0), but that is not necessarily the case.</p>
-<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" data-line-number="1"><span class="kw">origin</span>(elev_<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb178-2" data-line-number="2"><span class="co">#&gt; [1] 0 0</span></a></code></pre></div>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb179-1" data-line-number="1"><span class="kw">origin</span>(elev_<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb179-2" data-line-number="2"><span class="co">#&gt; [1] 0 0</span></a></code></pre></div>
 <p>If two rasters have different origins, their cells do not overlap completely which would make map algebra impossible.
 To change the origin , use <code>origin()</code>.<a href="#fn21" class="footnote-ref" id="fnref21"><sup>21</sup></a>
 Looking at Figure <a href="geometric-operations.html#fig:origin-example">5.14</a> reveals the effect of changing the origin.</p>
-<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb179-1" data-line-number="1"><span class="co"># change the origin</span></a>
-<a class="sourceLine" id="cb179-2" data-line-number="2"><span class="kw">origin</span>(elev_<span class="dv">4</span>) =<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.25</span>)</a>
-<a class="sourceLine" id="cb179-3" data-line-number="3"><span class="kw">plot</span>(elev_<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb179-4" data-line-number="4"><span class="co"># and add the original raster</span></a>
-<a class="sourceLine" id="cb179-5" data-line-number="5"><span class="kw">plot</span>(elev, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb180-1" data-line-number="1"><span class="co"># change the origin</span></a>
+<a class="sourceLine" id="cb180-2" data-line-number="2"><span class="kw">origin</span>(elev_<span class="dv">4</span>) =<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.25</span>)</a>
+<a class="sourceLine" id="cb180-3" data-line-number="3"><span class="kw">plot</span>(elev_<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb180-4" data-line-number="4"><span class="co"># and add the original raster</span></a>
+<a class="sourceLine" id="cb180-5" data-line-number="5"><span class="kw">plot</span>(elev, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:origin-example"></span>
-<img src="figures/origin-example-1.png" alt="Rasters with identical values but different origins." width="100%" />
+<img src="05-geometry-operations_files/figure-html/origin-example-1.png" alt="Rasters with identical values but different origins." width="100%" />
 <p class="caption">
 FIGURE 5.14: Rasters with identical values but different origins.
 </p>
@@ -990,10 +995,10 @@ Raster datasets can also differ with regard to their resolution.
 To match resolutions, one can either decrease (<code>aggregate()</code>) or increase (<code>disaggregate()</code>) the resolution of one raster.<a href="#fn22" class="footnote-ref" id="fnref22"><sup>22</sup></a>
 As an example, we here change the spatial resolution of <code>dem</code> (found in the <strong>RQGIS</strong> package) by a factor of 5 (Figure <a href="geometric-operations.html#fig:aggregate-example">5.15</a>).
 Additionally, the output cell value should correspond to the mean of the input cells (note that one could use other functions as well, such as <code>median()</code>, <code>sum()</code>, etc.):</p>
-<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb180-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;dem&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;RQGIS&quot;</span>)</a>
-<a class="sourceLine" id="cb180-2" data-line-number="2">dem_agg =<span class="st"> </span><span class="kw">aggregate</span>(dem, <span class="dt">fact =</span> <span class="dv">5</span>, <span class="dt">fun =</span> mean)</a></code></pre></div>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb181-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;dem&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;RQGIS&quot;</span>)</a>
+<a class="sourceLine" id="cb181-2" data-line-number="2">dem_agg =<span class="st"> </span><span class="kw">aggregate</span>(dem, <span class="dt">fact =</span> <span class="dv">5</span>, <span class="dt">fun =</span> mean)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:aggregate-example"></span>
-<img src="figures/aggregate-example-1.png" alt="Original raster (left). Aggregated raster (right)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/aggregate-example-1.png" alt="Original raster (left). Aggregated raster (right)." width="100%" />
 <p class="caption">
 FIGURE 5.15: Original raster (left). Aggregated raster (right).
 </p>
@@ -1003,11 +1008,11 @@ However, we have to specify a method on how to fill the new cells.
 The <code>disaggregate()</code> function provides two methods.
 The first (<code>method = &quot;&quot;</code>) simply gives all output cells the value of the input cell, and hence duplicates values which leads to a blocky output image.</p>
 <p>The <code>bilinear</code> method, in turn, is an interpolation technique that uses the four nearest pixel centers of the input image (salmon colored points in Figure <a href="geometric-operations.html#fig:bilinear">5.16</a>) to compute an average weighted by distance (arrows in Figure <a href="geometric-operations.html#fig:bilinear">5.16</a> as the value of the output cell - square in the upper left corner in Figure <a href="geometric-operations.html#fig:bilinear">5.16</a>).</p>
-<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb181-1" data-line-number="1">dem_disagg =<span class="st"> </span><span class="kw">disaggregate</span>(dem_agg, <span class="dt">fact =</span> <span class="dv">5</span>, <span class="dt">method =</span> <span class="st">&quot;bilinear&quot;</span>)</a>
-<a class="sourceLine" id="cb181-2" data-line-number="2"><span class="kw">identical</span>(dem, dem_disagg)</a>
-<a class="sourceLine" id="cb181-3" data-line-number="3"><span class="co">#&gt; [1] FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb182-1" data-line-number="1">dem_disagg =<span class="st"> </span><span class="kw">disaggregate</span>(dem_agg, <span class="dt">fact =</span> <span class="dv">5</span>, <span class="dt">method =</span> <span class="st">&quot;bilinear&quot;</span>)</a>
+<a class="sourceLine" id="cb182-2" data-line-number="2"><span class="kw">identical</span>(dem, dem_disagg)</a>
+<a class="sourceLine" id="cb182-3" data-line-number="3"><span class="co">#&gt; [1] FALSE</span></a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:bilinear"></span>
-<img src="figures/bilinear-1.png" alt="Bilinear disaggregation in action." width="100%" />
+<img src="05-geometry-operations_files/figure-html/bilinear-1.png" alt="Bilinear disaggregation in action." width="100%" />
 <p class="caption">
 FIGURE 5.16: Bilinear disaggregation in action.
 </p>
@@ -1019,9 +1024,9 @@ It is important to keep in mind that disaggregating results in a finer resolutio
 In fact, the <strong>raster</strong> package provides a <code>resample()</code> function.
 It lets you align several raster properties in one go, namely origin, extent and resolution.
 By default, it uses the <code>bilinear</code>-interpolation.</p>
-<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb182-1" data-line-number="1"><span class="co"># add 2 rows and columns, i.e. change the extent</span></a>
-<a class="sourceLine" id="cb182-2" data-line-number="2">dem_agg =<span class="st"> </span><span class="kw">extend</span>(dem_agg, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb182-3" data-line-number="3">dem_disagg_<span class="dv">2</span> =<span class="st"> </span><span class="kw">resample</span>(dem_agg, dem)</a></code></pre></div>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" data-line-number="1"><span class="co"># add 2 rows and columns, i.e. change the extent</span></a>
+<a class="sourceLine" id="cb183-2" data-line-number="2">dem_agg =<span class="st"> </span><span class="kw">extend</span>(dem_agg, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb183-3" data-line-number="3">dem_disagg_<span class="dv">2</span> =<span class="st"> </span><span class="kw">resample</span>(dem_agg, dem)</a></code></pre></div>
 <p>Finally, in order to align many (possibly hundreds or thousands of) images stored on disk, you could use the <code>gdalUtils::align_rasters()</code> function.
 However, you may also use <strong>raster</strong> with very large datasets.
 This is because <strong>raster</strong>:</p>
@@ -1061,22 +1066,22 @@ Both operations reduce object memory use and associated computational resources 
 <p>Both target and cropping objects must have the same projection.
 The following code chunk therefore not only loads the datasets, from the <strong>spDataLarge</strong> package installed in Chapter <a href="spatial-class.html#spatial-class">2</a>,
 it also reprojects <code>zion</code> (see Section <a href="reproj-geo-data.html#reproj-geo-data">6</a> for more on reprojection):</p>
-<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" data-line-number="1">srtm =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">system.file</span>(<span class="st">&quot;raster/srtm.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>))</a>
-<a class="sourceLine" id="cb183-2" data-line-number="2">zion =<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">&quot;vector/zion.gpkg&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>))</a>
-<a class="sourceLine" id="cb183-3" data-line-number="3">zion =<span class="st"> </span><span class="kw">st_transform</span>(zion, <span class="kw">projection</span>(srtm))</a></code></pre></div>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" data-line-number="1">srtm =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">system.file</span>(<span class="st">&quot;raster/srtm.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>))</a>
+<a class="sourceLine" id="cb184-2" data-line-number="2">zion =<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">&quot;vector/zion.gpkg&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>))</a>
+<a class="sourceLine" id="cb184-3" data-line-number="3">zion =<span class="st"> </span><span class="kw">st_transform</span>(zion, <span class="kw">projection</span>(srtm))</a></code></pre></div>
 <p>We will use <code>crop()</code> from the <strong>raster</strong> package to crop the <code>srtm</code> raster.
 <code>crop()</code> reduces the rectangular extent of the object passed to its first argument based on the extent of the object passed to its second argument, as demonstrated in the command below (which generates Figure <a href="geometric-operations.html#fig:cropmask">5.17</a>(B) — note the smaller extent of the raster background):</p>
-<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" data-line-number="1">srtm_cropped =<span class="st"> </span><span class="kw">crop</span>(srtm, zion)</a></code></pre></div>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb185-1" data-line-number="1">srtm_cropped =<span class="st"> </span><span class="kw">crop</span>(srtm, zion)</a></code></pre></div>
 <p>
 Related to <code>crop()</code> is the <strong>raster</strong> function <code>mask()</code>, which sets values outside of the bounds of the object passed to its second argument to <code>NA</code>.
 The following command therefore masks every cell outside of the Zion National Park boundaries (Figure <a href="geometric-operations.html#fig:cropmask">5.17</a>(C)):</p>
-<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb185-1" data-line-number="1">srtm_masked =<span class="st"> </span><span class="kw">mask</span>(srtm, zion)</a></code></pre></div>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb186-1" data-line-number="1">srtm_masked =<span class="st"> </span><span class="kw">mask</span>(srtm, zion)</a></code></pre></div>
 <p>Changing the settings of <code>mask()</code> yields different results.
 Setting <code>updatevalue = 0</code>, for example, will set all pixels outside the national park to 0.
 Setting <code>inverse = TRUE</code> will mask everything <em>inside</em> the bounds of the park (see <code>?mask</code> for details) (Figure <a href="geometric-operations.html#fig:cropmask">5.17</a>(D)).</p>
-<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb186-1" data-line-number="1">srtm_inv_masked =<span class="st"> </span><span class="kw">mask</span>(srtm, zion, <span class="dt">inverse =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb187-1" data-line-number="1">srtm_inv_masked =<span class="st"> </span><span class="kw">mask</span>(srtm, zion, <span class="dt">inverse =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:cropmask"></span>
-<img src="figures/cropmask-1.png" alt="Illustration of raster cropping and raster masking." width="100%" />
+<img src="05-geometry-operations_files/figure-html/cropmask-1.png" alt="Illustration of raster cropping and raster masking." width="100%" />
 <p class="caption">
 FIGURE 5.17: Illustration of raster cropping and raster masking.
 </p>
@@ -1092,38 +1097,38 @@ The reverse of raster extraction — assigning raster cell values based on vecto
 For this purpose, we will use <code>zion_points</code>, which contain a sample of 30 locations within the Zion National Park (Figure <a href="geometric-operations.html#fig:pointextr">5.18</a>).
 <!-- They could represent places where soils properties were measured and we want to know what is the elevation of each point. -->
 The following command extracts elevation values from <code>srtm</code> and assigns the resulting vector to a new column (<code>elevation</code>) in the <code>zion_points</code> dataset:</p>
-<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb187-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;zion_points&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>)</a>
-<a class="sourceLine" id="cb187-2" data-line-number="2">zion_points<span class="op">$</span>elevation =<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(srtm, zion_points)</a></code></pre></div>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb188-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;zion_points&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;spDataLarge&quot;</span>)</a>
+<a class="sourceLine" id="cb188-2" data-line-number="2">zion_points<span class="op">$</span>elevation =<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(srtm, zion_points)</a></code></pre></div>
 <p>The <code>buffer</code> argument can be used to specify a buffer radius (in meters) around each point.
 The result of <code>raster::extract(srtm, zion_points, buffer = 1000)</code>, for example, is a list of vectors, each of which representing the values of cells inside the buffer associated with each point.
 In practice, this example is a special case of extraction with a polygon selector, described below.</p>
 <div class="figure" style="text-align: center"><span id="fig:pointextr"></span>
-<img src="figures/pointextr-1.png" alt="Locations of points used for raster extraction." width="60%" />
+<img src="05-geometry-operations_files/figure-html/pointextr-1.png" alt="Locations of points used for raster extraction." width="60%" />
 <p class="caption">
 FIGURE 5.18: Locations of points used for raster extraction.
 </p>
 </div>
 <p>Raster extraction also works with <strong>line</strong> selectors.
 To demonstrate this, the code below creates <code>zion_transect</code>, a straight line going from northwest to southeast of the Zion National Park, illustrated in Figure <a href="geometric-operations.html#fig:lineextr">5.19</a>(A) (see Section <a href="spatial-class.html#vector-data">2.2</a> for a recap on the vector data model):</p>
-<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb188-1" data-line-number="1">zion_transect =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">c</span>(<span class="op">-</span><span class="fl">113.2</span>, <span class="fl">-112.9</span>), <span class="kw">c</span>(<span class="fl">37.45</span>, <span class="fl">37.2</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb188-2" data-line-number="2"><span class="st">  </span><span class="kw">st_linestring</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb188-3" data-line-number="3"><span class="st">  </span><span class="kw">st_sfc</span>(<span class="dt">crs =</span> <span class="kw">projection</span>(srtm)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb188-4" data-line-number="4"><span class="st">  </span><span class="kw">st_sf</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb189-1" data-line-number="1">zion_transect =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">c</span>(<span class="op">-</span><span class="fl">113.2</span>, <span class="fl">-112.9</span>), <span class="kw">c</span>(<span class="fl">37.45</span>, <span class="fl">37.2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb189-2" data-line-number="2"><span class="st">  </span><span class="kw">st_linestring</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb189-3" data-line-number="3"><span class="st">  </span><span class="kw">st_sfc</span>(<span class="dt">crs =</span> <span class="kw">projection</span>(srtm)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb189-4" data-line-number="4"><span class="st">  </span><span class="kw">st_sf</span>()</a></code></pre></div>
 <p>The utility of extracting heights from a linear selector is illustrated by imagining that you are planning a hike.
 The method demonstrated below provides an ‘elevation profile’ of the route (the line does not need to be straight), useful for estimating how long it will take due to long climbs:</p>
-<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb189-1" data-line-number="1">transect =<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(srtm, zion_transect, </a>
-<a class="sourceLine" id="cb189-2" data-line-number="2">                           <span class="dt">along =</span> <span class="ot">TRUE</span>, <span class="dt">cellnumbers =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb190-1" data-line-number="1">transect =<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(srtm, zion_transect, </a>
+<a class="sourceLine" id="cb190-2" data-line-number="2">                           <span class="dt">along =</span> <span class="ot">TRUE</span>, <span class="dt">cellnumbers =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Note the use of <code>along = TRUE</code> and <code>cellnumbers = TRUE</code> arguments to return cell IDs <em>along</em> the path.
 The result is a list containing a matrix of cell IDs in the first column and elevation values in the second.
 The number of list elements is equal to the number of lines or polygons from which we are extracting values.
 The subsequent code chunk first converts this tricky matrix-in-a-list object into a simple data frame, returns the coordinates associated with each extracted cell, and finds the associated distances along the transect (see <code>?geosphere::distGeo()</code> for details):</p>
-<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb190-1" data-line-number="1">transect_df =<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_dfr</span>(transect, as_data_frame, <span class="dt">.id =</span> <span class="st">&quot;ID&quot;</span>)</a>
-<a class="sourceLine" id="cb190-2" data-line-number="2">transect_coords =<span class="st"> </span><span class="kw">xyFromCell</span>(srtm, transect_df<span class="op">$</span>cell)</a>
-<a class="sourceLine" id="cb190-3" data-line-number="3">pair_dist =<span class="st"> </span>geosphere<span class="op">::</span><span class="kw">distGeo</span>(transect_coords)[<span class="op">-</span><span class="kw">nrow</span>(transect_coords)]</a>
-<a class="sourceLine" id="cb190-4" data-line-number="4">transect_df<span class="op">$</span>dist =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">cumsum</span>(pair_dist)) </a></code></pre></div>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb191-1" data-line-number="1">transect_df =<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_dfr</span>(transect, as_data_frame, <span class="dt">.id =</span> <span class="st">&quot;ID&quot;</span>)</a>
+<a class="sourceLine" id="cb191-2" data-line-number="2">transect_coords =<span class="st"> </span><span class="kw">xyFromCell</span>(srtm, transect_df<span class="op">$</span>cell)</a>
+<a class="sourceLine" id="cb191-3" data-line-number="3">pair_dist =<span class="st"> </span>geosphere<span class="op">::</span><span class="kw">distGeo</span>(transect_coords)[<span class="op">-</span><span class="kw">nrow</span>(transect_coords)]</a>
+<a class="sourceLine" id="cb191-4" data-line-number="4">transect_df<span class="op">$</span>dist =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">cumsum</span>(pair_dist)) </a></code></pre></div>
 <p>The resulting <code>transect_df</code> can be used to create elevation profiles, as illustrated in Figure <a href="geometric-operations.html#fig:lineextr">5.19</a>(B).</p>
 <div class="figure" style="text-align: center"><span id="fig:lineextr"></span>
-<img src="figures/lineextr-1.png" alt="Location of a line used for raster extraction (left) and the elevation along this line (right)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/lineextr-1.png" alt="Location of a line used for raster extraction (left) and the elevation along this line (right)." width="100%" />
 <p class="caption">
 FIGURE 5.19: Location of a line used for raster extraction (left) and the elevation along this line (right).
 </p>
@@ -1131,33 +1136,33 @@ FIGURE 5.19: Location of a line used for raster extraction (left) and the elevat
 <p>The final type of geographic vector object for raster extraction is <strong>polygons</strong>.
 Like lines and buffers, polygons tend to return many raster values per polygon.
 This is demonstrated in the command below, which results in a data frame with column names <code>ID</code> (the row number of the polygon) and <code>srtm</code> (associated elevation values):</p>
-<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb191-1" data-line-number="1">zion_srtm_values =<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(<span class="dt">x =</span> srtm, <span class="dt">y =</span> zion, <span class="dt">df =</span> <span class="ot">TRUE</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb192-1" data-line-number="1">zion_srtm_values =<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(<span class="dt">x =</span> srtm, <span class="dt">y =</span> zion, <span class="dt">df =</span> <span class="ot">TRUE</span>) </a></code></pre></div>
 <p>Such results can be used to generate summary statistics for raster values per polygon, for example to characterize a single region or to compare many regions.
 The generation of summary statistics is demonstrated in the code below, which creates the object <code>zion_srtm_df</code> containing summary statistics for elevation values in Zion National Park (see Figure <a href="geometric-operations.html#fig:polyextr">5.20</a>(A)):</p>
-<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb192-1" data-line-number="1"><span class="kw">group_by</span>(zion_srtm_values, ID) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb192-2" data-line-number="2"><span class="st">  </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(srtm), <span class="kw">list</span>(<span class="op">~</span><span class="kw">min</span>(.), <span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">max</span>(.)))</a>
-<a class="sourceLine" id="cb192-3" data-line-number="3"><span class="co">#&gt; # A tibble: 1 x 4</span></a>
-<a class="sourceLine" id="cb192-4" data-line-number="4"><span class="co">#&gt;      ID   min  mean   max</span></a>
-<a class="sourceLine" id="cb192-5" data-line-number="5"><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb192-6" data-line-number="6"><span class="co">#&gt; 1     1  1122 1818.  2661</span></a></code></pre></div>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" data-line-number="1"><span class="kw">group_by</span>(zion_srtm_values, ID) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb193-2" data-line-number="2"><span class="st">  </span><span class="kw">summarize_at</span>(<span class="kw">vars</span>(srtm), <span class="kw">list</span>(<span class="op">~</span><span class="kw">min</span>(.), <span class="op">~</span><span class="kw">mean</span>(.), <span class="op">~</span><span class="kw">max</span>(.)))</a>
+<a class="sourceLine" id="cb193-3" data-line-number="3"><span class="co">#&gt; # A tibble: 1 x 4</span></a>
+<a class="sourceLine" id="cb193-4" data-line-number="4"><span class="co">#&gt;      ID   min  mean   max</span></a>
+<a class="sourceLine" id="cb193-5" data-line-number="5"><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb193-6" data-line-number="6"><span class="co">#&gt; 1     1  1122 1818.  2661</span></a></code></pre></div>
 <p>The preceding code chunk used the <strong>tidyverse</strong> to provide summary statistics for cell values per polygon ID, as described in Chapter <a href="attr.html#attr">3</a>.
 The results provide useful summaries, for example that the maximum height in the park is around 2,661 meters (other summary statistics, such as standard deviation, can also be calculated in this way).
 Because there is only one polygon in the example a data frame with a single row is returned; however, the method works when multiple selector polygons are used.</p>
 <p>The same approach works for counting occurrences of categorical raster values within polygons.
 This is illustrated with a land cover dataset (<code>nlcd</code>) from the <strong>spDataLarge</strong> package in Figure <a href="geometric-operations.html#fig:polyextr">5.20</a>(B), and demonstrated in the code below:</p>
-<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" data-line-number="1">zion_nlcd =<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(nlcd, zion, <span class="dt">df =</span> <span class="ot">TRUE</span>, <span class="dt">factors =</span> <span class="ot">TRUE</span>) </a>
-<a class="sourceLine" id="cb193-2" data-line-number="2">dplyr<span class="op">::</span><span class="kw">select</span>(zion_nlcd, ID, levels) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb193-3" data-line-number="3"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(key, value, <span class="op">-</span>ID) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb193-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(ID, key, value) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb193-5" data-line-number="5"><span class="st">  </span><span class="kw">tally</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb193-6" data-line-number="6"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(value, n, <span class="dt">fill =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb193-7" data-line-number="7"><span class="co">#&gt; # A tibble: 1 x 9</span></a>
-<a class="sourceLine" id="cb193-8" data-line-number="8"><span class="co">#&gt; # Groups:   ID, key [1]</span></a>
-<a class="sourceLine" id="cb193-9" data-line-number="9"><span class="co">#&gt;      ID key    Barren Cultivated Developed Forest Herbaceous Shrubland Wetlands</span></a>
-<a class="sourceLine" id="cb193-10" data-line-number="10"><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb193-11" data-line-number="11"><span class="co">#&gt; 1     1 levels  98285         62      4205 298299        235    203701      679</span></a></code></pre></div>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" data-line-number="1">zion_nlcd =<span class="st"> </span>raster<span class="op">::</span><span class="kw">extract</span>(nlcd, zion, <span class="dt">df =</span> <span class="ot">TRUE</span>, <span class="dt">factors =</span> <span class="ot">TRUE</span>) </a>
+<a class="sourceLine" id="cb194-2" data-line-number="2">dplyr<span class="op">::</span><span class="kw">select</span>(zion_nlcd, ID, levels) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb194-3" data-line-number="3"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(key, value, <span class="op">-</span>ID) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb194-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(ID, key, value) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb194-5" data-line-number="5"><span class="st">  </span><span class="kw">tally</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb194-6" data-line-number="6"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(value, n, <span class="dt">fill =</span> <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb194-7" data-line-number="7"><span class="co">#&gt; # A tibble: 1 x 9</span></a>
+<a class="sourceLine" id="cb194-8" data-line-number="8"><span class="co">#&gt; # Groups:   ID, key [1]</span></a>
+<a class="sourceLine" id="cb194-9" data-line-number="9"><span class="co">#&gt;      ID key    Barren Cultivated Developed Forest Herbaceous Shrubland Wetlands</span></a>
+<a class="sourceLine" id="cb194-10" data-line-number="10"><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb194-11" data-line-number="11"><span class="co">#&gt; 1     1 levels  98285         62      4205 298299        235    203701      679</span></a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:polyextr"></span>
-<img src="figures/polyextr-1.png" alt="Area used for continuous (left) and categorical (right) raster extraction." width="100%" />
+<img src="05-geometry-operations_files/figure-html/polyextr-1.png" alt="Area used for continuous (left) and categorical (right) raster extraction." width="100%" />
 <p class="caption">
 FIGURE 5.20: Area used for continuous (left) and categorical (right) raster extraction.
 </p>
@@ -1189,40 +1194,40 @@ The geographic resolution of the input raster has a major impact on the results:
 There are no simple rules to follow when deciding an appropriate geographic resolution, which is heavily dependent on the intended use of the results.
 Often the target resolution is imposed on the user, for example when the output of rasterization needs to be aligned to the existing raster.</p>
 <p>To demonstrate rasterization in action, we will use a template raster that has the same extent and CRS as the input vector data <code>cycle_hire_osm_projected</code> (a dataset on cycle hire points in London is illustrated in Figure <a href="geometric-operations.html#fig:vector-rasterization1">5.21</a>(A)) and spatial resolution of 1000 meters:</p>
-<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" data-line-number="1">cycle_hire_osm_projected =<span class="st"> </span><span class="kw">st_transform</span>(cycle_hire_osm, <span class="dv">27700</span>)</a>
-<a class="sourceLine" id="cb194-2" data-line-number="2">raster_template =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">extent</span>(cycle_hire_osm_projected), <span class="dt">resolution =</span> <span class="dv">1000</span>,</a>
-<a class="sourceLine" id="cb194-3" data-line-number="3">                         <span class="dt">crs =</span> <span class="kw">st_crs</span>(cycle_hire_osm_projected)<span class="op">$</span>proj4string)</a></code></pre></div>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" data-line-number="1">cycle_hire_osm_projected =<span class="st"> </span><span class="kw">st_transform</span>(cycle_hire_osm, <span class="dv">27700</span>)</a>
+<a class="sourceLine" id="cb195-2" data-line-number="2">raster_template =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">extent</span>(cycle_hire_osm_projected), <span class="dt">resolution =</span> <span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb195-3" data-line-number="3">                         <span class="dt">crs =</span> <span class="kw">st_crs</span>(cycle_hire_osm_projected)<span class="op">$</span>proj4string)</a></code></pre></div>
 <p>Rasterization is a very flexible operation: the results depend not only on the nature of the template raster, but also on the type of input vector (e.g., points, polygons) and a variety of arguments taken by the <code>rasterize()</code> function.</p>
 <p>To illustrate this flexibility we will try three different approaches to rasterization.
 First, we create a raster representing the presence or absence of cycle hire points (known as presence/absence rasters).
 In this case <code>rasterize()</code> requires only one argument in addition to <code>x</code> and <code>y</code> (the aforementioned vector and raster objects): a value to be transferred to all non-empty cells specified by <code>field</code> (results illustrated Figure <a href="geometric-operations.html#fig:vector-rasterization1">5.21</a>(B)).</p>
-<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" data-line-number="1">ch_raster1 =<span class="st"> </span><span class="kw">rasterize</span>(cycle_hire_osm_projected, raster_template, <span class="dt">field =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb196-1" data-line-number="1">ch_raster1 =<span class="st"> </span><span class="kw">rasterize</span>(cycle_hire_osm_projected, raster_template, <span class="dt">field =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>The <code>fun</code> argument specifies summary statistics used to convert multiple observations in close proximity into associate cells in the raster object.
 By default <code>fun = &quot;last&quot;</code> is used but other options such as <code>fun = &quot;count&quot;</code> can be used, in this case to count the number of cycle hire points in each grid cell (the results of this operation are illustrated in Figure <a href="geometric-operations.html#fig:vector-rasterization1">5.21</a>(C)).</p>
-<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb196-1" data-line-number="1">ch_raster2 =<span class="st"> </span><span class="kw">rasterize</span>(cycle_hire_osm_projected, raster_template, </a>
-<a class="sourceLine" id="cb196-2" data-line-number="2">                       <span class="dt">field =</span> <span class="dv">1</span>, <span class="dt">fun =</span> <span class="st">&quot;count&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" data-line-number="1">ch_raster2 =<span class="st"> </span><span class="kw">rasterize</span>(cycle_hire_osm_projected, raster_template, </a>
+<a class="sourceLine" id="cb197-2" data-line-number="2">                       <span class="dt">field =</span> <span class="dv">1</span>, <span class="dt">fun =</span> <span class="st">&quot;count&quot;</span>)</a></code></pre></div>
 <p>The new output, <code>ch_raster2</code>, shows the number of cycle hire points in each grid cell.
 The cycle hire locations have different numbers of bicycles described by the <code>capacity</code> variable, raising the question, what’s the capacity in each grid cell?
 To calculate that we must <code>sum</code> the field (<code>&quot;capacity&quot;</code>), resulting in output illustrated in Figure <a href="geometric-operations.html#fig:vector-rasterization1">5.21</a>(D), calculated with the following command (other summary functions such as <code>mean</code> could be used):</p>
-<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" data-line-number="1">ch_raster3 =<span class="st"> </span><span class="kw">rasterize</span>(cycle_hire_osm_projected, raster_template, </a>
-<a class="sourceLine" id="cb197-2" data-line-number="2">                       <span class="dt">field =</span> <span class="st">&quot;capacity&quot;</span>, <span class="dt">fun =</span> sum)</a></code></pre></div>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" data-line-number="1">ch_raster3 =<span class="st"> </span><span class="kw">rasterize</span>(cycle_hire_osm_projected, raster_template, </a>
+<a class="sourceLine" id="cb198-2" data-line-number="2">                       <span class="dt">field =</span> <span class="st">&quot;capacity&quot;</span>, <span class="dt">fun =</span> sum)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:vector-rasterization1"></span>
-<img src="figures/vector-rasterization1-1.png" alt="Examples of point rasterization." width="100%" />
+<img src="05-geometry-operations_files/figure-html/vector-rasterization1-1.png" alt="Examples of point rasterization." width="100%" />
 <p class="caption">
 FIGURE 5.21: Examples of point rasterization.
 </p>
 </div>
 <p>Another dataset based on California’s polygons and borders (created below) illustrates rasterization of lines.
 After casting the polygon objects into a multilinestring, a template raster is created with a resolution of a 0.5 degree:</p>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" data-line-number="1">california =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(us_states, NAME <span class="op">==</span><span class="st"> &quot;California&quot;</span>)</a>
-<a class="sourceLine" id="cb198-2" data-line-number="2">california_borders =<span class="st"> </span><span class="kw">st_cast</span>(california, <span class="st">&quot;MULTILINESTRING&quot;</span>)</a>
-<a class="sourceLine" id="cb198-3" data-line-number="3">raster_template2 =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">extent</span>(california), <span class="dt">resolution =</span> <span class="fl">0.5</span>,</a>
-<a class="sourceLine" id="cb198-4" data-line-number="4">                         <span class="dt">crs =</span> <span class="kw">st_crs</span>(california)<span class="op">$</span>proj4string)</a></code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" data-line-number="1">california =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(us_states, NAME <span class="op">==</span><span class="st"> &quot;California&quot;</span>)</a>
+<a class="sourceLine" id="cb199-2" data-line-number="2">california_borders =<span class="st"> </span><span class="kw">st_cast</span>(california, <span class="st">&quot;MULTILINESTRING&quot;</span>)</a>
+<a class="sourceLine" id="cb199-3" data-line-number="3">raster_template2 =<span class="st"> </span><span class="kw">raster</span>(<span class="kw">extent</span>(california), <span class="dt">resolution =</span> <span class="fl">0.5</span>,</a>
+<a class="sourceLine" id="cb199-4" data-line-number="4">                         <span class="dt">crs =</span> <span class="kw">st_crs</span>(california)<span class="op">$</span>proj4string)</a></code></pre></div>
 <p>Line rasterization is demonstrated in the code below.
 In the resulting raster, all cells that are touched by a line get a value, as illustrated in Figure <a href="geometric-operations.html#fig:vector-rasterization2">5.22</a>(A).</p>
-<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" data-line-number="1">california_raster1 =<span class="st"> </span><span class="kw">rasterize</span>(california_borders, raster_template2) </a></code></pre></div>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" data-line-number="1">california_raster1 =<span class="st"> </span><span class="kw">rasterize</span>(california_borders, raster_template2) </a></code></pre></div>
 <p>Polygon rasterization, by contrast, selects only cells whose centroids are inside the selector polygon, as illustrated in Figure <a href="geometric-operations.html#fig:vector-rasterization2">5.22</a>(B).</p>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" data-line-number="1">california_raster2 =<span class="st"> </span><span class="kw">rasterize</span>(california, raster_template2) </a></code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" data-line-number="1">california_raster2 =<span class="st"> </span><span class="kw">rasterize</span>(california, raster_template2) </a></code></pre></div>
 <!-- getCover? -->
 <!-- the fraction of each grid cell that is covered by the polygons-->
 <!-- ```{r, echo=FALSE, eval=FALSE} -->
@@ -1236,7 +1241,7 @@ In the resulting raster, all cells that are touched by a line get a value, as il
 <!-- ``` -->
 <!-- It is also possible to use the `field` or `fun` arguments for lines and polygons rasterizations. -->
 <div class="figure" style="text-align: center"><span id="fig:vector-rasterization2"></span>
-<img src="figures/vector-rasterization2-1.png" alt="Examples of line and polygon rasterizations." width="100%" />
+<img src="05-geometry-operations_files/figure-html/vector-rasterization2-1.png" alt="Examples of line and polygon rasterizations." width="100%" />
 <p class="caption">
 FIGURE 5.22: Examples of line and polygon rasterizations.
 </p>
@@ -1260,10 +1265,10 @@ In R, vectorization refers to the possibility of replacing <code>for</code>-loop
 <p>The simplest form of vectorization is to convert the centroids of raster cells into points.
 <code>rasterToPoints()</code> does exactly this for all non-<code>NA</code> raster grid cells (Figure <a href="geometric-operations.html#fig:raster-vectorization1">5.23</a>).
 Setting the <code>spatial</code> parameter to <code>TRUE</code> is needed to get a spatial object instead of a matrix.</p>
-<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" data-line-number="1">elev_point =<span class="st"> </span><span class="kw">rasterToPoints</span>(elev, <span class="dt">spatial =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb201-2" data-line-number="2"><span class="st">  </span><span class="kw">st_as_sf</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb202-1" data-line-number="1">elev_point =<span class="st"> </span><span class="kw">rasterToPoints</span>(elev, <span class="dt">spatial =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb202-2" data-line-number="2"><span class="st">  </span><span class="kw">st_as_sf</span>()</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:raster-vectorization1"></span>
-<img src="figures/raster-vectorization1-1.png" alt="Raster and point representation of the elev object." width="100%" />
+<img src="05-geometry-operations_files/figure-html/raster-vectorization1-1.png" alt="Raster and point representation of the elev object." width="100%" />
 <p class="caption">
 FIGURE 5.23: Raster and point representation of the elev object.
 </p>
@@ -1272,22 +1277,22 @@ FIGURE 5.23: Raster and point representation of the elev object.
 We will use a real-world digital elevation model (DEM) because the artificial raster <code>elev</code> produces parallel lines (task: verify this and explain why this happens).
 <!-- because when creating it we made the upper left corner the lowest and the lower right corner the highest value while increasing cell values by one from left to right. -->
 Contour lines can be created with the <strong>raster</strong> function <code>rasterToContour()</code>, which is itself a wrapper around <code>contourLines()</code>, as demonstrated below (not shown):</p>
-<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb202-1" data-line-number="1"><span class="kw">data</span>(dem, <span class="dt">package =</span> <span class="st">&quot;RQGIS&quot;</span>)</a>
-<a class="sourceLine" id="cb202-2" data-line-number="2">cl =<span class="st"> </span><span class="kw">rasterToContour</span>(dem)</a>
-<a class="sourceLine" id="cb202-3" data-line-number="3"><span class="kw">plot</span>(dem, <span class="dt">axes =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb202-4" data-line-number="4"><span class="kw">plot</span>(cl, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" data-line-number="1"><span class="kw">data</span>(dem, <span class="dt">package =</span> <span class="st">&quot;RQGIS&quot;</span>)</a>
+<a class="sourceLine" id="cb203-2" data-line-number="2">cl =<span class="st"> </span><span class="kw">rasterToContour</span>(dem)</a>
+<a class="sourceLine" id="cb203-3" data-line-number="3"><span class="kw">plot</span>(dem, <span class="dt">axes =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb203-4" data-line-number="4"><span class="kw">plot</span>(cl, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Contours can also be added to existing plots with functions such as <code>contour()</code>, <code>rasterVis::contourplot()</code> or <code>tmap::tm_iso()</code>.
 As illustrated in Figure <a href="geometric-operations.html#fig:contour-tmap">5.24</a>, isolines can be labelled.</p>
-<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" data-line-number="1"><span class="co"># create hillshade</span></a>
-<a class="sourceLine" id="cb203-2" data-line-number="2">hs =<span class="st"> </span><span class="kw">hillShade</span>(<span class="dt">slope =</span> <span class="kw">terrain</span>(dem, <span class="st">&quot;slope&quot;</span>), <span class="dt">aspect =</span> <span class="kw">terrain</span>(dem, <span class="st">&quot;aspect&quot;</span>))</a>
-<a class="sourceLine" id="cb203-3" data-line-number="3"><span class="kw">plot</span>(hs, <span class="dt">col =</span> <span class="kw">gray</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">100</span> <span class="op">/</span><span class="st"> </span><span class="dv">100</span>), <span class="dt">legend =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb203-4" data-line-number="4"><span class="co"># overlay with DEM</span></a>
-<a class="sourceLine" id="cb203-5" data-line-number="5"><span class="kw">plot</span>(dem, <span class="dt">col =</span> <span class="kw">terrain.colors</span>(<span class="dv">25</span>), <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">legend =</span> <span class="ot">FALSE</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb203-6" data-line-number="6"><span class="co"># add contour lines</span></a>
-<a class="sourceLine" id="cb203-7" data-line-number="7"><span class="kw">contour</span>(dem, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb204-1" data-line-number="1"><span class="co"># create hillshade</span></a>
+<a class="sourceLine" id="cb204-2" data-line-number="2">hs =<span class="st"> </span><span class="kw">hillShade</span>(<span class="dt">slope =</span> <span class="kw">terrain</span>(dem, <span class="st">&quot;slope&quot;</span>), <span class="dt">aspect =</span> <span class="kw">terrain</span>(dem, <span class="st">&quot;aspect&quot;</span>))</a>
+<a class="sourceLine" id="cb204-3" data-line-number="3"><span class="kw">plot</span>(hs, <span class="dt">col =</span> <span class="kw">gray</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">100</span> <span class="op">/</span><span class="st"> </span><span class="dv">100</span>), <span class="dt">legend =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb204-4" data-line-number="4"><span class="co"># overlay with DEM</span></a>
+<a class="sourceLine" id="cb204-5" data-line-number="5"><span class="kw">plot</span>(dem, <span class="dt">col =</span> <span class="kw">terrain.colors</span>(<span class="dv">25</span>), <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">legend =</span> <span class="ot">FALSE</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb204-6" data-line-number="6"><span class="co"># add contour lines</span></a>
+<a class="sourceLine" id="cb204-7" data-line-number="7"><span class="kw">contour</span>(dem, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:contour-tmap"></span>
-<img src="figures/contour-tmap-1.png" alt="DEM hillshade of the southern flank of Mt. Mongón overlaid by contour lines." width="100%" />
+<img src="05-geometry-operations_files/figure-html/contour-tmap-1.png" alt="DEM hillshade of the southern flank of Mt. Mongón overlaid by contour lines." width="100%" />
 <p class="caption">
 FIGURE 5.24: DEM hillshade of the southern flank of Mt. Mongón overlaid by contour lines.
 </p>
@@ -1297,13 +1302,13 @@ This can be done with <code>raster::rasterToPolygons()</code>, which converts ea
 <p>This is illustrated below by converting the <code>grain</code> object into polygons and subsequently dissolving borders between polygons with the same attribute values (also see the <code>dissolve</code> argument in <code>rasterToPolygons()</code>).
 Attributes in this case are stored in a column called <code>layer</code> (see Section <a href="geometric-operations.html#geometry-unions">5.2.6</a> and Figure <a href="geometric-operations.html#fig:raster-vectorization2">5.25</a>).
 (Note: a convenient alternative for converting rasters into polygons is <code>spex::polygonize()</code> which by default returns an <code>sf</code> object.)</p>
-<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb204-1" data-line-number="1">grain_poly =<span class="st"> </span><span class="kw">rasterToPolygons</span>(grain) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb204-2" data-line-number="2"><span class="st">  </span><span class="kw">st_as_sf</span>()</a>
-<a class="sourceLine" id="cb204-3" data-line-number="3">grain_poly2 =<span class="st"> </span>grain_poly <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb204-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(layer) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb204-5" data-line-number="5"><span class="st">  </span><span class="kw">summarize</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" data-line-number="1">grain_poly =<span class="st"> </span><span class="kw">rasterToPolygons</span>(grain) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb205-2" data-line-number="2"><span class="st">  </span><span class="kw">st_as_sf</span>()</a>
+<a class="sourceLine" id="cb205-3" data-line-number="3">grain_poly2 =<span class="st"> </span>grain_poly <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb205-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(layer) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb205-5" data-line-number="5"><span class="st">  </span><span class="kw">summarize</span>()</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:raster-vectorization2"></span>
-<img src="figures/raster-vectorization2-1.png" alt="Illustration of vectorization of raster (left) into polygon (center) and polygon aggregation (right)." width="100%" />
+<img src="05-geometry-operations_files/figure-html/raster-vectorization2-1.png" alt="Illustration of vectorization of raster (left) into polygon (center) and polygon aggregation (right)." width="100%" />
 <p class="caption">
 FIGURE 5.25: Illustration of vectorization of raster (left) into polygon (center) and polygon aggregation (right).
 </p>
@@ -1315,11 +1320,11 @@ FIGURE 5.25: Illustration of vectorization of raster (left) into polygon (center
 <h2><span class="header-section-number">5.5</span> Exercises</h2>
 <p>Some of the exercises use a vector (<code>random_points</code>) and raster dataset (<code>ndvi</code>) from the <strong>RQGIS</strong> package.
 They also use a polygonal ‘convex hull’ derived from the vector dataset (<code>ch</code>) to represent the area of interest:</p>
-<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" data-line-number="1"><span class="kw">library</span>(RQGIS)</a>
-<a class="sourceLine" id="cb205-2" data-line-number="2"><span class="kw">data</span>(random_points)</a>
-<a class="sourceLine" id="cb205-3" data-line-number="3"><span class="kw">data</span>(ndvi)</a>
-<a class="sourceLine" id="cb205-4" data-line-number="4">ch =<span class="st"> </span><span class="kw">st_combine</span>(random_points) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb205-5" data-line-number="5"><span class="st">  </span><span class="kw">st_convex_hull</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb206-1" data-line-number="1"><span class="kw">library</span>(RQGIS)</a>
+<a class="sourceLine" id="cb206-2" data-line-number="2"><span class="kw">data</span>(random_points)</a>
+<a class="sourceLine" id="cb206-3" data-line-number="3"><span class="kw">data</span>(ndvi)</a>
+<a class="sourceLine" id="cb206-4" data-line-number="4">ch =<span class="st"> </span><span class="kw">st_combine</span>(random_points) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb206-5" data-line-number="5"><span class="st">  </span><span class="kw">st_convex_hull</span>()</a></code></pre></div>
 <ol style="list-style-type: decimal">
 <li>Generate and plot simplified versions of the <code>nz</code> dataset.
 Experiment with different values of <code>keep</code> (ranging from 0.5 to 0.00005) for <code>ms_simplify()</code> and <code>dTolerance</code> (from 100 to 100,000) <code>st_simplify()</code> .

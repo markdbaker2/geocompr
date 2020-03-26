@@ -1,6 +1,5 @@
 
 
-
 # Introduction {#intro}
 
 This book is about using the power of computers to *do things* with geographic data.
