@@ -450,18 +450,18 @@ This final section of the book also provides some pointers on how to get involve
 <h2><span class="header-section-number">15.2</span> Package choice</h2>
 <p>A characteristic of R is that there are often multiple ways to achieve the same result.
 The code chunk below illustrates this by using three functions, covered in Chapters <a href="attr.html#attr">3</a> and <a href="geometric-operations.html#geometric-operations">5</a>, to combine the 16 regions of New Zealand into a single geometry:</p>
-<div class="sourceCode" id="cb461"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb461-1" data-line-number="1"><span class="kw">library</span>(spData)</a>
-<a class="sourceLine" id="cb461-2" data-line-number="2">nz_u1 =<span class="st"> </span>sf<span class="op">::</span><span class="kw">st_union</span>(nz)</a>
-<a class="sourceLine" id="cb461-3" data-line-number="3"><span class="co">#&gt; Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span></a>
-<a class="sourceLine" id="cb461-4" data-line-number="4"><span class="co">#&gt; that</span></a>
-<a class="sourceLine" id="cb461-5" data-line-number="5">nz_u2 =<span class="st"> </span><span class="kw">aggregate</span>(nz[<span class="st">&quot;Population&quot;</span>], <span class="kw">list</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(nz))), sum)</a>
-<a class="sourceLine" id="cb461-6" data-line-number="6">nz_u3 =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(nz, <span class="dt">t =</span> <span class="kw">sum</span>(Population))</a>
-<a class="sourceLine" id="cb461-7" data-line-number="7"><span class="co">#&gt; Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span></a>
-<a class="sourceLine" id="cb461-8" data-line-number="8"><span class="co">#&gt; that</span></a>
-<a class="sourceLine" id="cb461-9" data-line-number="9"><span class="kw">identical</span>(nz_u1, nz_u2<span class="op">$</span>geometry)</a>
-<a class="sourceLine" id="cb461-10" data-line-number="10"><span class="co">#&gt; [1] FALSE</span></a>
-<a class="sourceLine" id="cb461-11" data-line-number="11"><span class="kw">identical</span>(nz_u1, nz_u3<span class="op">$</span>geom)</a>
-<a class="sourceLine" id="cb461-12" data-line-number="12"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb460-1" data-line-number="1"><span class="kw">library</span>(spData)</a>
+<a class="sourceLine" id="cb460-2" data-line-number="2">nz_u1 =<span class="st"> </span>sf<span class="op">::</span><span class="kw">st_union</span>(nz)</a>
+<a class="sourceLine" id="cb460-3" data-line-number="3"><span class="co">#&gt; Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span></a>
+<a class="sourceLine" id="cb460-4" data-line-number="4"><span class="co">#&gt; that</span></a>
+<a class="sourceLine" id="cb460-5" data-line-number="5">nz_u2 =<span class="st"> </span><span class="kw">aggregate</span>(nz[<span class="st">&quot;Population&quot;</span>], <span class="kw">list</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(nz))), sum)</a>
+<a class="sourceLine" id="cb460-6" data-line-number="6">nz_u3 =<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(nz, <span class="dt">t =</span> <span class="kw">sum</span>(Population))</a>
+<a class="sourceLine" id="cb460-7" data-line-number="7"><span class="co">#&gt; Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span></a>
+<a class="sourceLine" id="cb460-8" data-line-number="8"><span class="co">#&gt; that</span></a>
+<a class="sourceLine" id="cb460-9" data-line-number="9"><span class="kw">identical</span>(nz_u1, nz_u2<span class="op">$</span>geometry)</a>
+<a class="sourceLine" id="cb460-10" data-line-number="10"><span class="co">#&gt; [1] FALSE</span></a>
+<a class="sourceLine" id="cb460-11" data-line-number="11"><span class="kw">identical</span>(nz_u1, nz_u3<span class="op">$</span>geom)</a>
+<a class="sourceLine" id="cb460-12" data-line-number="12"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 <p>Although the classes, attributes and column names of the resulting objects <code>nz_u1</code> to <code>nz_u3</code> differ, their geometries are identical.
 This is verified using the base R function <code>identical()</code>.<a href="#fn80" class="footnote-ref" id="fnref80"><sup>80</sup></a>
 Which to use?
@@ -473,11 +473,11 @@ We recommend using <strong>sf</strong> and the other packages showcased in this 
 We cover both and encourage you to try both before deciding which is more appropriate for different tasks.
 The following code chunk, described in Chapter <a href="attr.html#attr">3</a>, shows how attribute data subsetting works in each approach, using the base R operator <code>[</code> and the <code>select()</code> function from the <strong>tidyverse</strong> package <strong>dplyr</strong>.
 The syntax differs but the results are (in essence) the same:</p>
-<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb462-1" data-line-number="1"><span class="kw">library</span>(dplyr)                          <span class="co"># attach tidyverse package</span></a>
-<a class="sourceLine" id="cb462-2" data-line-number="2">nz_name1 =<span class="st"> </span>nz[<span class="st">&quot;Name&quot;</span>]                   <span class="co"># base R approach</span></a>
-<a class="sourceLine" id="cb462-3" data-line-number="3">nz_name2 =<span class="st"> </span>nz <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(Name)          <span class="co"># tidyverse approach</span></a>
-<a class="sourceLine" id="cb462-4" data-line-number="4"><span class="kw">identical</span>(nz_name1<span class="op">$</span>Name, nz_name2<span class="op">$</span>Name) <span class="co"># check results</span></a>
-<a class="sourceLine" id="cb462-5" data-line-number="5"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb461"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb461-1" data-line-number="1"><span class="kw">library</span>(dplyr)                          <span class="co"># attach tidyverse package</span></a>
+<a class="sourceLine" id="cb461-2" data-line-number="2">nz_name1 =<span class="st"> </span>nz[<span class="st">&quot;Name&quot;</span>]                   <span class="co"># base R approach</span></a>
+<a class="sourceLine" id="cb461-3" data-line-number="3">nz_name2 =<span class="st"> </span>nz <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(Name)          <span class="co"># tidyverse approach</span></a>
+<a class="sourceLine" id="cb461-4" data-line-number="4"><span class="kw">identical</span>(nz_name1<span class="op">$</span>Name, nz_name2<span class="op">$</span>Name) <span class="co"># check results</span></a>
+<a class="sourceLine" id="cb461-5" data-line-number="5"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 <p>Again the question arises: which to use?
 Again the answer is: it depends.
 Each approach has advantages: the pipe syntax is popular and appealing to some, while base R is more stable, and is well known to others.
